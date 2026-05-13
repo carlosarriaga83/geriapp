@@ -84,7 +84,8 @@ async function loadResidentes() {
     if (!list) return;
     Object.keys(_resExpandCache || {}).forEach(k => delete _resExpandCache[k]);
     list.innerHTML = skeleton(4);
-    const estado = $('#cdResMgmtFilter')?.value ?? 'activo';
+    const estadoRaw = $('#cdResMgmtFilter')?.value ?? 'activo';
+    const estado = estadoRaw === 'todos' ? '' : estadoRaw;
     const busqueda = $('#cdResMgmtSearch')?.value.trim() || '';
     try {
         const params = new URLSearchParams();
@@ -972,7 +973,7 @@ function _resInvitationHasDelivery(item = {}) {
 
 function _resInvitationStatusLabel(item = {}, stateKey = '') {
     const status = String(item.estado || item.raw?.invitacion?.status || '').toLowerCase();
-    if (item.completed || status === 'completada' || status === 'registrado' || status === 'aceptada') return item.estado === 'registrado' ? 'Registrado' : 'Completada';
+    if (item.completed || status === 'completada' || status === 'registrado' || status === 'aceptada') return 'Registrado';
     if (status === 'revocada') return 'Revocada';
     if (status === 'expirada') return 'Expirada';
     const errors = _resInvitationErrorChannels(item);
@@ -1023,7 +1024,7 @@ function _resFamStatusFilterDefs(list = []) {
         { key: 'creada', label: 'Creada', count: counts.creada || 0 },
         { key: 'enviada', label: 'Enviada', count: counts.enviada || 0 },
         { key: 'expirada', label: 'Expiradas', count: counts.expirada || 0 },
-        { key: 'completada', label: 'Completadas', count: counts.completada || 0 },
+        { key: 'completada', label: 'Registradas', count: counts.completada || 0 },
     ];
 }
 
@@ -1038,7 +1039,7 @@ function _resInvStatusFilterDefs(list = []) {
         { key: 'creada', label: 'Creada', count: counts.creada || 0 },
         { key: 'enviada', label: 'Enviada', count: counts.enviada || 0 },
         { key: 'expirada', label: 'Expirada', count: counts.expirada || 0 },
-        { key: 'completada', label: 'Completadas', count: counts.completada || 0 },
+        { key: 'completada', label: 'Registrados', count: counts.completada || 0 },
     ];
 }
 
@@ -1081,7 +1082,7 @@ function _resBindInvitacionesFilters(sub, list = [], context = {}) {
         const bar = sub.querySelector('[data-inv-bulkbar]');
         const count = sub.querySelector('[data-inv-bulk-count]');
         const selectAll = sub.querySelector('[data-inv-select-all]');
-        if (bar) bar.hidden = selected.length === 0;
+        if (bar) { bar.hidden = selected.length === 0; bar.style.display = selected.length ? '' : 'none'; }
         if (count) count.textContent = String(selected.length);
         if (selectAll) {
             const visible = Array.from(sub.querySelectorAll('.cd-inv-row-group:not([hidden]) [data-inv-select]'));
@@ -1161,6 +1162,52 @@ function _resBindInvitacionesFilters(sub, list = [], context = {}) {
             ep.hidden = open;
             btn.setAttribute('aria-expanded', String(!open));
             btn.classList.toggle('is-open', !open);
+        });
+    });
+    sub.querySelectorAll('[data-inv-add-toggle]').forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+            const panel = sub.querySelector(`[data-inv-add-panel="${btn.dataset.invAddToggle}"]`);
+            if (panel) panel.hidden = !panel.hidden;
+        });
+    });
+    sub.querySelectorAll('[data-inv-add-submit]').forEach(btn => {
+        btn.addEventListener('click', async e => {
+            e.stopPropagation();
+            const idx = parseInt(btn.dataset.invAddSubmit, 10);
+            const item = list[idx];
+            if (!item) return;
+            const panel = sub.querySelector(`[data-inv-add-panel="${idx}"]`);
+            const addIds = Array.from(panel?.querySelectorAll('[data-inv-add-res-check]:checked') || []).map(ch => parseInt(ch.value, 10)).filter(Boolean);
+            if (!addIds.length) { showToast?.('Selecciona al menos un residente', 'info'); return; }
+            const oldText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Agregando...';
+            try {
+                const currentIds = Array.isArray(item.residenteIds) ? item.residenteIds.map(id => parseInt(id, 10)).filter(Boolean) : [];
+                const mergedIds = Array.from(new Set([...currentIds, ...addIds]));
+                const userId = parseInt(item.raw?.usuario_id || item.usuario_id || 0, 10);
+                if (userId) {
+                    for (const rid of addIds) {
+                        await api(`${BASE}/api/invitaciones.php`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'link_residente', usuario_id:userId, residente_id:rid }) });
+                    }
+                } else if (item.id) {
+                    const inv = item.raw?.invitacion || item.raw || {};
+                    await api(`${BASE}/api/invitaciones.php`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({
+                        action:'actualizar', id:item.id, rol:inv.rol || item.raw?.rol || 'familiar',
+                        email:item.email || inv.email || '', telefono:item.telefono || inv.telefono || '',
+                        nombre_sugerido:inv.nombre_sugerido || '', apellido_sugerido:inv.apellido_sugerido || '', mensaje:inv.mensaje || '',
+                        residente_ids: mergedIds
+                    }) });
+                }
+                showToast?.(`Residente${addIds.length === 1 ? '' : 's'} agregado${addIds.length === 1 ? '' : 's'}`, 'success');
+                await refreshAfterBulk();
+            } catch(err) {
+                showToast?.(err?.message || 'No se pudieron agregar residentes', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = oldText;
+            }
         });
     });
     // Resident dropdown filter
@@ -1486,7 +1533,7 @@ function _resInvitationStepHtml(item) {
     const noEnviada = !!item.noEnviada || !!item.legacyContact;
     const isExpired = status === 'revocada' || status === 'expirada';
     const isAccepted = !!item.completed || status === 'aceptada' || status === 'registrado' || status === 'completada';
-    const statusLabel = isAccepted ? 'Completada' : (isExpired ? (status === 'revocada' ? 'Revocada' : 'Expirada') : 'Pendiente');
+    const statusLabel = isAccepted ? 'Registrado' : (isExpired ? (status === 'revocada' ? 'Revocada' : 'Expirada') : 'Pendiente');
     const steps = [
         { label:'Creada', cls:'is-done' },
         { label:noEnviada ? 'No enviada' : 'Enviada', cls:item.enviada ? 'is-done' : 'is-current', extra:noEnviada ? '' : _resInvitationChannelHtml(item) },
@@ -1588,11 +1635,10 @@ function _resRenderInvitaciones(list, resId, data = {}) {
     const canEdit = !!(typeof IS_ADMIN !== 'undefined' && IS_ADMIN);
     const search = _resSubcardSearchHtml('invitaciones', 'Buscar invitaciones');
     const inviteButton = `<button type="button" class="cd-res-inv-add-btn${canEdit ? '' : ' cd-role-locked'}" data-inv-new="${resId}" title="Crear invitación" ${!canEdit ? `data-cd-locked data-lock-title="Requiere permisos de administrador" data-lock-msg="Solo los administradores pueden crear invitaciones."` : ''}><span class="material-symbols-outlined" aria-hidden="true">add</span><span>Invitar</span></button>`;
-    const residentOptions = isGlobal ? (() => {
-        const map = { ...(data.residentMap || {}) };
-        list.forEach(item => { (item.residenteIds || []).forEach((id, i) => { if (!map[id]) { const names = String(item.residenteNames || '').split(','); map[id] = (names[i] || '').trim() || `Residente #${id}`; } }); });
-        return Object.entries(map).sort((a, b) => a[1].localeCompare(b[1])).map(([id, name]) => `<div class="cd-inv-res-option" data-inv-res-id="${esc(id)}" role="option" tabindex="-1">${esc(name)}</div>`).join('');
-    })() : '';
+    const residentMap = isGlobal ? { ...(data.residentMap || {}) } : {};
+    if (isGlobal) list.forEach(item => { (item.residenteIds || []).forEach((id, i) => { if (!residentMap[id]) { const names = String(item.residenteNames || '').split(','); residentMap[id] = (names[i] || '').trim() || `Residente #${id}`; } }); });
+    const residentEntries = Object.entries(residentMap).sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+    const residentOptions = isGlobal ? residentEntries.map(([id, name]) => `<div class="cd-inv-res-option" data-inv-res-id="${esc(id)}" role="option" tabindex="-1">${esc(name)}</div>`).join('') : '';
     const resDropdown = isGlobal ? `<div class="cd-inv-res-dropdown" data-inv-res-dropdown><button type="button" class="cd-inv-res-dropdown-toggle" data-inv-res-toggle aria-haspopup="listbox" aria-expanded="false"><span class="material-symbols-outlined" aria-hidden="true">person_search</span><span class="cd-inv-res-dd-label" data-inv-res-label>Todos los residentes</span><span class="material-symbols-outlined cd-inv-res-dd-chevron" aria-hidden="true">expand_more</span></button><div class="cd-inv-res-dropdown-panel" role="listbox" aria-label="Filtrar por residente" hidden><div class="cd-inv-res-search-wrap"><span class="material-symbols-outlined" aria-hidden="true">search</span><input type="text" class="cd-inv-res-search-input" data-inv-res-search placeholder="Buscar residente..." autocomplete="off"></div><div class="cd-inv-res-options" data-inv-res-options><div class="cd-inv-res-option is-active" data-inv-res-id="" role="option" tabindex="-1">Todos los residentes</div>${residentOptions}</div></div></div>` : '';
     const header = `<div class="cd-res-fam-panel-head cd-res-inv-panel-head"><div class="cd-res-inv-toolbar">${search}${resDropdown}${inviteButton}</div></div>`;
     if (!list.length) return `${header}<div class="cd-res-subpanel-empty">${isGlobal ? 'No hay invitaciones pendientes.' : 'No hay invitaciones para este residente.'}</div>`;
@@ -1601,7 +1647,7 @@ function _resRenderInvitaciones(list, resId, data = {}) {
         ${_resInvFilterChips('role', _resFamRoleFilterDefs(list), 'Filtrar invitaciones por rol')}
         ${_resInvFilterChips('status', _resInvStatusFilterDefs(list), 'Filtrar invitaciones por estado')}
     </div>`;
-    const _invStateLabel = { completada:'Completada', pendiente:'Pendiente', revocada:'Revocada', expirada:'Expirada', enviada:'Enviada', creada:'Creada' };
+    const _invStateLabel = { completada:'Registrado', pendiente:'Pendiente', revocada:'Revocada', expirada:'Expirada', enviada:'Enviada', creada:'Creada' };
     const _invStateCls   = { completada:'is-registered', pendiente:'is-invited', revocada:'is-expired', expirada:'is-expired', enviada:'is-invited', creada:'is-contact' };
     const _hdr = `<div class="cd-rri-hd cd-inv-row-head"><div class="cd-rri-col cd-inv-col--select">${canEdit ? '<label class="cd-inv-check-wrap"><input type="checkbox" data-inv-select-all aria-label="Seleccionar invitaciones visibles"><span></span></label>' : ''}</div><div class="cd-rri-col cd-rri-col--name">Contacto</div><div class="cd-rri-col cd-inv-col--target">Destino</div><div class="cd-rri-col cd-rri-col--status">Estado</div><div class="cd-rri-col cd-rri-col--actions"></div></div>`;
     return `${header}${bulkBar}${filters}<div class="cd-res-fam-list cd-res-inv-list cd-res-row-list">${_hdr}${list.map((item, idx) => {
@@ -1621,7 +1667,12 @@ function _resRenderInvitaciones(list, resId, data = {}) {
         const rawNombre = _cleanNombre(item.raw?.nombre) || _cleanNombre(item.raw?.invitacion?.nombre_sugerido) || item.email || item.telefono || '';
         const hasRealName = !!rawNombre;
         const nameLabel = hasRealName ? _resToTitleCase(rawNombre) : '';
-        const initials = isRegistered && hasRealName ? rawNombre.split(/\s+/).slice(0, 2).map(s => s[0] || '').join('').toUpperCase() : '';
+        const initialsSource = rawNombre || item.email || item.telefono || item.role || '?';
+        const initials = String(initialsSource).split(/\s+/).slice(0, 2).map(s => s[0] || '').join('').toUpperCase() || '?';
+        const avatarPath = String(item.avatarPath || item.raw?.avatar_path || '').trim();
+        const avatarHtml = avatarPath
+            ? `<span class="cd-rri-initials cd-rri-avatar" aria-hidden="true"><img src="${esc(avatarPath)}" alt=""></span>`
+            : `<span class="cd-rri-initials" aria-hidden="true">${esc(initials)}</span>`;
         const actions = [];
         const _lockEdit = { locked: !canEdit, lockTitle: 'Requiere permisos de administrador', lockMsg: 'Solo los administradores pueden gestionar y eliminar invitaciones.' };
         if (isRegisteredFam) {
@@ -1650,16 +1701,21 @@ function _resRenderInvitaciones(list, resId, data = {}) {
         const targetHtml = `<span class="cd-inv-target-stack">${hasEmail ? `<a href="mailto:${esc(item.email)}" onclick="event.stopPropagation()" class="cd-inv-target-line"><span class="material-symbols-outlined" aria-hidden="true">mail</span>${esc(item.email)}</a>` : ''}${hasPhone ? `<a href="tel:${esc(item.telefono)}" onclick="event.stopPropagation()" class="cd-inv-target-line"><span class="material-symbols-outlined" aria-hidden="true">call</span>${esc(item.telefono)}</a>` : ''}${!hasEmail && !hasPhone ? '<span class="cd-rri-empty">Sin destino</span>' : ''}</span>`;
         const _invResIds = item.residenteIds || [];
         const _invResNamesArr = String(item.residenteNames || '').split(',').map(s => s.trim());
-        const _hasExpand = _invResIds.length > 0;
+        const _assignedSet = new Set(_invResIds.map(id => String(id)));
+        const _canAddResidents = canEdit && isGlobal && item.kind !== 'admin' && residentEntries.length > 0;
+        const _hasExpand = _invResIds.length > 0 || _canAddResidents;
         const _expandBtn = _hasExpand ? `<button type="button" class="cd-inv-expand-btn" data-inv-exp="${idx}" title="Ver residentes asociados" aria-expanded="false"><span class="material-symbols-outlined" aria-hidden="true">expand_more</span></button>` : '';
         const _vigenciaIcon = stateKey === 'expirada' ? 'event_busy' : 'all_inclusive';
         const _vigenciaText = stateKey === 'expirada' ? (item.expira ? `Expirada: ${item.expira}` : 'Expirada') : 'Sin expiración';
         if (isGlobal) actions.unshift(_resFamMenuItem({ attrs:`data-inv-detail="${idx}"`, cls:'cd-res-fam-action--details', icon:'info', label:'Ver detalles', title:'Ver detalles' }));
-        const _expandPanel = _hasExpand ? `<div class="cd-inv-row-expand" data-inv-exp-panel="${idx}" hidden><div class="cd-inv-expand-inner"><div class="cd-inv-expand-main"><span class="cd-inv-expand-role-badge">${esc(item.role)}</span><div class="cd-inv-expand-chips">${_invResIds.map((rid, ri) => { const rn = _invResNamesArr[ri] || `Residente #${rid}`; const ri2 = rn.split(/\s+/).slice(0,2).map(s=>s[0]||'').join('').toUpperCase(); return `<button type="button" class="cd-inv-res-chip" data-res-nav="${esc(String(rid))}" title="${esc(rn)}"><span class="cd-inv-res-chip-init" aria-hidden="true">${esc(ri2)}</span><span>${esc(rn)}</span></button>`; }).join('')}</div></div>${item.enviada?`<div class="cd-inv-expand-dates"><span><span class="material-symbols-outlined" aria-hidden="true">outgoing_mail</span>${esc(item.enviada)}</span><span><span class="material-symbols-outlined" aria-hidden="true">${_vigenciaIcon}</span>${esc(_vigenciaText)}</span></div>`:''}</div></div>` : '';
+        const _availableRes = residentEntries.filter(([rid]) => !_assignedSet.has(String(rid)));
+        const _chipsHtml = _invResIds.length ? _invResIds.map((rid, ri) => { const rn = _invResNamesArr[ri] || residentMap[rid] || `Residente #${rid}`; const ri2 = rn.split(/\s+/).slice(0,2).map(s=>s[0]||'').join('').toUpperCase(); return `<button type="button" class="cd-inv-res-chip" data-res-nav="${esc(String(rid))}" title="${esc(rn)}"><span class="cd-inv-res-chip-init" aria-hidden="true">${esc(ri2)}</span><span>${esc(rn)}</span></button>`; }).join('') : '<span class="cd-inv-expand-empty">Sin residentes asociados</span>';
+        const _addHtml = _canAddResidents ? `<div class="cd-inv-expand-add"><button type="button" class="cd-inv-add-res-toggle" data-inv-add-toggle="${idx}"><span class="material-symbols-outlined" aria-hidden="true">person_add</span><span>Agregar residentes</span></button><div class="cd-inv-add-res-panel" data-inv-add-panel="${idx}" hidden>${_availableRes.length ? `<div class="cd-inv-add-res-list">${_availableRes.map(([rid, rn]) => `<label><input type="checkbox" value="${esc(String(rid))}" data-inv-add-res-check><span>${esc(rn)}</span></label>`).join('')}</div><button type="button" class="cd-inv-add-res-submit" data-inv-add-submit="${idx}">Agregar seleccionados</button>` : '<span class="cd-inv-expand-empty">Todos los residentes ya están asociados</span>'}</div></div>` : '';
+        const _expandPanel = _hasExpand ? `<div class="cd-inv-row-expand" data-inv-exp-panel="${idx}" hidden><div class="cd-inv-expand-inner"><div class="cd-inv-expand-main"><span class="cd-inv-expand-role-badge">${esc(item.role)}</span><div class="cd-inv-expand-chips">${_chipsHtml}</div></div>${_addHtml}${item.enviada?`<div class="cd-inv-expand-dates"><span><span class="material-symbols-outlined" aria-hidden="true">outgoing_mail</span>${esc(item.enviada)}</span><span><span class="material-symbols-outlined" aria-hidden="true">${_vigenciaIcon}</span>${esc(_vigenciaText)}</span></div>`:''}</div></div>` : '';
         return `<div class="cd-inv-row-group"><div class="cd-res-fam-item cd-res-fam-item--actionable cd-res-inv-item cd-res-row-item" data-inv-idx="${idx}" data-inv-role="${esc(roleKey)}" data-inv-state="${esc(stateKey)}" data-res-search-text="${esc(searchText)}" data-inv-res-ids="${esc(JSON.stringify(_invResIds))}" role="button" tabindex="0" title="Ver detalles de ${esc(nameLabel)}">
             <div class="cd-rri-col cd-inv-col--select">${canEdit ? `<label class="cd-inv-check-wrap" title="Seleccionar invitación"><input type="checkbox" data-inv-select="${idx}" onclick="event.stopPropagation()"><span></span></label>` : ''}</div>
             <div class="cd-rri-col cd-rri-col--name">
-                ${initials ? `<span class="cd-rri-initials">${esc(initials)}</span>` : ''}
+                ${avatarHtml}
                 <span class="cd-rri-name-stack">
                     <span class="cd-rri-label">${esc(nameLabel || 'Invitación sin nombre')}</span>
                     <span class="cd-res-fam-rel">${esc(item.role)}</span>
@@ -1689,6 +1745,7 @@ function _resInvitationRowsFromApi(rows = [], residentMap = {}) {
             role,
             email: inv.email || '',
             telefono: inv.telefono || '',
+            avatarPath: inv.avatar_path || '',
             estado: inv.status || (isRegistered ? 'registrado' : 'pendiente'),
             enviada: inv.enviada || '',
             expira: inv.expira || '',
@@ -1704,6 +1761,7 @@ function _resInvitationRowsFromApi(rows = [], residentMap = {}) {
                 rol: inv.rol || 'familiar',
                 email: inv.email || '',
                 telefono: inv.telefono || '',
+                avatar_path: inv.avatar_path || '',
                 invitacion: {
                     ...inv,
                     id: invId,

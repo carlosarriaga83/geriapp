@@ -1,4 +1,5 @@
-﻿<section id="viewConfig" class="cd-view">
+﻿<?php $userRole = $userRole ?? ($_SESSION['user_rol'] ?? ''); ?>
+<section id="viewConfig" class="cd-view">
 <div class="cd-config-page">
     <div class="cd-config-head">
         <h1><?= t('config_title') ?></h1>
@@ -27,6 +28,10 @@
         <button class="cd-cfg-tab" data-cfg="instituciones" data-cfg-nav="instituciones" role="tab" aria-selected="false" aria-controls="cfgPanelInstituciones">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9v.01"/><path d="M9 12v.01"/><path d="M9 15v.01"/><path d="M9 18v.01"/></svg>
             <span class="cd-cfg-tab-text"><span>Mis instituciones</span><small>Centros, cupos y datos fiscales</small></span>
+        </button>
+        <button class="cd-cfg-tab" data-cfg="facturacion" data-cfg-nav="facturacion" role="tab" aria-selected="false" aria-controls="cfgPanelFacturacion" data-hide-on-native>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="15" x2="10" y2="15"/></svg>
+            <span class="cd-cfg-tab-text"><span>Facturación</span><small>Plan, cobros y método de pago</small></span>
         </button>
         <?php endif; ?>
         <button class="cd-cfg-tab" data-cfg="notificaciones_admin" data-cfg-nav="notificaciones_admin" role="tab" aria-selected="false" aria-controls="cfgPanelNotificacionesAdmin">
@@ -712,6 +717,23 @@
     </div>
 
     <?php if (in_array($userRole, ['admin','superadmin'], true)): ?>
+    <!-- Facturación (solo web; oculto fail-closed en Capacitor/native) -->
+    <div class="cd-cfg-panel" id="cfgPanelFacturacion" data-cfg-panel="facturacion" data-hide-on-native>
+        <div class="cd-cfg-billing-head">
+            <div>
+                <h2 style="margin:0">Facturación</h2>
+                <p class="cd-cfg-desc" style="margin:4px 0 0">Plan, suscripción, método de pago e historial de cobros de la cuenta administrativa.</p>
+            </div>
+            <button type="button" class="cd-btn-submit cd-btn-secondary" id="cfgBillingRefreshBtn">
+                <span class="material-symbols-outlined" aria-hidden="true">refresh</span>
+                Actualizar
+            </button>
+        </div>
+        <div id="cfgBillingPanel" class="cd-cfg-billing-panel">
+            <div class="cd-cfg-billing-loading">Cargando facturación...</div>
+        </div>
+    </div>
+
     <!-- Mis instituciones (admin/superadmin) -->
     <div class="cd-cfg-panel" id="cfgPanelInstituciones" data-cfg-panel="instituciones">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px">

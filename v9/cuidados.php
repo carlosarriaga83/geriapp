@@ -304,7 +304,7 @@ $isNativeAppShell = !empty($_SERVER['HTTP_X_NATIVE_APP'])
         <div class="cd-header-actions">
             <?php if (!$saImpersonating): ?>
             <div class="cd-avatar-wrap">
-                <button class="cd-avatar-btn" id="cdAvatarBtn" data-perm-id="nav_open_profile_btn" title="<?= t('header_my_profile') ?>"><?= htmlspecialchars($userInitials) ?></button>
+                <button class="cd-avatar-btn" id="cdAvatarBtn" data-perm-id="nav_open_profile_btn" title="<?= t('header_my_profile') ?>"><?php if (!empty($userProfile['avatar_path'])): ?><img src="<?= htmlspecialchars($userProfile['avatar_path']) ?>" alt=""><?php else: ?><?= htmlspecialchars($userInitials) ?><?php endif; ?></button>
                 <span class="cd-avatar-role-badge"><?= htmlspecialchars($roleLabel) ?></span>
             </div>
             <?php endif; ?>

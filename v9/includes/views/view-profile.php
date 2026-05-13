@@ -1,4 +1,8 @@
 ﻿<?php $cdShowBillingProfile = empty($isNativeAppShell); ?>
+<?php $userName = $userName ?? htmlspecialchars($userProfile['nombre'] ?? ($_SESSION['user_nombre'] ?? 'Usuario')); ?>
+<?php $roleLabel = $roleLabel ?? ucfirst((string)($_SESSION['user_rol'] ?? 'usuario')); ?>
+<?php $userInitials = $userInitials ?? implode('', array_map(fn($w) => mb_strtoupper(mb_substr($w, 0, 1)), array_slice(explode(' ', trim($userProfile['nombre'] ?? ($_SESSION['user_nombre'] ?? 'U'))), 0, 2))); ?>
+<?php $cdProfileAvatar = trim((string)($userProfile['avatar_path'] ?? '')); ?>
 <section id="viewProfile" class="cd-view">
 <div class="cd-profile">
     <div class="cd-profile-header-row">
@@ -11,6 +15,15 @@
 
     <!-- View mode -->
     <div class="cd-profile-card" id="cdProfileView">
+        <div class="cd-profile-avatar-block">
+            <button type="button" class="cd-profile-avatar" id="cdProfAvatarView" title="Editar foto de perfil">
+                <?php if ($cdProfileAvatar): ?>
+                <img src="<?= htmlspecialchars($cdProfileAvatar) ?>" alt="">
+                <?php else: ?>
+                <span><?= htmlspecialchars($userInitials ?? '') ?></span>
+                <?php endif; ?>
+            </button>
+        </div>
         <h2 class="cd-profile-name" id="cdProfName"><?= $userName ?></h2>
         <p class="cd-profile-role"><?= $roleLabel ?></p>
         <dl>
@@ -24,6 +37,23 @@
     <!-- Edit mode (hidden by default) -->
     <div class="cd-profile-card" id="cdProfileEdit" style="display:none">
         <h2 style="font-size:1.125rem;font-weight:600;margin:0 0 16px"><?= t('btn_edit') ?> <?= t('profile_title') ?></h2>
+        <div class="cd-profile-edit-group">
+            <label>Foto de perfil</label>
+            <div class="cd-profile-avatar-edit-row">
+                <button type="button" class="cd-profile-avatar cd-profile-avatar--edit" id="cdProfAvatarEdit" title="Cambiar foto de perfil">
+                    <?php if ($cdProfileAvatar): ?>
+                    <img src="<?= htmlspecialchars($cdProfileAvatar) ?>" alt="">
+                    <?php else: ?>
+                    <span><?= htmlspecialchars($userInitials ?? '') ?></span>
+                    <?php endif; ?>
+                </button>
+                <div class="cd-profile-avatar-actions">
+                    <button type="button" class="cd-btn-submit cd-btn-secondary" id="cdProfAvatarBtn">Cambiar foto</button>
+                    <small>JPG, PNG o WebP. Máx. 10 MB.</small>
+                </div>
+                <input type="file" id="cdProfAvatarInput" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+            </div>
+        </div>
         <div class="cd-profile-edit-group">
             <label>Nombre <span style="color:#dc2626">*</span></label>
             <input class="cd-input" type="text" id="cdProfEditName" value="<?= htmlspecialchars($userProfile['nombre'] ?? $_SESSION['user_nombre'] ?? '') ?>" required>

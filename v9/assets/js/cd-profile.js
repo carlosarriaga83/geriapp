@@ -8,6 +8,19 @@
 const PERSONAL_API = BASE + '/api/personal.php';
 let _profileEditing = false;
 
+function _profileInitials() {
+    return String($('#cdProfName')?.textContent || $('#cdProfEditName')?.value || '')
+        .trim().split(/\s+/).slice(0, 2).map(s => s[0] || '').join('').toUpperCase() || '?';
+}
+
+function _profileSetAvatar(url) {
+    const html = url ? `<img src="${esc(url)}" alt="">` : `<span>${esc(_profileInitials())}</span>`;
+    ['cdProfAvatarView', 'cdProfAvatarEdit', 'cdAvatarBtn'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = html;
+    });
+}
+
 $('#cdProfileEditBtn')?.addEventListener('click', () => {
     _profileEditing = true;
     $('#cdProfileView').style.display = 'none';
@@ -18,6 +31,30 @@ $('#cdProfCancelBtn')?.addEventListener('click', () => {
     _profileEditing = false;
     $('#cdProfileEdit').style.display = 'none';
     $('#cdProfileView').style.display = '';
+});
+
+$('#cdProfAvatarView')?.addEventListener('click', () => $('#cdProfileEditBtn')?.click());
+$('#cdProfAvatarEdit')?.addEventListener('click', () => $('#cdProfAvatarInput')?.click());
+$('#cdProfAvatarBtn')?.addEventListener('click', () => $('#cdProfAvatarInput')?.click());
+$('#cdProfAvatarInput')?.addEventListener('change', async e => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    if (!/^image\//.test(file.type || '')) { showToast('Selecciona una imagen válida', 'error'); return; }
+    const btn = $('#cdProfAvatarBtn');
+    btnLoading(btn, 'Subiendo');
+    try {
+        const fd = new FormData();
+        fd.append('archivo', file);
+        fd.append('contexto', 'avatar');
+        const res = await fetch(BASE + '/api/upload.php', { method: 'POST', body: fd });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.message || 'No se pudo subir la foto');
+        const url = json.data?.url || json.data?.path || '';
+        if (url) _profileSetAvatar(url);
+        showToast('Foto de perfil actualizada', 'success');
+    } catch(e) { showToast(e.message || 'No se pudo subir la foto', 'error'); }
+    btnReset(btn);
 });
 
 $('#cdProfSaveBtn')?.addEventListener('click', async () => {
@@ -41,6 +78,7 @@ $('#cdProfSaveBtn')?.addEventListener('click', async () => {
         // Update UI
         $('#cdProfName').textContent = name;
         const ph = $('#cdProfPhone'); if (ph) ph.textContent = phone || '—';
+        if (!$('#cdProfAvatarView')?.querySelector('img')) _profileSetAvatar('');
 
         _profileEditing = false;
         $('#cdProfileEdit').style.display = 'none';

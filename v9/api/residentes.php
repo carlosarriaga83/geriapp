@@ -252,7 +252,8 @@ if ($method === 'POST' && !empty($_FILES['foto']) && $id > 0) {
 if ($method === 'GET') {
     if (!empty($_GET['cuidados_estado'])) {
         $instId = api_inst_id();
-        $estado = $_GET['estado'] ?? 'activo';
+        $estado = $_GET['estado'] ?? '';
+        if ($estado === 'todos') $estado = '';
         $busq   = trim($_GET['busqueda'] ?? '');
         $filtros = [];
         if ($estado !== '') $filtros['estado'] = $estado;

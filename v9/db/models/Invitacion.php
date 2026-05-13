@@ -305,6 +305,7 @@ class Invitacion
             'nombre_sugerido' => ($data['nombre_sugerido'] ?? '') !== '' ? $data['nombre_sugerido'] : null,
             'apellido_sugerido' => ($data['apellido_sugerido'] ?? '') !== '' ? $data['apellido_sugerido'] : null,
             'mensaje' => ($data['mensaje'] ?? '') !== '' ? $data['mensaje'] : null,
+            'residente_ids' => !empty($data['residente_ids']) && is_array($data['residente_ids']) ? json_encode(array_values(array_unique(array_map('intval', $data['residente_ids'])))) : null,
         ];
         $sets = [];
         $params = [':id' => $id, ':inst' => $institucion_id];
@@ -334,6 +335,7 @@ class Invitacion
             'token' => true,
             'estado' => true,
             'mensaje' => true,
+            'residente_ids' => true,
             'expires_at' => true,
             'creado_at' => true,
             'creado_por' => true,

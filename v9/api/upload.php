@@ -11,12 +11,12 @@
  *
  * Responde: { success, data: { url, path, documento_id? } }
  *
- * Roles: admin, medico, enfermero, superadmin
+ * Roles: avatar para cualquier usuario autenticado; otros contextos admin/medico/enfermero/superadmin
  */
 
 require_once __DIR__ . '/helpers.php';
 
-api_auth_roles(['superadmin', 'admin', 'medico', 'enfermero']);
+api_auth();
 api_require_method('POST');
 
 // ── Configuración de tipos permitidos ─────────────────────────────────────────
@@ -53,6 +53,9 @@ if (empty($_FILES['archivo']) || $_FILES['archivo']['error'] !== UPLOAD_ERR_OK) 
 
 $archivo  = $_FILES['archivo'];
 $contexto = $_POST['contexto'] ?? 'historial';
+if ($contexto !== 'avatar') {
+    api_auth_roles(['superadmin', 'admin', 'medico', 'enfermero']);
+}
 
 // ── Validaciones de tamaño y tipo ─────────────────────────────────────────────
 if ($archivo['size'] > UPLOAD_MAX_SIZE) {
@@ -90,6 +93,7 @@ if (!is_dir($destDir)) {
 $filename = date('YmdHis') . '_' . bin2hex(random_bytes(6)) . '.' . $ext;
 $destPath = $destDir . '/' . $filename;
 $urlPath  = BASE_URL . '/uploads/' . $subdir . '/' . $filename;
+$documento_id = null;
 
 // ── Mover archivo ─────────────────────────────────────────────────────────────
 if (!move_uploaded_file($archivo['tmp_name'], $destPath)) {
@@ -102,6 +106,7 @@ if (!move_uploaded_file($archivo['tmp_name'], $destPath)) {
 if ($contexto === 'avatar') {
     Usuario::update(api_user_id(), ['avatar_path' => $urlPath]);
     $_SESSION['user_avatar'] = $urlPath;
+    $_SESSION['user_avatar_path'] = $urlPath;
 }
 
 api_ok([

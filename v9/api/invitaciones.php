@@ -185,7 +185,7 @@ if ($method === 'GET') {
         require_once __DIR__ . '/../db/models/UsuarioResidente.php';
         $db = Database::getMaster();
         $stmt = $db->prepare(
-            "SELECT DISTINCT u.id, u.nombre, u.email, u.telefono, u.creado_at, COALESCE(ui.rol, u.rol) AS rol
+            "SELECT DISTINCT u.id, u.nombre, u.email, u.telefono, u.avatar_path, u.creado_at, COALESCE(ui.rol, u.rol) AS rol
              FROM usuarios u
              LEFT JOIN usuario_instituciones ui
                ON ui.usuario_id = u.id AND ui.institucion_id = ? AND ui.estado = 'activo'
@@ -205,6 +205,7 @@ if ($method === 'GET') {
               'registered' => true,
               'email'   => $u['email'] ?? '',
               'telefono' => $u['telefono'] ?? null,
+                'avatar_path' => $u['avatar_path'] ?? null,
               'rol'     => api_role_storage($u['rol'] ?? 'familiar'),
               'status'  => 'registrado',
               'enviada' => $u['creado_at'] ?? '',
@@ -934,6 +935,13 @@ HTML;
         }
         $current = Invitacion::getById($id, $inst_id);
         if (!$current) api_error('No se pudo actualizar (aceptada o no encontrada)', 409);
+        $residentIdsForUpdate = [];
+        if (array_key_exists('residente_ids', $body) && is_array($body['residente_ids'])) {
+          $residentIdsForUpdate = array_values(array_filter(array_unique(array_map('intval', $body['residente_ids'])), fn($v) => $v > 0));
+        } elseif (!empty($current['residente_ids'])) {
+          $decoded = json_decode((string)$current['residente_ids'], true);
+          if (is_array($decoded)) $residentIdsForUpdate = array_values(array_filter(array_unique(array_map('intval', $decoded)), fn($v) => $v > 0));
+        }
         $rol = api_role_storage($body['rol'] ?? ($current['rol'] ?? 'cuidador'));
         $rolesValidos = ['admin', 'medico', 'enfermero', 'familiar'];
         if (!in_array($rol, $rolesValidos, true)) {
@@ -950,6 +958,7 @@ HTML;
             'nombre_sugerido'   => trim((string)($body['nombre_sugerido']   ?? '')),
             'apellido_sugerido' => trim((string)($body['apellido_sugerido'] ?? '')),
             'mensaje'           => trim((string)($body['mensaje']           ?? '')),
+            'residente_ids'     => $residentIdsForUpdate,
         ]);
         if (!$ok) api_error('No se pudo actualizar (aceptada o no encontrada)', 409);
         api_ok(['actualizada' => true]);

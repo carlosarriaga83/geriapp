@@ -9,10 +9,12 @@ const CFG_API = BASE + '/api/configuracion.php';
 const INVITE_API = BASE + '/api/invitaciones.php';
 const NOTIF_API = BASE + '/api/notificaciones.php';
 const LEGAL_API = BASE + '/api/documentos_legales.php';
+const BILLING_API = BASE + '/api/billing.php';
 let _cfgLoaded = false;
 let _cfgData = {};
 let _legalTcLoaded = false;
 let _legalPrivLoaded = false;
+let _cfgBillingLoaded = false;
 
 // Tab switching
 function _positionCfgPill(container) {
@@ -50,6 +52,7 @@ $('#cdCfgTabs')?.addEventListener('click', e => {
     if (cfgKey === 'db') loadDbConfig();
     if (cfgKey === 'notificaciones_admin') loadNotificacionesAdmin();
     if (cfgKey === 'instituciones') loadInstituciones();
+    if (cfgKey === 'facturacion') loadConfigBilling();
 });
 
 // Sub-tab switching (generic for Logs , DB, etc.)
@@ -89,6 +92,7 @@ async function loadConfig(force = false) {
         _cfgData = await api(CFG_API);
         _cfgLoaded = true;
         populateConfigForms(_cfgData);
+        if ($('#cfgPanelFacturacion')?.classList.contains('active')) loadConfigBilling(true);
         // Re-populate after short delay to defeat Chrome autofill overwrites
         setTimeout(() => populateConfigForms(_cfgData), 350);
         // Warn about corrupted fields (mask saved to DB by old bug)
@@ -482,6 +486,117 @@ $('#cfgSegSave')?.addEventListener('click', async () => {
         await _reloadSection('seguridad');
     } catch(e) {}
     btnReset(_btn);
+});
+
+function _cfgBillingNative() {
+    return document.documentElement.dataset.native === '1' || document.documentElement.dataset.platform === 'native' || !!(window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform());
+}
+
+function _cfgBillingMoney(amount, currency) {
+    const n = Number(amount || 0);
+    try { return new Intl.NumberFormat(currency === 'MXN' ? 'es-MX' : (currency === 'COP' ? 'es-CO' : 'en-US'), { style:'currency', currency: currency || 'MXN', maximumFractionDigits: 0 }).format(n); }
+    catch(_) { return `${n.toFixed(2)} ${currency || ''}`.trim(); }
+}
+
+function _cfgBillingDate(value) {
+    if (!value) return '—';
+    const d = new Date(String(value).replace(' ', 'T'));
+    if (Number.isNaN(d.getTime())) return String(value);
+    return [String(d.getDate()).padStart(2, '0'), String(d.getMonth() + 1).padStart(2, '0'), d.getFullYear()].join('-');
+}
+
+function _cfgBillingPaymentLabel(tipo, status) {
+    if (tipo === 'invoice.payment_failed') return 'Pago fallido';
+    if (tipo === 'checkout.session.completed') return 'Checkout completado';
+    if (tipo === 'invoice.paid' || tipo === 'invoice.payment_succeeded') return 'Pago recibido';
+    return status || tipo || 'Evento';
+}
+
+function _cfgBillingStatusBadge(status) {
+    const map = {
+        active:{ label:'Activa', bg:'rgba(34,197,94,.14)', fg:'#15803d' }, trialing:{ label:'Prueba', bg:'rgba(23,131,145,.14)', fg:'#0f7682' },
+        trial:{ label:'Prueba', bg:'rgba(23,131,145,.14)', fg:'#0f7682' }, past_due:{ label:'Vencida', bg:'rgba(245,158,11,.16)', fg:'#b45309' },
+        canceled:{ label:'Cancelada', bg:'rgba(107,114,128,.16)', fg:'#4b5563' }, cancelada:{ label:'Cancelada', bg:'rgba(107,114,128,.16)', fg:'#4b5563' },
+        incomplete:{ label:'Incompleta', bg:'rgba(245,158,11,.16)', fg:'#b45309' }, unpaid:{ label:'Sin pago', bg:'rgba(239,68,68,.14)', fg:'#b91c1c' },
+    };
+    const v = map[String(status || '').toLowerCase()] || { label: status || 'Sin suscripción', bg:'rgba(107,114,128,.14)', fg:'#4b5563' };
+    return `<span class="cd-cfg-billing-badge" style="background:${v.bg};color:${v.fg}">${_instEsc(v.label)}</span>`;
+}
+
+function _cfgBillingLimit(used, max) {
+    if (max === null || max === undefined || max === '') return `${used || 0} / sin límite`;
+    return `${used || 0} / ${max}`;
+}
+
+async function loadConfigBilling(force = false) {
+    const panel = $('#cfgBillingPanel');
+    if (!panel || _cfgBillingNative()) return;
+    if (_cfgBillingLoaded && !force) return;
+    panel.innerHTML = '<div class="cd-cfg-billing-loading">Cargando facturación...</div>';
+    try {
+        const [status, history, plans] = await Promise.all([
+            api(BILLING_API + '?action=status'),
+            api(BILLING_API + '?action=payment_history'),
+            api(BILLING_API + '?action=plans'),
+        ]);
+        _cfgBillingLoaded = true;
+        _renderConfigBilling(status || {}, history?.payments || [], plans?.planes || []);
+    } catch(err) {
+        panel.innerHTML = `<div class="cd-cfg-billing-empty">${_instEsc(err?.message || 'No se pudo cargar facturación')}</div>`;
+    }
+}
+
+function _renderConfigBilling(status, payments, plans) {
+    const panel = $('#cfgBillingPanel'); if (!panel) return;
+    const sub = status.subscription || null;
+    const usage = status.usage || {};
+    const limits = sub?.plan_limits || {};
+    const planName = sub?.plan_nombre || status.plan?.nombre || 'Sin plan activo';
+    const period = sub?.periodo ? String(sub.periodo).replace('monthly', 'mensual').replace('yearly', 'anual') : '—';
+    const lastPay = sub?.ultimo_cobro || null;
+    const planCards = plans.slice(0, 6).map(p => {
+        const prices = (p.precios || []).map(pr => `${_cfgBillingMoney(pr.precio, pr.moneda)} ${pr.periodo === 'yearly' || pr.periodo === 'anual' ? 'anual' : 'mensual'}`).join(' · ') || 'Precio no configurado';
+        return `<div class="cd-cfg-billing-plan${sub && +sub.plan_id === +p.id ? ' is-current' : ''}"><strong>${_instEsc(p.nombre || 'Plan')}</strong><span>${_instEsc(prices)}</span><small>Res ${_cfgBillingLimit(usage.residentes, p.max_residentes)} · Fam ${_cfgBillingLimit(usage.familiares, p.max_familiares)}</small></div>`;
+    }).join('');
+    const paymentRows = payments.length ? payments.map(row => {
+        const links = [row.recibo_url ? `<a href="${_instEsc(row.recibo_url)}" target="_blank" rel="noopener">Recibo</a>` : '', row.recibo_pdf_url ? `<a href="${_instEsc(row.recibo_pdf_url)}" target="_blank" rel="noopener">PDF</a>` : ''].filter(Boolean).join(' · ');
+        return `<tr><td>${_cfgBillingDate(row.recibido_at)}</td><td>${_instEsc(_cfgBillingPaymentLabel(row.tipo, row.status))}</td><td>${_instEsc(row.status || '—')}</td><td>${row.monto != null ? _cfgBillingMoney(row.monto, row.moneda) : '—'}</td><td>${links || '—'}</td></tr>`;
+    }).join('') : '<tr><td colspan="5">Sin cobros registrados todavía.</td></tr>';
+    const instList = (status.instituciones || []).length ? (status.instituciones || []).map(i => `<span>${_instEsc(i.nombre || 'Institución')}</span>`).join('') : '<span>Sin instituciones vinculadas</span>';
+    panel.innerHTML = `
+        <div class="cd-cfg-billing-grid">
+            <section class="cd-cfg-billing-card cd-cfg-billing-card--primary">
+                <div class="cd-cfg-billing-kicker">Plan actual</div>
+                <div class="cd-cfg-billing-plan-name">${_instEsc(planName)}</div>
+                <div class="cd-cfg-billing-meta">${_cfgBillingStatusBadge(sub?.estado || status.institution_trial?.estado || '')}<span>${_instEsc((sub?.moneda || status.currency_default || 'MXN') + ' · ' + period)}</span></div>
+                <div class="cd-cfg-billing-actions"><button type="button" class="cd-btn-submit" id="cfgBillingOpenAppBtn">Ver planes y asientos</button><button type="button" class="cd-btn-submit cd-btn-secondary" id="cfgBillingPortalBtn" ${sub?.has_customer ? '' : 'disabled'}>Método de pago</button></div>
+            </section>
+            <section class="cd-cfg-billing-card"><div class="cd-cfg-billing-kicker">Periodo</div><strong>${_cfgBillingDate(sub?.periodo_inicio)} - ${_cfgBillingDate(sub?.periodo_fin || sub?.trial_ends_at || status.institution_trial?.trial_ends_at)}</strong><span>${sub?.cancel_at_period_end ? 'Cancelación programada al final del periodo' : 'Renovación activa'}</span></section>
+            <section class="cd-cfg-billing-card"><div class="cd-cfg-billing-kicker">Último cobro</div><strong>${lastPay ? _cfgBillingMoney(lastPay.monto, lastPay.moneda) : '—'}</strong><span>${lastPay ? _cfgBillingDate(lastPay.recibido_at) : 'Sin cobros todavía'}</span></section>
+        </div>
+        <div class="cd-cfg-billing-usage">
+            <div><span>Residentes</span><strong>${_cfgBillingLimit(usage.residentes, limits.max_residentes)}</strong></div>
+            <div><span>Familiares</span><strong>${_cfgBillingLimit(usage.familiares, limits.max_familiares)}</strong></div>
+            <div><span>Personal</span><strong>${_cfgBillingLimit(usage.personal, limits.max_usuarios)}</strong></div>
+            <div><span>Instituciones</span><strong>${_cfgBillingLimit((status.instituciones || []).length, limits.max_instituciones)}</strong></div>
+        </div>
+        <section class="cd-cfg-billing-section"><h3>Instituciones cubiertas</h3><div class="cd-cfg-billing-chips">${instList}</div></section>
+        <section class="cd-cfg-billing-section"><h3>Planes disponibles</h3><div class="cd-cfg-billing-plans">${planCards || '<div class="cd-cfg-billing-empty">No hay catálogo de planes disponible.</div>'}</div></section>
+        <section class="cd-cfg-billing-section"><h3>Historial</h3><div class="cd-cfg-billing-table-wrap"><table class="cd-cfg-billing-table"><thead><tr><th>Fecha</th><th>Evento</th><th>Estado</th><th>Monto</th><th>Documento</th></tr></thead><tbody>${paymentRows}</tbody></table></div></section>`;
+}
+
+$('#cfgBillingRefreshBtn')?.addEventListener('click', () => loadConfigBilling(true));
+document.addEventListener('click', async e => {
+    if (e.target.closest('#cfgBillingOpenAppBtn')) {
+        window.open(`${BASE}/billing.php`, '_blank', 'noopener');
+        return;
+    }
+    if (e.target.closest('#cfgBillingPortalBtn')) {
+        try {
+            const r = await api(BILLING_API + '?action=portal', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ return_url: location.href }) });
+            if (r?.url) window.open(r.url, '_blank', 'noopener');
+        } catch(err) { showToast(err?.message || 'No se pudo abrir el portal de pago', 'error'); }
+    }
 });
 
 // ═══════════════════════════════════════════════
