@@ -41,6 +41,18 @@ const RX_BY_RES  = <?= $rxJson ?>;
 const INST_NAME  = <?= json_encode($_SESSION['user_institucion_nombre'] ?? 'Institución') ?>;
 const INST_ID    = <?= (int)$instId ?>;
 
+function cdTitleCaseName(value) {
+    return String(value || '').trim().replace(/\s+/g, ' ').toLowerCase().replace(/(^|[\s'’\-])([^\s'’\-])/g, (m, sep, chr) => sep + chr.toUpperCase());
+}
+
+function cdResidentDisplayName(row = {}) {
+    const explicit = row.nombre_completo || row.full_name || row.display_name || '';
+    const raw = explicit || [row.nombre || '', row.apellidos || ''].join(' ');
+    return cdTitleCaseName(raw) || (row.id ? `Residente #${row.id}` : '');
+}
+
+RESIDENTES.forEach(r => { r.nombre = cdTitleCaseName(r.nombre); });
+
 // ── Â§1.9 CSRF: interceptar fetch para inyectar token automáticamente ──────
 const _CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]')?.content || '';
 const _origFetch = window.fetch;

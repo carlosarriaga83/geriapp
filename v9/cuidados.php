@@ -62,6 +62,22 @@ $saRoleSwitchNext = htmlspecialchars($_SERVER['REQUEST_URI'] ?? '/cuidados.php',
 
 $residentes     = Residente::getActivos($instId);
 
+if (!function_exists('cd_title_name')) {
+    function cd_title_name(?string $value): string
+    {
+        $value = trim(preg_replace('/\s+/u', ' ', (string)$value));
+        if ($value === '') return '';
+        return function_exists('mb_convert_case') ? mb_convert_case(mb_strtolower($value, 'UTF-8'), MB_CASE_TITLE, 'UTF-8') : ucwords(strtolower($value));
+    }
+}
+
+if (!function_exists('cd_resident_display_name')) {
+    function cd_resident_display_name(array $row): string
+    {
+        return cd_title_name(trim(($row['nombre'] ?? '') . ' ' . ($row['apellidos'] ?? '')));
+    }
+}
+
 // Non-admin users only see their linked residents
 if (!in_array($userRole, ['admin', 'superadmin'], true) && !$saFamiliarAllResidents) {
     try {
@@ -75,7 +91,7 @@ if (!in_array($userRole, ['admin', 'superadmin'], true) && !$saFamiliarAllReside
 
 $residentesJson = json_encode(array_map(fn($r) => [
     'id'       => (int)$r['id'],
-    'nombre'   => $r['nombre'] . ' ' . $r['apellidos'],
+    'nombre'   => cd_resident_display_name($r),
     'foto_path'=> $r['foto_path'] ?? null,
 ], $residentes), JSON_UNESCAPED_UNICODE);
 
@@ -336,7 +352,7 @@ $isNativeAppShell = !empty($_SERVER['HTTP_X_NATIVE_APP'])
                 <?php endif; ?>
             </div>
             <div class="cd-header-res-info">
-                <strong id="cdHeaderResidentName"><?= $headerRes ? htmlspecialchars(($headerRes['nombre'] ?? '') . ' ' . ($headerRes['apellidos'] ?? '')) : t('header_no_residents') ?></strong>
+                <strong id="cdHeaderResidentName"><?= $headerRes ? htmlspecialchars(cd_resident_display_name($headerRes)) : t('header_no_residents') ?></strong>
             </div>
             <span class="cd-header-res-change" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
@@ -344,7 +360,7 @@ $isNativeAppShell = !empty($_SERVER['HTTP_X_NATIVE_APP'])
         </div>
         <select id="cdPatientName" class="cd-header-res-select" title="<?= t('header_change_resident') ?>">
             <?php foreach ($residentes as $r): ?>
-            <option value="<?= $r['id'] ?>"><?= htmlspecialchars($r['nombre'] . ' ' . $r['apellidos']) ?></option>
+            <option value="<?= $r['id'] ?>"><?= htmlspecialchars(cd_resident_display_name($r)) ?></option>
             <?php endforeach; ?>
             <?php if (empty($residentes)): ?>
             <option value=""><?= t('header_no_residents') ?></option>

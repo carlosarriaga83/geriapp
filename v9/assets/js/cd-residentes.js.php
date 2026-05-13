@@ -117,7 +117,7 @@ function renderResidentesList() {
     });
     const canMoveResident = !!window.__cdCanMoveResident || (typeof IS_ADMIN !== 'undefined' && IS_ADMIN) || (typeof USER_ROLE !== 'undefined' && USER_ROLE === 'superadmin');
     list.innerHTML = sortedData.map(r => {
-        const fullName = (r.nombre||'') + ' ' + (r.apellidos||'');
+        const fullName = typeof cdResidentDisplayName === 'function' ? cdResidentDisplayName(r) : `${r.nombre || ''} ${r.apellidos || ''}`.trim();
         const age = r.fecha_nacimiento ? calcAge(r.fecha_nacimiento) : null;
         const sub = [age ? `${age} años` : null, ({M:'Masculino',F:'Femenino',Otro:'Otro'})[r.sexo]||r.sexo||null, r.habitacion ? `Hab. ${r.habitacion}` : null].filter(Boolean).join(' · ');
         const estadoClass = r.estado === 'activo' ? 'cd-res-estado-activo' : r.estado === 'egresado' ? 'cd-res-estado-egresado' : 'cd-res-estado-fallecido';
@@ -1168,8 +1168,36 @@ function _resBindInvitacionesFilters(sub, list = [], context = {}) {
         btn.addEventListener('click', e => {
             e.stopPropagation();
             const panel = sub.querySelector(`[data-inv-add-panel="${btn.dataset.invAddToggle}"]`);
-            if (panel) panel.hidden = !panel.hidden;
+            if (panel) {
+                panel.hidden = !panel.hidden;
+                btn.setAttribute('aria-expanded', String(!panel.hidden));
+                if (!panel.hidden) panel.querySelector('[data-inv-add-search]')?.focus();
+            }
         });
+    });
+    sub.querySelectorAll('[data-inv-add-panel]').forEach(panel => {
+        const updateCount = () => {
+            const count = panel.querySelectorAll('[data-inv-add-res-check]:checked').length;
+            const out = panel.querySelector('[data-inv-add-count]');
+            if (out) out.textContent = `${count} seleccionado${count === 1 ? '' : 's'}`;
+        };
+        const applyFilter = () => {
+            const q = (panel.querySelector('[data-inv-add-search]')?.value || '').trim().toLowerCase();
+            panel.querySelectorAll('[data-inv-add-res-option]').forEach(opt => { opt.hidden = !!q && !String(opt.dataset.name || '').includes(q); });
+        };
+        panel.querySelector('[data-inv-add-search]')?.addEventListener('input', applyFilter);
+        panel.querySelector('[data-inv-add-all]')?.addEventListener('click', e => {
+            e.stopPropagation();
+            panel.querySelectorAll('[data-inv-add-res-option]:not([hidden]) [data-inv-add-res-check]').forEach(ch => { ch.checked = true; });
+            updateCount();
+        });
+        panel.querySelector('[data-inv-add-none]')?.addEventListener('click', e => {
+            e.stopPropagation();
+            panel.querySelectorAll('[data-inv-add-res-check]').forEach(ch => { ch.checked = false; });
+            updateCount();
+        });
+        panel.querySelectorAll('[data-inv-add-res-check]').forEach(ch => ch.addEventListener('change', updateCount));
+        updateCount();
     });
     sub.querySelectorAll('[data-inv-add-submit]').forEach(btn => {
         btn.addEventListener('click', async e => {
@@ -1511,7 +1539,7 @@ function _resRoleRank(rol) {
 }
 
 function _resToTitleCase(str) {
-    return String(str || '').toLowerCase().replace(/(?:^|\s)\S/g, c => c.toUpperCase());
+    return typeof cdTitleCaseName === 'function' ? cdTitleCaseName(str) : String(str || '').toLowerCase().replace(/(?:^|\s)\S/g, c => c.toUpperCase());
 }
 
 function _resInvitationChannelHtml(item) {
@@ -1709,8 +1737,9 @@ function _resRenderInvitaciones(list, resId, data = {}) {
         const _vigenciaText = stateKey === 'expirada' ? (item.expira ? `Expirada: ${item.expira}` : 'Expirada') : 'Sin expiración';
         if (isGlobal) actions.unshift(_resFamMenuItem({ attrs:`data-inv-detail="${idx}"`, cls:'cd-res-fam-action--details', icon:'info', label:'Ver detalles', title:'Ver detalles' }));
         const _availableRes = residentEntries.filter(([rid]) => !_assignedSet.has(String(rid)));
-        const _chipsHtml = _invResIds.length ? _invResIds.map((rid, ri) => { const rn = _invResNamesArr[ri] || residentMap[rid] || `Residente #${rid}`; const ri2 = rn.split(/\s+/).slice(0,2).map(s=>s[0]||'').join('').toUpperCase(); return `<button type="button" class="cd-inv-res-chip" data-res-nav="${esc(String(rid))}" title="${esc(rn)}"><span class="cd-inv-res-chip-init" aria-hidden="true">${esc(ri2)}</span><span>${esc(rn)}</span></button>`; }).join('') : '<span class="cd-inv-expand-empty">Sin residentes asociados</span>';
-        const _addHtml = _canAddResidents ? `<div class="cd-inv-expand-add"><button type="button" class="cd-inv-add-res-toggle" data-inv-add-toggle="${idx}"><span class="material-symbols-outlined" aria-hidden="true">person_add</span><span>Agregar residentes</span></button><div class="cd-inv-add-res-panel" data-inv-add-panel="${idx}" hidden>${_availableRes.length ? `<div class="cd-inv-add-res-list">${_availableRes.map(([rid, rn]) => `<label><input type="checkbox" value="${esc(String(rid))}" data-inv-add-res-check><span>${esc(rn)}</span></label>`).join('')}</div><button type="button" class="cd-inv-add-res-submit" data-inv-add-submit="${idx}">Agregar seleccionados</button>` : '<span class="cd-inv-expand-empty">Todos los residentes ya están asociados</span>'}</div></div>` : '';
+        const _chipsHtml = _invResIds.length ? _invResIds.map((rid, ri) => { const rn = _resToTitleCase(_invResNamesArr[ri] || residentMap[rid] || `Residente #${rid}`); const ri2 = rn.split(/\s+/).slice(0,2).map(s=>s[0]||'').join('').toUpperCase(); return `<button type="button" class="cd-inv-res-chip" data-res-nav="${esc(String(rid))}" title="${esc(rn)}"><span class="cd-inv-res-chip-init" aria-hidden="true">${esc(ri2)}</span><span>${esc(rn)}</span></button>`; }).join('') : '<span class="cd-inv-expand-empty">Sin residentes asociados</span>';
+        const _addOptions = _availableRes.map(([rid, rn]) => { const label = _resToTitleCase(rn); const init = label.split(/\s+/).slice(0,2).map(s=>s[0]||'').join('').toUpperCase(); return `<label class="cd-inv-add-res-option" data-inv-add-res-option data-name="${esc(label.toLowerCase())}"><input type="checkbox" value="${esc(String(rid))}" data-inv-add-res-check><span class="cd-inv-add-res-avatar" aria-hidden="true">${esc(init)}</span><span class="cd-inv-add-res-name">${esc(label)}</span><span class="material-symbols-outlined" aria-hidden="true">check</span></label>`; }).join('');
+        const _addHtml = _canAddResidents ? `<div class="cd-inv-expand-add"><button type="button" class="cd-inv-add-res-toggle" data-inv-add-toggle="${idx}" aria-expanded="false"><span class="material-symbols-outlined" aria-hidden="true">person_add</span><span>Agregar residentes</span><small>${_availableRes.length} disponibles</small></button><div class="cd-inv-add-res-panel" data-inv-add-panel="${idx}" hidden>${_availableRes.length ? `<div class="cd-inv-add-res-head"><strong>Seleccionar residentes</strong><small>Marca uno o más para asociarlos a este usuario.</small></div><label class="cd-inv-add-res-search"><span class="material-symbols-outlined" aria-hidden="true">search</span><input type="search" data-inv-add-search placeholder="Buscar residente" autocomplete="off"></label><div class="cd-inv-add-res-tools"><button type="button" data-inv-add-all>Todos</button><button type="button" data-inv-add-none>Limpiar</button><span data-inv-add-count>0 seleccionados</span></div><div class="cd-inv-add-res-list">${_addOptions}</div><button type="button" class="cd-inv-add-res-submit" data-inv-add-submit="${idx}"><span class="material-symbols-outlined" aria-hidden="true">check_circle</span><span>Agregar seleccionados</span></button>` : '<span class="cd-inv-expand-empty">Todos los residentes ya están asociados</span>'}</div></div>` : '';
         const _expandPanel = _hasExpand ? `<div class="cd-inv-row-expand" data-inv-exp-panel="${idx}" hidden><div class="cd-inv-expand-inner"><div class="cd-inv-expand-main"><span class="cd-inv-expand-role-badge">${esc(item.role)}</span><div class="cd-inv-expand-chips">${_chipsHtml}</div></div>${_addHtml}${item.enviada?`<div class="cd-inv-expand-dates"><span><span class="material-symbols-outlined" aria-hidden="true">outgoing_mail</span>${esc(item.enviada)}</span><span><span class="material-symbols-outlined" aria-hidden="true">${_vigenciaIcon}</span>${esc(_vigenciaText)}</span></div>`:''}</div></div>` : '';
         return `<div class="cd-inv-row-group"><div class="cd-res-fam-item cd-res-fam-item--actionable cd-res-inv-item cd-res-row-item" data-inv-idx="${idx}" data-inv-role="${esc(roleKey)}" data-inv-state="${esc(stateKey)}" data-res-search-text="${esc(searchText)}" data-inv-res-ids="${esc(JSON.stringify(_invResIds))}" role="button" tabindex="0" title="Ver detalles de ${esc(nameLabel)}">
             <div class="cd-rri-col cd-inv-col--select">${canEdit ? `<label class="cd-inv-check-wrap" title="Seleccionar invitación"><input type="checkbox" data-inv-select="${idx}" onclick="event.stopPropagation()"><span></span></label>` : ''}</div>
@@ -1785,7 +1814,7 @@ async function _resInvitationResidentMap() {
     source.forEach(r => {
         const id = parseInt(r.id, 10);
         if (!id) return;
-        map[id] = (r.nombre_completo || [r.nombre || '', r.apellidos || ''].join(' ')).trim() || `Residente #${id}`;
+        map[id] = typeof cdResidentDisplayName === 'function' ? cdResidentDisplayName(r) : _resToTitleCase((r.nombre_completo || [r.nombre || '', r.apellidos || ''].join(' ')).trim() || `Residente #${id}`);
     });
     if (Object.keys(map).length) return map;
     try {
@@ -1795,7 +1824,7 @@ async function _resInvitationResidentMap() {
         residentRows.forEach(r => {
             const id = parseInt(r.id, 10);
             if (!id) return;
-            map[id] = [r.nombre || '', r.apellidos || ''].join(' ').trim() || `Residente #${id}`;
+            map[id] = typeof cdResidentDisplayName === 'function' ? cdResidentDisplayName(r) : _resToTitleCase([r.nombre || '', r.apellidos || ''].join(' ').trim() || `Residente #${id}`);
         });
     } catch(e) {}
     return map;
@@ -2567,7 +2596,7 @@ function _resOpenFamiliarInvite(resId, fam = {}, data = {}, refreshTab = 'invita
     const residentChecks = residentOptionsSource.map(r => {
         const id = parseInt(r.id, 10);
         if (!id) return '';
-        const label = (r.nombre_completo || [r.nombre || '', r.apellidos || ''].join(' ')).trim() || `Residente #${id}`;
+        const label = typeof cdResidentDisplayName === 'function' ? cdResidentDisplayName(r) : _resToTitleCase((r.nombre_completo || [r.nombre || '', r.apellidos || ''].join(' ')).trim() || `Residente #${id}`);
         return `<label class="cd-invite-res-check"><input type="checkbox" value="${id}" data-invite-res-check><span>${esc(label)}</span></label>`;
     }).filter(Boolean).join('');
     const targetResidentPicker = !resId ? `<div class="cd-sidebar-section cd-invite-resident-section" data-invite-resident-wrap>
@@ -4212,7 +4241,7 @@ function _resCritScore(r) {
 }
 
 function openResCareSidebar(r) {
-    const fullName = (r.nombre || '') + ' ' + (r.apellidos || '');
+    const fullName = typeof cdResidentDisplayName === 'function' ? cdResidentDisplayName(r) : _resToTitleCase((r.nombre || '') + ' ' + (r.apellidos || ''));
     const b = r.badges || {};
     const counts = r.counts_hoy || {};
     const _sbIc = (path) => `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;opacity:.7">${path}</svg>`;
@@ -4435,20 +4464,20 @@ async function _refreshResidenteSelect() {
         const sel = $('#cdPatientName');
         if (!sel) return;
         const curVal = sel.value;
-        sel.innerHTML = all.map(r => `<option value="${r.id}">${esc((r.nombre||'')+' '+(r.apellidos||''))}</option>`).join('');
+        sel.innerHTML = all.map(r => `<option value="${r.id}">${esc(typeof cdResidentDisplayName === 'function' ? cdResidentDisplayName(r) : _resToTitleCase((r.nombre||'')+' '+(r.apellidos||'')))}</option>`).join('');
         if (!all.length) sel.innerHTML = '<option value="">Sin residentes activos</option>';
         // Restore selection if still exists
         if (curVal && [...sel.options].some(o => o.value == curVal)) sel.value = curVal;
         // Update RESIDENTES global
         RESIDENTES.length = 0;
-        all.forEach(r => RESIDENTES.push({ id: r.id, nombre: (r.nombre||'')+' '+(r.apellidos||'') }));
+        all.forEach(r => RESIDENTES.push({ id: r.id, nombre: typeof cdResidentDisplayName === 'function' ? cdResidentDisplayName(r) : _resToTitleCase((r.nombre||'')+' '+(r.apellidos||'')), foto_path: r.foto_path || null }));
     } catch(e) {}
 }
 
 $('#cdResMgmtAddBtn')?.addEventListener('click', () => openResidenteMgmtSidebar(null));
 
 async function openEstadoLogSidebar(r) {
-    const fullName = (r.nombre||'') + ' ' + (r.apellidos||'');
+    const fullName = typeof cdResidentDisplayName === 'function' ? cdResidentDisplayName(r) : _resToTitleCase((r.nombre||'') + ' ' + (r.apellidos||''));
     const body = `<div class="cd-sidebar-section">
         <div class="cd-sidebar-section-title">${t('sidebar_current_status')}</div>
         <p style="margin:0 0 12px"><span class="cd-res-estado-badge ${r.estado==='activo'?'cd-res-estado-activo':r.estado==='egresado'?'cd-res-estado-egresado':'cd-res-estado-fallecido'}">${esc(r.estado||'activo')}</span></p>
