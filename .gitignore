@@ -1,0 +1,29 @@
+# GeriApp — repo root .gitignore
+# Only track v9/. Everything else is ignored.
+
+# Frozen historical versions
+old/
+v1/
+v2/
+v3/
+v4/
+v5/
+v6/
+v7/
+v8/
+
+# Web landing (separate deployment)
+web/
+
+# GitHub Copilot workspace instructions (keep local only)
+.github/
+
+# IDE / OS noise
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,77 @@
+# GeriApp — Apache / LiteSpeed configuration
+AddDefaultCharset UTF-8
+
+# ── Forzar HTTPS (solo en producción) ─────────────────────────────────────
+# Solo redirige a HTTPS en dominios de producción conocidos.
+# Entornos locales (localhost, tunnels, IPs) quedan en HTTP sin problema.
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteCond %{HTTP_HOST} ^(test)?geriapp\.prepenv\.com$ [NC]
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ── Forzar HTTP en hosts no-producción (tunnels, localhost) ───────────────
+# Si Chrome fuerza HTTPS vía HSTS / HTTPS-First y la petición llega al
+# servidor, redirigimos de vuelta a HTTP para evitar ERR_SSL_PROTOCOL_ERROR.
+RewriteCond %{HTTPS} =on [OR]
+RewriteCond %{HTTP:X-Forwarded-Proto} =https
+RewriteCond %{HTTP_HOST} !^(test)?geriapp\.prepenv\.com$ [NC]
+RewriteRule ^ http://%{HTTP_HOST}%{REQUEST_URI} [L,R=302]
+
+# ── Bloquear acceso a carpetas/archivos sensibles ───────────────────────
+# Denegar acceso a toda la carpeta db/ (config, modelos, migraciones, schemas)
+RewriteRule ^db/ - [F,L]
+
+# §10.5 Denegar acceso a conf/ (credenciales, .env)
+RewriteRule ^conf/ - [F,L]
+
+# Denegar acceso a auth/middleware.php (solo se usa via require_once interno)
+RewriteRule ^auth/middleware\.php$ - [F,L]
+
+# Denegar archivos ocultos (.env, .git, etc.)
+RewriteRule (^\.|/\.) - [F,L]
+
+# Bloquear archivos de diagnóstico/test/backup
+RewriteRule ^_(diag|test|temp) - [F,L]
+RewriteRule \.(bak|bak_.*)$ - [F,L]
+
+# ── Security headers ────────────────────────────────────────────────────
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # §2.5 HSTS — solo en dominios de producción (HTTPS)
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" "expr=%{HTTP_HOST} =~ /geriapp\.prepenv\.com$/"
+</IfModule>
+
+# ── CORS para Capacitor (APK nativo) ───────────────────────────────────
+# Con server.url remota, normalmente es same-origin (no necesita CORS).
+# Pero algunos webviews de Capacitor envían origin http://localhost o
+# capacitor://localhost. Se incluye el dominio de producción por seguridad.
+<IfModule mod_headers.c>
+    SetEnvIf Origin "^https://(test)?geriapp\.prepenv\.com$" CORS_ORIGIN=$0
+    SetEnvIf Origin "^https?://localhost" CORS_ORIGIN=$0
+    SetEnvIf Origin "^capacitor://localhost" CORS_ORIGIN=$0
+    Header set Access-Control-Allow-Origin %{CORS_ORIGIN}e env=CORS_ORIGIN
+    Header set Access-Control-Allow-Credentials "true" env=CORS_ORIGIN
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS, DELETE, PUT" env=CORS_ORIGIN
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, X-CSRF-Token, X-Native-App" env=CORS_ORIGIN
+</IfModule>
+
+# Responder OPTIONS (preflight) inmediatamente
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^api/ - [R=204,L]
+
+# ── php_value solo funciona en mod_php (XAMPP). ─────────────────────────
+# En Hostinger (LiteSpeed/CGI/FPM) se ignora automáticamente.
+<IfModule mod_php.c>
+    php_value default_charset "UTF-8"
+</IfModule>
+<IfModule mod_php7.c>
+    php_value default_charset "UTF-8"
+</IfModule>
+<IfModule mod_php8.c>
+    php_value default_charset "UTF-8"
+</IfModule>

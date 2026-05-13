@@ -1,0 +1,3339 @@
+================================================================================
+  GeriApp — Changelog
+================================================================================
+
+v1.53.26 — 2026-04-29
+  [UI]       Inicio: en cd-cat-grid todos los badges (contador y
+             alertas: heces, sueno, medicacion, signos vitales, notas
+             medico vigente, notificaciones) se reubicaron a la
+             segunda linea de la card. Esto libera la fila del titulo
+             para que ocupe todo el ancho disponible junto al icono y
+             evita que los nombres se recorten en pantallas pequenas.
+  [UI]       Layout actualizado a grid 2x4 (icono que ocupa ambas
+             filas + titulo a todo el ancho de la fila 1 + flujo
+             automatico de badges en la fila 2 con auto-flow).
+
+v1.53.25 — 2026-04-29
+  [Doc]      Nomenclatura: la seccion principal del usuario se llama
+             "Inicio" (clave i18n nav_home). El identificador tecnico
+             interno sigue siendo viewDashboard, pero todas las notas
+             de release y comunicacion futura usan "Inicio". Se
+             actualizaron las entradas v1.53.21 y v1.53.22 para
+             reflejar este nombre.
+
+v1.53.24 — 2026-04-29
+  [UI]       cd-cat-grid: ajustes de tamano y contraste de iconos en
+             tema claro y oscuro.
+               - Material Symbols: 26px peso 500 (antes 24px).
+               - SVG: padding 9px y stroke 2 para mejor densidad.
+               - PNGs (cd-cat-icon-img): filtro neutro oscuro con
+                 opacidad 0.82 en claro y blanco con 0.95 en oscuro.
+               - Variantes (notas, notas-medico, ficha, incidente,
+                 notificaciones) usan ahora un color de glifo mas
+                 oscuro en tema claro (700/800) y mas claro en tema
+                 oscuro (300/400) sobre tile con tint denso (30-32%)
+                 para garantizar contraste WCAG.
+  [UI]       Mobile (≤480px): tile 40px, padding 8px, glifo 24px.
+
+v1.53.23 — 2026-04-29
+  [UX]       Header: la tarjeta del residente activo solo funciona
+             como selector desplegable cuando el usuario esta en la
+             seccion Inicio (viewDashboard). En el resto de las
+             secciones se muestra como una card informativa de solo
+             lectura, manteniendo avatar, etiqueta y nombre.
+  [UI]       En estado bloqueado se oculta el caret de cambio y se
+             desactiva el hover/focus de acento para evitar pistas
+             visuales de interactividad. El control select queda
+             deshabilitado y fuera del flujo de teclado.
+
+v1.53.22 — 2026-04-29
+  [UI]       Inicio: las cards de cd-cat-grid ahora replican el
+             estilo visual de los accesos rapidos (cd-qs-btn): bordes
+             redondeados de 14px, padding 14x16, fondo de superficie y
+             sombra suave con hover que eleva la card.
+  [UI]       Icono de cada card presentado como tile cuadrado de 44px
+             con fondo tintado al color de acento de la categoria
+             (notas amarillo, notas medico azul, ficha verde,
+             incidente rojo, notificaciones violeta, resto primario).
+  [UI]       Reorganizacion de badges:
+               - cd-cat-badge azul (contador) actua como subtitulo
+                 alineado bajo el rotulo.
+               - Badges de alerta (heces, sueno, medicacion, signos
+                 vitales, notas medico vigente, notificaciones
+                 urgentes) se muestran al extremo derecho de la card.
+  [UX]       Tipografia mas legible (titulo 0.9375rem, peso 600) y
+             contraste verificado en tema claro y oscuro.
+
+v1.53.21 — 2026-04-28
+  [UI]       Inicio: cd-cat-grid rediseniado a 2 columnas con cards
+             de altura uniforme. El layout interno ahora es horizontal:
+             icono a la izquierda, texto del rotulo al centro y badge
+             de alerta (heces, sueno, medicacion, signos, notas vigente,
+             notificaciones) alineado al extremo derecho.
+  [UI]       Cards de cuidados: el cd-cat-badge informativo (azul,
+             contador) ahora aparece como subtitulo en una segunda
+             linea bajo el rotulo principal para una jerarquia visual
+             mas limpia y organica.
+  [UX]       Se ajustaron tamanios de iconos, padding y tipografia de
+             las cards para mantener un estilo simple, legible y
+             coherente entre tema claro y oscuro en todos los breakpoints.
+
+v1.53.20 — 2026-04-28
+  [UX]       Bottom bar: se retiro el acceso de Registros para
+             simplificar la navegacion inferior; Registros permanece
+             disponible desde los accesos existentes fuera del Bottom bar.
+  [UI]       Header: eliminada la linea vertical/acento lateral del
+             control de residente activo para dejar cdPatientName mas
+             limpio y minimalista.
+  [Fix]      cdPatientName: las opciones del selector ahora definen
+             color y fondo explicitos para tema claro y oscuro,
+             manteniendo contraste legible al abrir el desplegable.
+
+v1.53.19 — 2026-04-28
+  [UX]       Expediente: cd-exp-filters-row2 integra selector de fecha
+             con icono de calendario en los filtros Desde y Hasta,
+             manteniendo tambien la entrada manual.
+  [Fix]      El campo visible conserva el formato definido por
+             cfgFechaFormato y el selector nativo se sincroniza con
+             valores ISO internamente para preservar el filtrado de la
+             API sin mostrar placeholders del sistema operativo.
+
+v1.53.18 — 2026-04-28
+  [UI]       Header: redisenado cdHeaderResidentCard con una tarjeta
+             minimalista, mas compacta y visible para el residente
+             activo, con avatar pequeno, nombre claro, acento lateral
+             y control discreto de cambio.
+  [UX]       cdPatientName queda oculto visualmente para reducir ruido
+             en el header, pero permanece como control funcional sobre
+             la tarjeta para mantener el cambio de residente.
+
+v1.53.17 — 2026-04-28
+  [UI]       Bottom bar: el icono de Medicacion ahora usa el asset
+             oficial pill.png en lugar del simbolo Material.
+  [UX]       Se ajusto el tamano del PNG para equilibrar el grosor
+             visual de linea con el resto de iconos del Bottom bar en
+             estados activo, inactivo, claro y oscuro.
+
+v1.53.16 — 2026-04-28
+  [UX]       Bottom bar: revertido el anillo de contraste invertido
+             del boton Inicio elevado. El estado no activo vuelve a
+             usar borde var(--cd-surface), evitando que parezca el
+             boton seleccionado.
+  [UI]       Inicio no activo ahora se distingue con una pequena marca
+             superior tipo "anchor" en color acento tenue, manteniendo
+             su elevacion y posicion central sin competir con el
+             contraste del estado active.
+
+v1.53.15 — 2026-04-28
+  [Fix]      Expediente: los filtros compactos Desde/Hasta ya no
+             usan input type=date nativo, porque el placeholder lo
+             controla el sistema operativo y podia mostrar mm/dd/yyyy.
+             Ahora usan input text numerico con placeholder derivado
+             de cfgFechaFormato (DD-MM-AAAA, DD/MM/AAAA,
+             MM/DD/AAAA o AAAA-MM-DD) y convierten internamente a
+             ISO (YYYY-MM-DD) para la API.
+  [UX]       Al salir del campo, el valor ingresado se normaliza al
+             formato configurado mediante fmtDate(); si el formato no
+             es valido, se muestra una ayuda compacta bajo el input.
+
+v1.53.14 — 2026-04-28
+  [UI]       Header: integrado un card compacto del residente
+             seleccionado arriba de cdPatientName, reutilizando el
+             lenguaje visual de cd-res-full-card / cd-res-avatar-card.
+             Muestra mini-foto (o placeholder) y nombre completo para
+             identificar claramente al residente activo en todo momento.
+  [UX]       El card compacto se sincroniza con el selector de residente,
+             con la carga de Ficha y con cambios/eliminacion de foto del
+             residente. RESIDENTES bootstrap ahora incluye foto_path.
+  [Layout]   --cd-header-h actualizado para reflejar el header mas alto
+             y mantener alineados elementos fijos dependientes del header.
+
+v1.53.13 — 2026-04-28
+  [Fix]      Expediente: cd-exp-filters-row2 ahora respeta el
+             formato de fecha configurado en cfgFechaFormato
+             (APP_DATE_FMT). Los filtros Desde/Hasta dejaron de
+             excluir el helper de fecha y ahora muestran el hint
+             formateado bajo cada input.
+  [Fix]      Expediente: eliminado formato fijo interno
+             "DD Mes YYYY" en fmtDateShort(); separadores de
+             timeline, detalle de documento y selector de enlaces
+             ahora usan fmtDate(), respetando d/m/Y, d-m-Y,
+             m/d/Y o Y-m-d.
+  [Config]   Al guardar Configuracion > General > Formato de fecha,
+             se refrescan los hints de inputs date ya renderizados
+             sin recargar la pagina.
+
+v1.53.12 — 2026-04-28
+  [UX]       Bottom bar: el anillo del boton Inicio elevado ahora
+             usa contraste invertido segun tema: negro (#111) en
+             tema claro y blanco (#fff) en tema oscuro. El fondo
+             del icono se mantiene solido con var(--cd-surface).
+
+v1.53.11 — 2026-04-28
+  [UX]       Bottom bar: el boton Inicio elevado, cuando no esta
+             activo, deja de usar fondo transparente y ahora usa
+             var(--cd-surface) en tema claro y oscuro. Mantiene el
+             realce posicional sin adoptar el contraste del boton
+             seleccionado.
+
+v1.53.10 — 2026-04-28
+  [Capacitor] Correccion definitiva del contraste de la StatusBar:
+             se ajusto el mapeo real de @capacitor/status-bar
+             (LIGHT = texto/iconos oscuros para fondos claros;
+             DARK = texto/iconos claros para fondos oscuros).
+             applyTheme() ahora usa LIGHT en tema claro y DARK en
+             tema oscuro. La configuracion inicial nativa tambien
+             arranca con LIGHT + backgroundColor #ffffff para evitar
+             que reloj/notificaciones/bateria aparezcan blancos sobre
+             la barra superior clara antes de que cargue el JS.
+
+v1.53.9 — 2026-04-28
+  [UX]       Bottom bar: el boton Inicio (viewResidentes) queda
+             siempre elevado como referencia posicional central,
+             aunque no este seleccionado. Cuando no esta activo no
+             toma el fondo contrastado del FAB activo; mantiene fondo
+             transparente, borde del surface y sombra suave. El boton
+             actualmente seleccionado conserva el contraste de color
+             normal del estado active.
+
+v1.53.8 — 2026-04-28
+  [Capacitor] Barra superior del sistema corregida para tema
+             claro/oscuro: agregado @capacitor/status-bar y
+             sincronizacion runtime desde applyTheme(). En tema
+             claro se fuerza StatusBar style DARK (texto/iconos
+             oscuros sobre fondo blanco); en tema oscuro se fuerza
+             style LIGHT (texto/iconos claros sobre fondo oscuro).
+             Tambien se define backgroundColor y overlaysWebView=false
+             para evitar que reloj/senal/bateria queden invisibles.
+
+v1.53.7 — 2026-04-28
+  [UX]       Registros: agregado boton "Volver" en el encabezado
+             de la seccion, con flecha izquierda y el mismo estilo
+             cd-form-back usado en formularios. El boton regresa al
+             nuevo Inicio (viewResidentes cuando esta disponible) y
+             conserva fallback a Cuidados para roles sin acceso a
+             Residentes.
+
+v1.53.6 — 2026-04-28
+  [UX]       Navegacion principal reorganizada:
+             - La seccion Residentes pasa a ser el nuevo Inicio.
+             - El Inicio anterior (dashboard de registro de cuidados)
+               ahora se llama Cuidados.
+             - En el bottom bar, Inicio queda en posicion central
+               para el layout de 6 botones: Cuidados, Registros,
+               Medicacion, Inicio, Ficha, Expediente (3 a la
+               izquierda y 2 a la derecha de Inicio).
+             - El estado inicial de la app apunta a Inicio
+               (viewResidentes) cuando el rol tiene permiso para
+               ver residentes; si no, conserva el fallback a
+               Cuidados u otra seccion disponible.
+
+v1.53.5 — 2026-04-28
+  [UI]       Contraste corregido en dashboard para tema oscuro:
+             los iconos PNG de .cd-cat-icon-img ahora usan
+             brightness(0) invert(1) opacity(.9), evitando que
+             food.png, terapia.png, moon-zzz.png, pill.png y
+             handwash.png se vean negros sobre tarjetas oscuras.
+             En tema claro se mantiene el tint negro suave ya
+             existente.
+
+v1.53.4 — 2026-04-28
+  [UI]       Contraste de iconos PNG en tema claro y oscuro:
+             - Timeline (.cd-tl-icon img): nuevos filtros
+               tintados para que cada PNG adopte el color
+               de su categoria (igual que el border):
+                 • alimentacion -> ambar (#f59e0b)
+                 • higiene      -> cian  (#06b6d4)
+                 • terapia      -> rosa  (#ec4899)
+                 • eliminacion  -> rojo  (#ef4444)
+               Antes solo sueno/medicacion/movilidad/
+               comportamiento tenian tint y los demas se
+               veian como PNG plano sin coincidir con el
+               borde de color.
+             - Sidebar de residentes (.cd-sb-vitals-table
+               th img): regla CSS centralizada con
+               brightness(0) opacity(.65) en claro y
+               brightness(0) invert(1) opacity(.75) en
+               oscuro. Asegura legibilidad en ambos temas
+               sin depender del color original del PNG.
+             - Hint de sueno (.cd-sleep-hint-row img):
+               invertido a blanco en oscuro.
+
+v1.53.3 — 2026-04-28
+  [UI]       Iconos PNG oficiales aplicados a mas categorias
+             para uniformar el estilo grafico:
+             - moon-zzz.png reemplaza el SVG inline (luna) de
+               Sueño en:
+                 • Dashboard (cd-cat-btn data-cat="sueno")
+                 • Timeline (tlIcon en cd-core.js.php, antes
+                   usaba night.png)
+                 • Sidebar de residentes: filas "Sueño
+                   pendiente" y counts.sueno (cd-residentes.js.php)
+                 • Hint cdSleepHint (sleep_crosses_midnight)
+                   en cd-forms.js.php
+             - pill.png reemplaza el SVG inline (pildora) de
+               Medicacion en:
+                 • Dashboard (cd-cat-btn data-cat="medicacion")
+                 • Sidebar de residentes: "Medicaciones
+                   pendientes" y counts.medicacion
+             - handwash.png reemplaza el material-symbol de
+               Higiene en:
+                 • Dashboard (cd-cat-btn data-cat="higiene")
+                 • Timeline (tlIcon)
+                 • Sidebar de residentes: counts.higiene
+                   (antes shower.png)
+             Sin impacto en datos clinicos / PHI — cambio
+             puramente visual.
+
+v1.53.2 — 2026-04-28
+  [UI]       Iconos PNG oficiales aplicados donde correspondia:
+             - food.png reemplaza el SVG inline (frasco) de
+               Alimentacion en:
+                 • Dashboard (cd-cat-btn data-cat="alimentacion")
+                 • Timeline (tlIcon en cd-core.js.php)
+                 • Sidebar de residentes (tabla counts en
+                   cd-residentes.js.php)
+             - terapia.png reemplaza el material-symbol /
+               SVG inline (corazon) de Terapia en los
+               mismos tres lugares.
+             Ahora todas las categorias del dashboard usan
+             el mismo estilo grafico (PNG via cd-cat-icon-img)
+             excepto las que aun usan SVG por convenio (sueno,
+             medicacion, higiene, signos_vitales, incidente).
+
+v1.53.1 — 2026-04-27
+  [Seguridad/Cumplimiento] Referencias de Signos Vitales
+             reestructuradas para PRIORIZAR Normas Oficiales
+             Mexicanas (NOM) sobre fuentes internacionales,
+             fortaleciendo el cumplimiento regulatorio
+             local (Mexico) ademas del Apple 1.4.1:
+             - Bloque destacado "Marco normativo aplicable"
+               citando NOM-031-SSA3-2012 (asistencia social
+               adultos mayores) y NOM-004-SSA3-2012
+               (expediente clinico) con enlace al indice
+               oficial de Sec. Salud y al DOF.
+             - Cada signo vital cita la NOM correspondiente:
+                 • Temperatura: NOM-004 + GPC CENETEC fiebre
+                 • Frec. Respiratoria: NOM-004 + GPC CENETEC
+                   neumonia adquirida en la comunidad
+                 • Frec. Cardiaca: NOM-030-SSA2-2009 + GPC
+                 • Presion Arterial: NOM-030-SSA2-2009
+                 • SpO2: GPC CENETEC EPOC / IRA
+                 • Glucosa: NOM-015-SSA2-2010
+                 • Peso/IMC: NOM-008-SSA3-2017 + NOM-043
+             - Enlaces estables a gob.mx/salud (indice NOM)
+               y cenetec-difusion.com/CMGPC (Catalogo
+               Maestro de GPC).
+  [i18n]     vitals_refs_title, vitals_refs_intro y nueva
+             clave vitals_refs_framework actualizadas en es/en
+             para reflejar enfoque normativo NOM/CENETEC.
+  [UI]       Item .cd-vref-framework destacado con fondo
+             azul tenue y borde acentuado para sobresalir
+             del resto de la lista. Soporte dark mode.
+
+v1.53.0 — 2026-04-27
+  [Seguridad/Cumplimiento] Apple App Store Review — Guideline 1.4.1
+             (Safety / Physical Harm). Se agregan citas
+             clinicas a la pantalla de Signos Vitales:
+             - Asterisco (*) clickeable junto al hint del
+               formulario que abre la nueva seccion de
+               referencias y la lleva a la vista.
+             - Bloque colapsable cd-vitals-refs (id
+               cdVitalsRefs) con tabla de los rangos
+               normales usados por cd-vital-status para
+               cada signo vital y su fuente clinica oficial
+               con enlace directo:
+                 • Temperatura: Mayo Clinic / Sund-Levander
+                 • Frec. Respiratoria: Cleveland Clinic
+                 • Frec. Cardiaca: American Heart Assoc.
+                 • Presion Arterial: ACC/AHA 2017 +
+                   NOM-030-SSA2-2009
+                 • SpO2: WHO Pulse Oximetry
+                 • Glucosa: ADA Standards of Care 2024 +
+                   NOM-015-SSA2-2010
+                 • Peso/IMC: WHO BMI + NOM-008-SSA3-2017
+             - Disclaimer: "informacion solo de referencia,
+               no sustituye el juicio clinico".
+  [i18n]     Nuevas claves: vitals_refs_title,
+             vitals_refs_intro, vitals_refs_source,
+             vitals_refs_disclaimer (es / en).
+  [UI]       cd-vitals-refs estilo: details/summary con
+             marcador * en pill azul, enlaces subrayados,
+             rangos en monoespaciada, soporte dark mode.
+
+v1.52.41 — 2026-04-27
+  [UI]       cd-res-med-name vuelve a color neutral
+             (var(--cd-text-primary)) para todos los estados.
+             El color de estado solo se aplica al icono y al
+             status de la fila, no al nombre del medicamento,
+             para mantener legibilidad y evitar competir con
+             los chips de horario.
+
+v1.52.40 — 2026-04-27
+  [UI]       Texto "Día anterior" reemplazado por "Ayer":
+             - cd-event-date-chip ahora muestra "Ayer · <fecha>"
+               tambien en el formulario de Sueño (antes mostraba
+               "Día anterior" solo en viewFormSueno).
+             - Boton del toggle cdSleepStartDayToggle dice "Ayer"
+               en lugar de "Día anterior".
+             - Hint de sueño (cdSleepDateHint) ahora dice
+               "Inicio marcado como ayer".
+
+v1.52.39 — 2026-04-27
+  [UI]       cd-res-med-name ahora se colorea segun el estado de
+             la fila, alineado con la paleta de cd-res-med-chip:
+             - overdue / soon / expired -> AMBAR (#78350f light /
+               #fde68a dark) en lugar del rojo previo.
+             - done / ok -> verde (#14532d / #bbf7d0).
+             - partial -> azul (#1e3a8a / #bfdbfe).
+             - off -> gris muted.
+             Iconos y status de fila tambien se ajustaron a la
+             paleta ambar para overdue (antes rojo intenso).
+
+v1.52.38 — 2026-04-27
+  [UI]       cd-event-date-chip: cuando la fecha del registro es el
+             día en curso, ya no muestra "Hoy · <fecha>" sino el
+             nombre del día capitalizado (ej. "Lunes · 27-04-2026").
+             En Sueño, si el toggle está en "Hoy" pero se mostraba
+             erróneamente "Día anterior" por lógica de _sleepFecha,
+             ahora se reflejará correctamente como informativo del
+             día actual.
+
+v1.52.37 — 2026-04-25
+  [UI]       Familiares (cd-res-fam-*):
+             - cd-res-fam-rel ahora es un badge pill al extremo
+               derecho de cd-res-fam-head (color primario, fondo
+               translucido, borde suave). Se quito el separador
+               "·" del texto.
+             - cd-res-fam-head usa justify-content: space-between
+               para empujar el badge a la derecha.
+             - cd-res-fam-meta-val ahora muestra un icono oficial
+               de WhatsApp junto al teléfono cuando el numero tiene
+               10+ dígitos. Click abre wa.me/<num> (autoprefijo 52
+               para celulares MX de 10 dígitos).
+  [UI]       cd-res-mgmt-subcard:
+             - Fondo blanco en tema claro (era --cd-bg gris).
+             - Animación de expansión más lenta: max-height
+               0.9s -> 1.4s, opacity 0.65s -> 1.0s, margin/border
+               0.55s -> 0.85s.
+  [UI]       cd-res-med-chip:
+             - admin: verde más saturado.
+             - overdue: AMARILLO/ÁMBAR (warning) en lugar de rojo.
+             - pending: NEUTRO con fondo --cd-bg, borde estandar y
+               fuente negra (#111 en light, gris claro en dark).
+             - Bordes añadidos para mejor definicion visual.
+
+v1.52.36 — 2026-04-25
+  [UI]       Botón cd-res-med-goto (Ir a Medicación) ahora hereda
+             la clase .cd-btn-add (primario): fondo --cd-primary,
+             texto blanco, padding 7px 14px, hover oscurecido,
+             active scale. Icono cambiado al SVG estándar de
+             medicación (píldora) usado en el dashboard
+             (.cd-cat-btn[data-cat=medicacion]). Icono colocado a
+             la izquierda del texto.
+  [UI]       cd-res-subtabs:
+             - Fondo más contrastado (mezcla --cd-text 6% en
+               --cd-bg en light; #fff 5% en dark) para que las
+               pills resalten claramente.
+             - Sombra inset sutil en el contenedor.
+             - Pill activa con sombra más pronunciada (3 capas:
+               sombra cercana + dispersa + ring 1px) para look
+               flotante claro.
+
+v1.52.35 — 2026-04-25
+  [UI]       Residentes: cd-res-subtabs (Familiares / Medicaciones /
+             Nota médica) ahora usa el estilo pill de cd-cfg-tabs:
+             - Contenedor con border-radius 999px, padding 4px,
+               isolation aislada.
+             - Pill animada (cubic-bezier .34,1.56,.64,1) que se
+               desplaza al tab activo.
+             - Tab activo con color --cd-primary y count badge
+               relleno primario (en dark: accent).
+             - JS calcula posición del pill con
+               offsetLeft + offsetWidth tras render y al hacer click.
+
+v1.52.34 — 2026-04-25
+  [UI]       Stickybar compacta:
+             - Aplicada la fuente del sitio (var(--cd-font) =
+               DM Sans / Inter) tanto en el contenedor como en
+               el nombre del residente.
+             - Botón "Cerrar" rehecho con el estilo .cd-btn-add
+               (primario): fondo --cd-primary, texto blanco,
+               padding 8px 16px, border-radius más suave, hover
+               oscurecido, active scale.
+             - Icono del botón agrandado a 14x14.
+
+v1.52.33 — 2026-04-25
+  [Fix]      Stickybar aparecía desfasada y se movía con el hover
+             de la card. Causa: .cd-res-mgmt-card usa transform en
+             hover (translateY -1px) y active (scale .995), lo que
+             crea un containing block para position:fixed (per CSS
+             spec). Como la barra vivía dentro de la card, su
+             posición fixed se calculaba relativa a la card.
+             Solución: appendear la barra al <body> con un
+             data-card-id para identificarla. Ahora fixed usa el
+             viewport real y el hover de la card no la afecta.
+             - Cleanup actualizado para remover bars del body al
+               colapsar.
+
+v1.52.32 — 2026-04-25
+  [Fix]      Stickybar no aparecía al scrollear: el listener
+             estaba atado a un scroller que no era el real en
+             algunos casos. Ahora:
+             - Detección automática del scroller real subiendo
+               por los ancestros (overflow-y: auto/scroll/overlay
+               + scrollHeight > clientHeight).
+             - Listener en document con capture:true => atrapa
+               eventos de scroll de cualquier ancestro anidado.
+             - 3 checks diferidos (200/600/1100 ms) tras expandir
+               para corregir posición mientras la card aún se
+               anima.
+
+v1.52.31 — 2026-04-25
+  [Fix]      Stickybar dejaba un hueco blanco vacío dentro del
+             subcard porque position:sticky sigue ocupando espacio
+             en el flujo. Cambiada a position:fixed controlado por
+             JS: top/left/width calculados desde card.getBoundingClientRect()
+             y scroller.getBoundingClientRect() en cada scroll.
+             Sin .is-visible no ocupa espacio. Sombra reforzada
+             para look flotante.
+             - También se oculta cuando la card sale por abajo del
+               viewport para evitar barras huérfanas.
+
+v1.52.30 — 2026-04-25
+  [Fix]      Stickybar quedaba flotando muy abajo (no pegada arriba):
+             como .cd-main es el scroller y ya empieza bajo el
+             header, el top del position:sticky es relativo al
+             inicio de .cd-main, no al viewport. Cambiado de
+             top: calc(--cd-header-h + 6px) a top: 6px.
+             Además el JS ahora calcula el umbral de "oculto"
+             usando scroller.getBoundingClientRect().top en vez
+             de la altura del header CSS.
+
+v1.52.29 — 2026-04-25
+  [UI]       Stickybar compacta ahora se desprende cuando el bloque
+             .cd-res-mgmt-head (avatar + nombre + datos principales)
+             sale del viewport por arriba, en lugar de basarse solo
+             en la foto principal. Esto da una transición más
+             natural: la barra aparece cuando ya no se ve la
+             cabecera completa de la card.
+
+v1.52.28 — 2026-04-25
+  [UI]       Stickybar compacta ahora flota sobre TODA la card
+             (cd-res-mgmt-card), no sólo sobre el subcard.
+             Negativos margin -11px -15px (= padding card + borde
+             subcard) y border-radius grande para alinear con la
+             card. Sombra más pronunciada para sensación flotante.
+             Padding interno 10px 14px (era 8px 12px).
+
+v1.52.27 — 2026-04-25
+  [Fix]      Stickybar compacta no aparecía al scrollear: el scroll
+             real ocurre en .cd-main (overflow-y:auto), no en
+             window. El listener estaba en window y nunca
+             disparaba. Ahora se ata el listener al contenedor
+             real (.cd-main) y la barra aparece/desaparece
+             correctamente según la posición del avatar principal.
+  [UI]       Removida la leyenda de chips (cd-res-legend) de la
+             cabecera de Residentes — cada card ya muestra sus
+             propios indicadores. CSS asociado también eliminado.
+
+v1.52.26 — 2026-04-25
+  [Fix]      Stickybar compacta no aparecía al hacer scroll.
+             El IntersectionObserver con rootMargin negativo no
+             disparaba de forma fiable en algunos navegadores y
+             tamaños de viewport. Reemplazado por scroll listener
+             (con throttle requestAnimationFrame) que verifica
+             directamente la posición del avatar:
+             rect.bottom <= header_h + 4 => mostrar; en otro caso
+             ocultar. Mucho mas predecible.
+             - Listener se remueve al colapsar la card.
+             - Estado inicial calculado al instalar (visible al
+               expandir = bar oculta).
+
+v1.52.25 — 2026-04-25
+  [UI]       Stickybar compacta del residente expandido ahora
+             solo flota cuando el avatar principal sale del
+             viewport por arriba (queda oculto bajo el header).
+             Cuando el usuario scrollea de regreso y la foto
+             principal vuelve a verse, la stickybar se oculta
+             (fade + translate) para no duplicar información.
+             - Implementado con IntersectionObserver sobre la
+               .cd-res-mgmt-avatar usando rootMargin negativo
+               igual a la altura del header.
+             - Estado controlado por la clase .is-visible
+               (CSS: opacity 0↔1, transform translateY,
+               pointer-events none↔auto).
+             - Observer se desconecta al colapsar la card.
+
+v1.52.24 — 2026-04-25
+  [Fix]      Stickybar de residente expandido no era visible:
+             - Causa 1: la subcard tiene overflow:hidden para la
+               transición max-height; eso confina el position:sticky
+               y la barra no podía fijarse al scroll del viewport.
+               Solución: overflow:visible cuando la card está
+               expandida.
+             - Causa 2: la lógica anterior dependía de un
+               IntersectionObserver sobre un sentinel + clase
+               .is-stuck, pero el sentinel vivía dentro de
+               overflow:hidden y nunca cambiaba de estado en
+               muchos casos. Eliminado el observer; ahora la
+               stickybar se muestra siempre que la card esté
+               expandida con animación cdStickybarIn de entrada.
+             - Causa 3: _resLoadExpand sobrescribía sub.innerHTML
+               después de prepend de la barra, borrándola.
+               Solución: instalar la stickybar después del then()
+               de _resLoadExpand (o inmediato si ya está cargada).
+             - La stickybar se elimina al colapsar y se vuelve a
+               crear al re-expandir, garantizando datos frescos.
+
+v1.52.23 — 2026-04-25
+  [UI]       Auto-scroll al expandir card de residente:
+             - Al pulsar “Ver más”, la página hace scroll suave para
+               enfocar el inicio de la card (top - header_h - 8px),
+               garantizando que la información desplegada quede
+               visible sin que el usuario tenga que scrollear
+               manualmente.
+  [UI]       Stickybar dedicada (reemplaza sticky de avatar+head):
+             - Se inyecta dinámicamente al expandir una stickybar
+               compacta dentro de la subcard, con mini-avatar 38x38
+               (rounded-12), nombre del residente truncado con
+               ellipsis, y botón “Cerrar” que scrollea de vuelta y
+               colapsa la card.
+             - Aparece con fade-in (opacity + translateY) solo cuando
+               el usuario scrollea más allá del header original
+               (detectado por IntersectionObserver sobre un sentinel),
+               y se desvanece automáticamente cuando la card sale
+               del viewport.
+             - El layout original de la card (avatar 168x168 + nombre
+               + info) ya NO se vuelve sticky, evitando obstrucción
+               por la foto grande. La stickybar es lo único fijo y
+               es claramente identificable (mini-foto + nombre).
+             - Variantes para light y dark mode con sombra ajustada.
+
+v1.52.22 — 2026-04-25
+  [UI]       Sub-card “Ver más” — transición más lenta y suave:
+             - max-height 0.55s → 0.9s, opacity 0.42s → 0.65s,
+               margin/border 0.42s → 0.55s, chevron 0.42s → 0.7s.
+             - El despliegue es notablemente más perceptible y
+               cinematográfico.
+  [UI]       Sticky header al expandir card de residente:
+             - Cuando la card está expandida, la foto (avatar 168x168)
+               y el nombre del residente quedan fijos en la parte
+               superior (top: header_h + 8px) mientras el usuario
+               scrollea por la información expandida (familiares /
+               medicaciones / nota médica). Al salir de la card el
+               sticky se libera automáticamente.
+             - El nombre recibe fondo cd-surface + blur de 4px para
+               legibilidad sobre el contenido que pasa por detrás.
+  [Fix]      Botón “Ir a Medicación” (cd-res-med-goto) no funcionaba:
+             - El orden era change → showView, pero reloadCurrentView()
+               hace `break` cuando _currentView === 'viewResidentes',
+               por lo que el dashboard no se recargaba.
+             - Ahora: showView('viewDashboard') primero, luego sel.value
+               + change (o loadDashboard manual si es el mismo id), y
+               por último polling cada 80ms (máx 20 intentos) para
+               clickear .cd-cat-btn[data-cat="medicacion"] cuando esté
+               disponible.
+  [UI]       Contraste cd-nm-card.cd-res-nm-card:
+             - Background era var(--cd-bg-card) (variable inexistente →
+               transparente) y se confundía con el fondo del subcard.
+             - Cambiado a var(--cd-surface) en light y #1f1f1f en dark,
+               con borde y sombra sutil para destacar la nota médica
+               sobre el panel cd-bg.
+
+v1.52.21 — 2026-04-25
+  [UI]       Sub-card Familiares — íconos uniformes y parentesco:
+             - Cada cd-res-fam-meta usa un grid (ícono + valor) con 2
+               filas fijas (correo y teléfono), garantizando alineación
+               idéntica entre familiares de distintos residentes.
+             - Si un dato falta, se muestra un placeholder en gris
+               itálica ("Sin correo" / "Sin teléfono") manteniendo
+               la altura uniforme.
+             - Junto al nombre se muestra el parentesco (· Hija, ·
+               Hijo, etc.) en cd-res-fam-rel, leído de
+               familiares_usuarios[].parentesco.
+  [API]      cuidados.php (?dashboard=1) — el array
+             residente.familiares_usuarios ahora incluye 'parentesco',
+             enriquecido por match contra contactos_json del residente
+             (por email → teléfono → nombre).
+  [UI]       Vista Residentes — cabecera renombrada de
+             "Estado de Cuidados de Residentes" a simplemente
+             "Residentes".
+  [UI]       Sub-card Medicaciones — chips por horario:
+             - Se eliminan las 3 secciones (Pendientes / Administradas
+               / Sin pendientes). Ahora una sola lista ordenada por
+               estado (vencidas primero).
+             - La columna cd-res-med-tbl-status muestra cada horario
+               como un chip coloreado: verde administrado, rojo
+               vencido, ámbar pendiente, gris (tachado) omitido,
+               gris off para inactiva/vencida/programada.
+             - Header con título "Medicaciones" y botón "Ir a
+               Medicación →" arriba a la derecha que selecciona el
+               residente actual y abre la categoría Medicación.
+  [UI]       Nota médica del residente — Signos Vitales al final:
+             - Dentro de cd-nm-card.cd-res-nm-card, la sección de
+               Signos Vitales se mueve al final del bloque (después
+               de SOAP y diagnósticos), priorizando la lectura del
+               análisis clínico antes que las cifras.
+
+v1.52.20 — 2026-04-25
+  [UI]       Sub-card "Ver más" — Mejoras UX:
+             - Animación de expand: ahora la sub-card se despliega de
+               manera fluida con transición de max-height + opacity +
+               margin-top + border-width (550ms cubic-bezier en lugar
+               del fade rígido anterior). El chevron también suaviza
+               su rotación (420ms).
+             - Medicaciones simplificadas: nueva tabla compacta estilo
+               cd-nm-sv-table, agrupada en 3 secciones:
+                 · Pendientes hoy (rojo si vencidas, ámbar si por
+                   administrar)
+                 · Administradas hoy (verde si completas, azul si
+                   parciales con n/Total)
+                 · Sin pendientes hoy (programadas / inactivas /
+                   vencidas, atenuadas)
+               Cada fila: ícono de estado + nombre/dosis + texto
+               principal (ej: "2 pendientes", "3/3", "Inactiva") +
+               sub-texto ("de 3 hoy", "completada", etc.). Tooltip
+               con desglose detallado de horarios e indicaciones.
+  [UI]       Transiciones más visibles:
+             - Slides de vista: 280ms → 420ms cubic-bezier.
+             - cd-fade-up-in: 220ms → 380ms (translateY 10px).
+             - cd-fade-in: 180ms → 300ms.
+             - Chevron de "Ver más": 250ms → 420ms.
+
+v1.52.19 — 2026-04-25
+  [UI]       Sistema global de transiciones de UI:
+             - Nuevas animaciones CSS reutilizables: cd-fade-up-in
+               (opacidad + translateY 8px→0, 220ms cubic-bezier) y
+               cd-fade-in (opacidad pura, 180ms).
+             - showView ahora aplica fade-up por defecto en cualquier
+               cambio de vista que no sea slide horizontal (Inicio,
+               Registros, Residentes, Reportes, Configuración, etc.),
+               además de las transiciones slide existentes para
+               formularios.
+             - Pestañas de la Ficha (Info / Familia / Notificaciones):
+               el panel activo ahora hace fade-up al cambiar de tab.
+             - Sub-card "Ver más" en Residentes: cada cambio de tab
+               (Familiares / Medicaciones / Nota médica) hace fade-up.
+             - Respeto a prefers-reduced-motion: todas las
+               animaciones se desactivan si el usuario lo pide.
+
+v1.52.18 — 2026-04-25
+  [UI]       Residentes · Sub-card "Ver más" — mejoras UX:
+             - Nota médica: ahora reutiliza el render SOAP completo de
+               cd-nm.js (cd-nm-card + nmRenderSections), idéntico al
+               panel del Expediente. Muestra Signos Vitales (TA/FC/FR/
+               Temp/SpO₂/Peso/Glucosa con flags fuera de rango),
+               Subjetivo, Objetivo, Análisis, Plan/Indicaciones,
+               Diagnósticos CIE-10 y header con médico, fecha y bandera
+               "editada".
+             - Medicaciones: lista simplificada y enfocada en el día.
+               Cada medicamento muestra chips de dosis con estado claro:
+                 ✓ Administrada (verde)
+                 ⚠ Pendiente vencida (rojo)
+                 ⦾ Programada (ámbar)
+                 ✕ Omitida (gris tachado)
+               Badge resumen por medicamento: "Completada hoy",
+               "X de Y hoy", "X pendientes", "Inactiva", "Vencida",
+               "Programada". Ordenado: pendientes primero. Lee
+               horarios_cubiertos y medicamentos_no_administrados de
+               los registros del día.
+             - Familiares: nuevo botón de campana en cada item para
+               configurar notificaciones. Lleva a Ficha → pestaña
+               Notificaciones y abre automáticamente el panel del
+               familiar correspondiente (mismo UX que cd-notif-member).
+  [API]      _resLoadExpand ahora extrae registros de medicación del
+             día actual desde /api/cuidados.php?dashboard=1 para
+             calcular dosis administradas/pendientes en tiempo real.
+
+v1.52.17 — 2026-04-25
+  [Fix]      Residentes — "Ver más" mostraba "No se pudo cargar la
+             información" porque el lazy-load llamaba a
+             /api/cuidados.php?id=X&fecha=Y, pero el endpoint requiere
+             ?dashboard=1&residente_id=X&fecha=Y. Ajustado el query y
+             también se acepta `notaMedico` como fallback al parsear la
+             nota médica vigente.
+
+v1.52.16 — 2026-04-25
+  [UI]       Residentes (cards) — Detalles UX:
+             - Padding derecho de 18px en cd-res-mgmt-info para que los
+               valores no toquen el borde de la tarjeta (matching imagen
+               de referencia).
+             - Padding derecho de 36px en cd-res-mgmt-meta y reducción
+               del row-gap de la tarjeta (8px → 4px) para acercar el
+               nombre con su meta-info.
+  [UI]       Residentes — Nuevo botón "Ver más" / "Ver menos":
+             - Botón con chevron animado (rota 180° al expandir) en una
+               fila propia que ocupa todo el ancho de la tarjeta.
+             - Al hacer click despliega una sub-card animada
+               (slide+fade) con tab-bar de 3 pestañas:
+                 · Familiares: lista con avatar de iniciales,
+                   email/teléfono como links, y botones de acción
+                   (llamar / correo) con SVG icons.
+                 · Medicaciones: lista coloreada por estado de cada
+                   medicamento (Activa=verde, Programada/Por terminar=
+                   ámbar, Inactiva=gris, Vencida=rojo) con tira de
+                   color izquierda + pill de status + detalle
+                   (horario, periodo, indicaciones).
+                 · Nota médica: nota vigente con badge "Vigente",
+                   parsing automático de SOAP (S/O/A/P) si el cuerpo
+                   es JSON, o texto plano en otro caso.
+             - Lazy-load: los datos solo se piden la primera vez que
+               se abre la tarjeta y se cachean por residente
+               (_resExpandCache) para tabs subsecuentes.
+             - Endpoints usados: /api/cuidados.php (familiares,
+               nota_medico) y /api/prescripciones.php (medicaciones).
+             - Click en el botón / sub-card no propaga al click de
+               navegación al dashboard.
+  [UI]       Variantes dark mode: variables específicas para tira y
+             pill de medicación (--cd-med-ok/--cd-med-soon/--cd-med-off/
+             --cd-med-expired) con buen contraste en ambos temas.
+
+v1.52.15 — 2026-04-25
+  [UI]       Residentes (cards) cd-res-mgmt-info:
+             - Layout justificado: label a la izquierda con ancho fijo
+               (64px) y valor alineado a la derecha (text-align: right)
+               igual que la imagen de referencia.
+             - Diagnósticos múltiples: si el campo trae varios Dx
+               separados por coma, cada uno va en una línea propia. La
+               etiqueta "Dx:" solo aparece en la primera; las siguientes
+               usan un placeholder invisible para mantener la sangría.
+             - Orden cambiado a: Médico, Dx, Alergias (antes: Alergias,
+               Médico, Dx).
+             - Alergias "negadas" también se reconoce como "sin
+               alergias" y se muestra en verde.
+             - Valores de alergias y "negadas" en negrita y color
+               correspondiente (rojo / verde) para destacar.
+
+v1.52.14 — 2026-04-25
+  [UI]       Residentes (cards): badge de estado movido al renglón de
+             los stats (grid-row 4) y columna de la foto (grid-column 1),
+             centrado vertical y horizontalmente. Sale del avatar-wrap
+             y va como elemento independiente del grid.
+
+v1.52.13 — 2026-04-25
+  [UI]       Residentes (cards):
+             - El badge de estado (Activo/Egresado/Fallecido) ahora se
+               coloca centrado debajo de la foto del residente, dentro
+               de un nuevo wrapper .cd-res-mgmt-avatar-wrap.
+             - La fila .cd-res-mgmt-meta queda solo con el subtítulo.
+             - Removidos los iconos SVG de la lista .cd-res-mgmt-info.
+               Ahora cada item es texto plano: "Label: valor".
+
+v1.52.12 — 2026-04-25
+  [UI]       Residentes (cards): info de alergias / médico / diagnóstico
+             ahora se muestra como pequeña lista vertical (icono + label
+             en negrita + valor), sin estilo de badge. Ocupa menos espacio
+             vertical, más legible. Alergias mantiene tono rojo (verde si
+             es "sin alergias conocidas") sólo en el texto, sin fondo.
+
+v1.52.11 — 2026-04-25
+  [UI]       Residentes (cards):
+             - Avatar duplicado a 168px (rounded square 24px), móvil 110px.
+               Ocupa 3 filas del grid alineado al inicio.
+             - Nueva fila de "info chips" entre meta y stats que muestra
+               de un vistazo:
+                 • Alergias (chip rojo con icono de alerta) o
+                   "Sin alergias" (chip verde) si el campo dice ninguna/
+                   no conocidas/n a/none.
+                 • Médico responsable (chip azul con icono de corazón).
+                 • Diagnóstico (chip neutro con icono de documento),
+                   truncado a 36 chars con tooltip completo.
+             - Icono de heces: corregido. El truco anterior con <img> +
+               mask no funcionaba porque <img> renderiza los píxeles del
+               PNG encima de la máscara. Ahora usa <span> con mask-image
+               y background-color: currentColor, asi adopta el color de
+               la fuente del badge en claro y oscuro.
+  [API]      api/residentes.php (?cuidados_estado): añade alergias,
+             diagnostico, medico_nombre al payload (mismos roles que
+             antes: superadmin/admin/medico/enfermero).
+  [PHIPA]    Los campos alergias y diagnostico son PHI; la exposición se
+             limita al dashboard de cuidados al que ya tienen acceso los
+             roles clínicos. Coincide con la política de mínimo necesario.
+
+v1.52.10 — 2026-04-25
+  [UI]       Residentes (cards):
+             - Avatar agrandado de 48px circular a 84px con esquinas
+               redondeadas (rounded square 18px), inspirado en la
+               referencia visual del usuario. En móvil baja a 64px.
+             - Icono de heces (poop.png) ahora usa CSS mask-image con
+               background-color: currentColor, asi adopta el mismo color
+               de la fuente del badge (en lugar del color original del
+               PNG). Funciona correctamente con tonos alert/danger en
+               claro y oscuro.
+
+v1.52.9 — 2026-04-25
+  [UI]       Residentes (cards): mejoras visuales.
+             - Sombra suave en cada card (con realce al hover y leve
+               translateY) y sombra más profunda en dark mode.
+             - Badges de stats con fondo semi-transparente + borde tintado
+               + texto coloreado (mejor legibilidad y estética más sobria
+               que el fondo sólido anterior).
+             - Stats movidos a una línea independiente debajo del nombre y
+               meta, con separador punteado superior. Layout: a la izquierda
+               cuidados de hoy + stock; spacer flexible al medio; a la
+               derecha medicación, alertas médicas, signos vitales, sueño,
+               horas desde última evacuación.
+             - Hover ahora aplica un sutil translateY(-1px) para feedback.
+
+v1.52.8 — 2026-04-24
+  [UI]       Residentes: revertido el rediseño tipo panel (v1.52.0–v1.52.7).
+             Vuelve al layout horizontal compacto previo: avatar 48px a la
+             izquierda, nombre + badge de estado + subtítulo + pills de
+             stats, kebab a la derecha. Se restaura la leyenda de chips
+             (cd-res-legend) en la cabecera de la vista.
+
+v1.52.7 — 2026-04-24
+  [UI]       Residentes: el kebab ahora se ancla a la esquina superior
+             derecha de la tarjeta (10px desde top/right) en vez de la
+             esquina del hero. La card es position:relative para servir
+             de contexto al overlay. Hero perdio el margen-top vacio.
+
+v1.52.6 — 2026-04-24
+  [UI]       Residentes: removido cd-res-panel-top. El kebab ahora se
+             posiciona en absoluto sobre el hero (esquina superior
+             derecha del avatar) con fondo cd-surface y borde para
+             contraste. Reduce ~36px de espacio vertical vacio en cada
+             tarjeta.
+
+v1.52.5 — 2026-04-24
+  [UI]       Bottom bar: removido el boton "Config" del nav inferior.
+             Reubicado al header como cd-icon-btn (icono settings de
+             Material Symbols) a la derecha del toggle de tema y antes
+             del logout. Se respeta el permiso $canSecConfiguracion.
+  [UI]       El nuevo boton del header se marca activo (clase
+             cd-icon-btn--active, fondo color de acento) cuando la vista
+             actual es viewConfig, sincronizado por showView().
+  [UI]       Click handler en cd-navigation.js.php replica las mismas
+             confirmaciones de salida (medicacion, notas medico, care
+             form dirty) que tienen los botones del nav inferior.
+
+v1.52.4 — 2026-04-24
+  [UI]       Residentes: simplificado el header de la tarjeta
+             (cd-res-panel-top) — ahora solo contiene el boton kebab
+             alineado a la derecha. Removidos el avatar mini y el nombre
+             duplicado (el nombre ya aparece grande debajo del hero).
+
+v1.52.3 — 2026-04-24
+  [UI]       Residentes: las filas de la tarjeta ahora son una lista
+             plana separada por hairlines (border-bottom 1px) en vez de
+             cajas con borde individual. Reduce ~40% el alto vertical de
+             cada tarjeta sin perder claridad. El color de severidad se
+             mueve al icono (rojo/ambar/verde) ya que ya no hay borde de
+             la fila para tintar.
+  [UI]       Mobile (<=480px): grid a 1 columna, hero 96px (antes 110px),
+             titulo 1.0625rem, filas 32px de alto minimo, padding lateral
+             reducido y boton Ver full-width.
+
+v1.52.2 — 2026-04-24
+  [Fix]      Residentes: tarjetas se renderizaban desfazadas (avatar
+             grande a la derecha, boton Ver flotando fuera, hero vacio).
+             Causa: las reglas viejas de .cd-res-mgmt-card (display:grid,
+             grid-template-columns: auto 1fr auto) y de
+             .cd-res-mgmt-menu-wrap (grid-column:3; grid-row:1) seguian
+             aplicando porque estan despues en el archivo CSS y la
+             especificidad era igual. Fix: reglas .cd-res-mgmt-card.cd-res-panel
+             (especificidad doble) que fuerzan flex-direction:column y
+             resetean grid-template-columns/gap; tambien override del
+             menu-wrap dentro de .cd-res-panel-top con grid-column/row:auto
+             y margin-left:auto.
+
+v1.52.1 — 2026-04-24
+  [UI]       Residentes: tarjetas mas parecidas al referente:
+               • Titulo del nombre en mayusculas + bold (1.25rem),
+                 estilo "NOMBRE AQUI".
+               • Subtitulo (chip de estado + edad/sexo/habitacion) solo
+                 se muestra si el residente NO esta activo o si hay
+                 datos de subtitulo — mas limpio para residentes activos.
+               • Filas (cd-res-panel-row) mas compactas: padding 7px 12px,
+                 gap 6px, min-height 40px, etiqueta+detalle en linea
+                 (flex-wrap baseline) en vez de columna, iconos 17px,
+                 indicador 20px.
+
+v1.52.0 — 2026-04-24
+  [UI]       Residentes: rediseno de tarjetas estilo "panel" (inspirado
+             en el modal de apps conectadas de Gemini). Cada residente
+             se muestra en una tarjeta vertical con:
+               • Header: avatar mini + nombre + kebab de acciones.
+               • Hero: avatar circular grande con borde y sombra.
+               • Title block: nombre completo + chip de estado + edad/
+                 sexo/habitacion.
+               • Filas (badges integrados): Medicacion, Alertas medicas,
+                 Signos vitales, Sueno, Eliminacion (heces), Inventario y
+                 Cuidados hoy. Cada fila muestra icono + etiqueta +
+                 detalle + indicador de estado (verde OK, naranja Atencion,
+                 rojo Critico).
+               • Boton "Ver" full-width que navega al Inicio con el
+                 residente seleccionado (reemplaza el click implicito en
+                 la tarjeta como CTA principal).
+  [UI]       Removida la leyenda de chips superior (cd-res-legend) —
+             ahora cada fila explica su semantica con su propio indicador.
+  [UI]       Grid responsivo: auto-fill minmax(320px, 1fr); en pantallas
+             <= 480px colapsa a una columna.
+
+v1.51.61 — 2026-04-24
+  [Config]   Configuración → Equipo → Personal: el "último acceso"
+             en las tarjetas de usuario ahora se formatea con el
+             timezone de la institución (cfgTimezone / APP_TZ) y el
+             formato de fecha configurado (APP_DATE_FMT) usando el
+             helper fmtDateTime(). Antes se mostraba el string crudo
+             del servidor (UTC sin formato), lo que causaba confusión
+             para instituciones en zonas horarias distintas.
+  [Config]   Auditoría similar: corregidas tarjetas de Invitaciones
+             (fecha de expiración + sidebar de detalle), Notificaciones
+             (lista y tooltip de fecha completa, fallback de _timeAgo)
+             e Historial ARCO (fechas de solicitudes). Todas usan ahora
+             APP_TZ explícitamente.
+  [Note]    Logs y Sesiones ya respetaban cfgTimezone vía fmtDateTime
+             desde versiones previas — sin cambios necesarios.
+
+v1.51.60 — 2026-04-24
+  [Fix]    Matriz de Roles — los cambios ahora se reflejan
+           INMEDIATAMENTE en las sesiones de otros usuarios.
+           Causa raíz: `Configuracion::getCached()` cachea la
+           configuración por sesión con TTL de 5 minutos. Cuando
+           el admin guardaba la matriz, `clearCache()` solo
+           limpiaba la sesión del admin — los enfermeros, médicos
+           y familiares con sesión abierta seguían viendo el JSON
+           viejo hasta el TTL, lo cual hacía parecer que el cambio
+           "no funcionaba". Ahora `clearCache()` actualiza el
+           mtime del archivo `conf/.cfg_v_<inst>` y `getCached()`
+           lo compara contra el timestamp de la caché; si el flag
+           es más reciente, refresca de BD. Sin queries extra
+           (sólo un syscall filemtime, mucho más barato que un
+           SELECT). Ése era el caso del enfermero que no veía
+           la sección Medicación aunque el admin se la habilitó.
+
+  [Fix]    Matriz de Roles — cerrado un bypass de permisos en
+           el Inicio (Dashboard). Los siguientes botones no
+           respetaban la matriz de visibilidad de secciones:
+             • Atajo rápido "Ver registros" → ahora gated por
+               `ver_seccion_registros`.
+             • Atajo rápido "Medicación del día" → ahora gated
+               por `ver_seccion_medicacion`.
+             • Categoría "Ficha" → ahora gated por
+               `ver_seccion_ficha`.
+             • Categoría "Notificaciones" (que abre la pestaña
+               de notificaciones dentro de la Ficha) → ahora
+               gated por `ver_seccion_ficha`.
+           Antes, un rol con `ver_cuidados_grid` o
+           `hacer_registros` activos podía navegar a esas vistas
+           desde el Dashboard incluso con la sección apagada en
+           la matriz, dejando inconsistente la barra lateral
+           (ocultaba) vs. el Inicio (mostraba).
+
+v1.51.59 — 2026-04-24
+  [Cifrado] inventario_items.notas — ahora marcada como PHI
+            (Protected Health Information / Información de Salud
+            Protegida) en EncryptionMap. El modelo Inventario.php
+            usa el valor cifrado de `notas` en INSERT y UPDATE.
+            La columna no se usa en WHERE/LIKE/ORDER BY — cifrado
+            seguro.
+            Para activar el cifrado en cada entorno:
+              Superadmin → Auditoría BD → Cifrado → marcar el
+              campo `inventario_items.notas` y correr las 4 fases
+              (Preparar → Migrar → Activar → Consolidar).
+
+v1.51.58 — 2026-04-24
+  [Cifrado] Superadmin → Auditoría BD → Cifrado: ahora se puede
+            REPARAR drift entre encryption_state.json y la BD real.
+            Casos típicos resueltos:
+              • El JSON dice 'consolidated' pero las columnas _enc
+                siguen existiendo (DDL DROP/RENAME nunca corrió,
+                o solo corrió en master y no en los tenants).
+              • El JSON dice 'active'/'migrated' pero la columna
+                _enc no existe en la BD.
+            Cambios:
+              - encryption_status: detecta drift por campo y devuelve
+                un nuevo flag `drift` ('enc_still_present' o
+                'enc_missing'). La app YA NO hace auto-corrección
+                silenciosa de la fase — muestra el estado real para
+                que el superadmin vea el problema.
+              - UI: insignia ⚠️ "drift" junto a la fase cuando
+                hay desincronización.
+              - UI: nuevo toggle "Modo forzar" (en la barra de
+                acciones). Cuando está activo:
+                  · los 4 botones (Preparar/Migrar/Activar/Consolidar)
+                    se habilitan para cualquier fase seleccionada,
+                  · se envía `force=true` al backend, que omite el
+                    chequeo de fase guardada (pero MANTIENE el guard
+                    de pérdida de datos: no deja consolidar si hay
+                    filas con la columna original poblada y _enc NULL).
+              - UI: selector inline "Fijar fase…" por campo, que
+                permite editar manualmente la fase guardada en el
+                JSON sin ejecutar DDL (útil para etiquetar
+                correctamente cuando la BD ya está en otro estado).
+              - api.php: nueva acción `encryption_set_phase` (sólo
+                actualiza el JSON, no ejecuta SQL).
+              - api.php: `encryption_consolidate` y
+                `encryption_activate` aceptan `force: true`.
+            §5 PHIPA / NOM-024-SSA3-2012: el guard que impide
+            perder PHI (Protected Health Information / Información
+            de Salud Protegida) se mantiene incluso en Modo forzar
+            — si una fila tiene texto plano en la columna original
+            y NULL en _enc, el DROP se rechaza y se exige correr
+            Migrar primero. "Modo forzar" no bypasea esa salvaguarda.
+
+v1.51.57 — 2026-04-24
+  [IA]     Reporte del día — enriquecido el prompt enviado al
+           proveedor de IA (OpenAI / Gemini / DeepSeek) con dos
+           bloques clínicos adicionales:
+             1. NOTA MÉDICA VIGENTE — última nota del médico
+                cuyo estado='vigente' (PHI = Protected Health
+                Information cifrado en reposo, descifrado solo
+                para componer el prompt). Permite que la IA
+                contraste lo registrado contra el plan/diagnóstico
+                del médico y resalte cumplimiento o desviaciones.
+             2. ALERTAS DE ELIMINACIÓN — horas transcurridas
+                desde el último registro de Heces y Orina, con
+                niveles automáticos:
+                  • heces ≥12h → monitoreo, ≥24h → CRÍTICA
+                  • orina ≥8h  → monitoreo, ≥12h → CRÍTICA
+                Las alertas CRÍTICAS se inyectan obligatoriamente
+                en la sección 🔴 ALERTAS PRIORITARIAS y las de
+                monitoreo en ⚠️ MONITOREO.
+           Aplica a:
+             - cron/notificaciones.php → _buildReportData() y
+               _generateAIReport() (envió automático WhatsApp/email).
+             - api/reportes.php → acción 'interpretar' (botón
+               manual de Reportes / Bitácora). Ahora server-side
+               obtiene la nota vigente y los últimos eventos de
+               Heces/Orina si el cliente envía residente_id.
+             - assets/js/cd-ai.js → ahora envió residente_id en
+               el body del POST.
+           Aviso PHIPA/NOM: la nota médica es PHI; viaja al
+           proveedor IA sólo si hay ia_api_key configurada y
+           según el ia_proveedor escogido por la institución.
+           Esto ya estaba documentado en el aviso de privacidad
+           (LFPDPPP sección 3, transferencias a terceros).
+
+v1.51.56 — 2026-04-24
+  [UI]     Residentes — Reorganización del card de cada
+           residente para coincidir con el diseño solicitado:
+             • Fila 1: avatar | nombre completo | kebab.
+             • Fila 2 (.cd-res-mgmt-meta): badge de estado
+               ("Activo" / "Egresado" / "Fallecido") +
+               edad · sexo · habitación a la izquierda;
+               contadores/stats (medicación pendiente, signos
+               fuera de rango, sueño pendiente, heces, inventario,
+               actividad de hoy) alineados a la derecha en la
+               misma línea.
+           Antes el badge y la línea de sub-info iban en filas
+           separadas y los stats compartían fila con el nombre,
+           lo que generaba un card alto y desbalanceado.
+
+v1.51.55 — 2026-04-24
+  [UI]     Cuidados — Formularios de registro: el bloque
+           .cd-form-group.cd-event-time-group (cabecera "Hora del
+           evento" presente en alimentación, higiene, eliminación,
+           comportamiento, movilidad, signos vitales, sueño,
+           medicación, terapia e incidente) ahora muestra un chip
+           con el día en que se guardará el registro, formateado
+           según Configuración > General > Formato de fecha
+           (APP_DATE_FMT). Estados visuales del chip:
+             • "Hoy · DD/MM/YYYY" (verde/acento) cuando _fecha es hoy.
+             • "Ayer · …" cuando _fecha es ayer.
+             • Solo la fecha cuando se navega a otros días.
+           El chip se inyecta dinámicamente al abrir el formulario
+           y se actualiza al cambiar la fecha en la barra global.
+  [Sueño] viewFormSueno: el chip respeta el toggle
+           cdSleepStartDayToggle (Hoy / Día anterior) usando
+           _sleepFecha(), porque el registro de sueño se ancla al
+           día en que comenzó. Si se elige "Día anterior" el chip
+           cambia a "Día anterior · <fecha>" en estilo ámbar.
+
+v1.51.54 — 2026-04-24
+  [Fix]    Producción reportaba en php_errors.log dos problemas:
+           (1) "[Cipher] decrypt failed — clave incorrecta o datos
+           corruptos (len=…)" inundando el log. Causa: el método
+           Cipher::decrypt() registra cada intento fallido, pero
+           durante la transición gradual desde texto plano a
+           AES-256-GCM hay valores que PARECEN base64 válido (PHI
+           = Protected Health Information / Información de Salud
+           Protegida no migrada aún) que dispara openssl_decrypt
+           false. La función ya devolvía el valor original (no
+           rompía la app), solo el log era ruido. Ahora el log
+           está silenciado por defecto y solo se activa con
+           CIPHER_DEBUG=1 en conf/.env (con dedupe por valor +
+           caller para depuración real).
+           (2) "Table 'arco_solicitudes' doesn't exist" en
+           api/personal.php:565 al consultar historial ARCO.
+           Causa: la tabla se creaba solo vía db/migrate_arco.php
+           (script standalone) y no estaba registrada en
+           db/expected_schema.php, así que Auditoría BD del
+           superadmin no la creaba en instalaciones nuevas ni la
+           reparaba si faltaba. Ahora forma parte del esquema
+           esperado (scope=master) y run_full_migration la crea
+           automáticamente. Acción requerida en producción:
+           ejecutar Superadmin → Auditoría BD → Migración total.
+
+v1.51.53 — 2026-04-23
+  [Fix]    Residentes → click en card: aunque la navegación al
+           dashboard funcionaba (v1.51.52), durante el breve
+           periodo en que `loadDashboard()` espera el fetch al
+           backend los badges (Medicación pendiente ⚠ N, Heces Nh,
+           Signos ⚠ N, Sueño, NM, contadores por categoría)
+           seguían mostrando los valores del residente ANTERIOR.
+           Causa: `loadDashboard(silent=false)` mostraba esqueletos
+           para el timeline y RxTracker pero NO limpiaba los badges.
+           El usuario veía la vista cambiar pero los números
+           "viejos" persistían 1-2s, lo que parecía que el click
+           no había hecho efecto (o que mostraba datos cruzados).
+           Ahora `loadDashboard` resetea `_counts`, `_registros`,
+           `_bitacoraEvents`, `__cdServerBadges` y limpia
+           visualmente todos los badges al iniciar (cuando
+           `silent=false`), garantizando un "estado limpio"
+           consistente con los esqueletos del timeline y RxTracker
+           hasta que llega la respuesta con los datos del nuevo
+           residente.
+
+v1.51.52 — 2026-04-23
+  [Fix]    Residentes → click en card: navegaba al dashboard
+           pero el contenido del dashboard quedaba con los datos
+           del residente anterior. Causa: el handler hacía
+           `sel.dispatchEvent('change')` mientras `_currentView`
+           seguía siendo 'viewResidentes', y el case correspondiente
+           en `reloadCurrentView()` hace `break` (no recarga). El
+           `showView('viewDashboard')` posterior solo cambiaba la
+           vista visible, sin disparar `loadDashboard()`.
+           Ahora se llama `showView('viewDashboard')` ANTES de
+           dispatch del change, y si el id es el mismo que ya estaba
+           seleccionado se invoca `loadDashboard()` manualmente
+           (porque `change` no se dispara si el value no cambia).
+
+v1.51.51 — 2026-04-23
+  [Fix]    Sesión cerrándose antes del timeout configurado en
+           Configuración > Seguridad. Dos causas:
+             1) Multi-institución: `index.php` calculaba el timeout
+                con la institución *primaria* (`usuarios.institucion_id`)
+                ANTES de que el usuario eligiera otra en
+                `select_institucion.php`. `api/switch_institucion.php`
+                actualizaba la institución activa pero NO refrescaba
+                `_cfg_session_timeout`, por lo que se usaba el valor
+                de la institución equivocada.
+             2) Al guardar la sección 'seguridad' en
+                `api/configuracion.php`, el nuevo `seg_timeout_sesion`
+                no se aplicaba a la sesión actual hasta cerrar y
+                volver a iniciar sesión.
+           Ahora ambos endpoints recargan `_cfg_session_timeout`
+           desde la config de la institución activa y resetean
+           `_last_activity` para que el cambio surta efecto inmediato.
+
+v1.51.50 — 2026-04-23
+  [Fix]    Badges: los números mostrados en la lista de Residentes
+           y en las cards del dashboard (Inicio) podían diferir
+           hasta en 1 hora cuando el `timezone` configurado en la
+           institución no coincidía con `date_default_timezone_set`
+           del servidor (ej. `Etc/GMT+5` (UTC-5) vs.
+           `America/Mexico_City` (UTC-6 desde 2022, sin horario de
+           verano)). El cliente clasificaba 22:00 como "vencido"
+           mientras el servidor lo clasificaba como "próximo".
+  [Refactor] Helpers de cálculo de badges extraídos a
+           `api/_badge_helpers.php` (single source of truth):
+             - `_signos_out_count()`
+             - `_med_overdue_count()`
+             - `_heces_hours_since()`
+             - `_rx_parse_horarios()`
+           Usados ahora por `api/residentes.php` (lista) y
+           `api/cuidados.php` (dashboard batch).
+  [API]    `GET /api/cuidados.php?dashboard=1` ahora devuelve
+           `badges: { medicacion_pendiente, signos_fuera_rango,
+           heces_horas }` calculados en zona horaria del servidor.
+  [JS]     `cd-dashboard.js::loadDashboard` captura `data.badges`
+           en `window.__cdServerBadges`.
+           `renderHecesBadge` prefiere `heces_horas` del servidor
+           sobre el cálculo local con `new Date()` (que usa la TZ
+           del navegador, no la de la app).
+           `cd-forms.js.php::renderRxTracker` prefiere
+           `medicacion_pendiente` del servidor sobre el conteo
+           local `pendingWarnSlots`. La grilla visual de pills
+           sigue clasificándose en cliente (estilo done/skipped/
+           pending) pero el badge numérico es autoritativo.
+  [Result] El badge `⚠ N` de Medicación y el `Nh` de Eliminación
+           del dashboard ahora son idénticos a los badges de la
+           misma residente en la sección Residentes,
+           independientemente de la zona horaria del navegador.
+
+v1.51.49 — 2026-04-23
+  [Fix]    Residentes: el conteo de `medicacion_pendiente` que
+           alimenta los badges de la lista no coincidía con el
+           que muestra el badge `cdMedPendingBadge` del dashboard
+           (`renderRxTracker` → `pendingWarnSlots`). Causas:
+             - La API ignoraba prescripciones cuyo `inicio` está
+               en el futuro (el dashboard sí las filtra).
+             - La API descartaba Rx sin horarios; el dashboard
+               las cuenta como 1 pendiente si no hay registro hoy.
+           Ahora `_med_overdue_count()` en `api/residentes.php`:
+             1) salta Rx con `inicio > today`.
+             2) cuenta como 1 pendiente las Rx sin horarios cuando
+                hoy no hay administración ni skip total registrado.
+           Resultado: los números de los badges en la sección de
+           Residentes coinciden con los de las cards de inicio.
+
+v1.51.48 — 2026-04-23
+  [UI]     Residentes: badges de las cards alineados con los
+           iconos del dashboard (cards de inicio) para que sean
+           visualmente consistentes:
+             - alertas_medico_pendientes ahora usa el SVG
+               clipboard-with-cross (igual que .cd-cat-btn--notas-medico)
+               en lugar del icono de campana.
+             - signos_fuera_rango ahora usa el glifo Material
+               Symbols heart-pulse (e650) (igual que la card
+               .cd-cat-btn[data-cat="signos_vitales"]) en lugar
+               del SVG de actividad genérico.
+             - heces_horas ahora usa `assets/icons/poop.png`
+               (igual que .cd-heces-badge dentro de la card de
+               eliminación) en lugar de toilet.png; tono cambia
+               a `danger` cuando ≥24h, igual que el badge.
+           Medicación y sueño ya coincidían; inventario_low_stock
+           se mantiene con su glifo de caja (no tiene contraparte
+           en las cards del dashboard).
+
+v1.51.47 — 2026-04-23
+  [UI]     Tarjetas de categoría con efecto "breathing" (glow
+           pulsante en box-shadow) cuando algo requiere atención:
+             - `.cd-cat-btn--notas-medico` recibe la clase
+               `.cd-cat-btn--breathing-blue` mientras hay una
+               nota médica vigente (_notaMedico).
+             - El botón de Eliminación recibe
+               `.cd-cat-btn--breathing-red` cuando el badge de
+               heces está en estado danger (≥24h sin registro o
+               sin registro alguno).
+           Animaciones `cd-card-breath-blue` (2.4s) y
+           `cd-card-breath-red` (1.8s). Respeta
+           `prefers-reduced-motion` (cambia a outline estático).
+
+v1.51.46 — 2026-04-23
+  [UI]     Dashboard: botón de categoría "Notificaciones"
+           (`.cd-cat-btn--notificaciones`) ahora usa el logo de
+           WhatsApp (SVG inline brand mark) en lugar del glifo
+           Material Symbols anterior. Renderizado como <svg> para
+           heredar el sizing estándar de `.cd-cat-btn svg`
+           (22px / 28px en breakpoints grandes), igualando al
+           resto de iconos de la rejilla.
+
+v1.51.45 — 2026-04-23
+  [UI]     Botones de ayuda de notificaciones (.cd-notif-help-btn):
+           agrandados de 18×18px a 28×28px (icono 14→ 22px) y
+           reemplazado el SVG outline genérico por el glifo
+           "info" filled de Material Icons (codepoint e88e),
+           reproducido como SVG inline para no depender de la
+           fuente Material Icons. Color base ahora `--cd-primary`
+           (antes `--cd-text-muted`) para que sea claro que es un
+           botoncillo de ayuda interactivo. Añadido feedback
+           `:active { transform: scale(.92) }`.
+
+v1.51.44 — 2026-04-23
+  [UI]     Visor de imagen de receta (.cd-rx-img-overlay): añadida
+           barra de herramientas inferior con botones para rotar
+           la imagen 90° a la izquierda, 90° a la derecha, y
+           restablecer la rotación. Estado almacenado en
+           `data-rot` del <img>; la transformación CSS rota desde
+           el centro y, cuando la imagen queda de lado (90°/270°),
+           se intercambian max-width/max-height para que siga
+           cabiendo en el viewport. Click fuera o en × sigue
+           cerrando el overlay; clicks en la toolbar ya no lo
+           cierran.
+
+v1.51.43 — 2026-04-23
+  [UI]     Fechas: TODOS los `<input type="date">` ahora muestran
+           debajo el valor formateado según `cfgFechaFormato`
+           (APP_DATE_FMT: d/m/Y, d-m-Y, m/d/Y, Y-m-d). El input
+           nativo siempre usa ISO internamente y la apariencia
+           visual depende del SO/navegador, así que la pista
+           `.cd-date-fmt-hint` da una previsualización consistente
+           dentro de la app. Implementado vía helper global
+           `_attachDateFmtHint` en `cd-date-nav.js` con
+           `MutationObserver` para cubrir formularios renderizados
+           dinámicamente (sidebar, modales, listas). Idempotente:
+           reutiliza divs `.cd-date-fmt-hint` ya presentes (como
+           los del formulario de medicación). Inputs marcados con
+           `data-no-fmt-hint="1"` (filtros compactos: reportes,
+           expediente, logs, header de fecha, edición inline en
+           ficha) quedan exentos para no romper layouts angostos.
+           Cubre: cdSbInvExpiry, cdSbOccFecha, cdResMgFechaNac,
+           cdResMgFechaIngreso, cdNrFechaNac, cdNrFechaIngreso,
+           cdExpFrmFecha y cualquier input de tipo date futuro.
+
+v1.51.42 — 2026-04-23
+  [UI]     Inventario: el campo `cdSbInvUnit` (unidad de medida)
+           cambió de input de texto libre a <select> con opciones
+           predefinidas: Unidades, Piezas, Tabletas, Cápsulas, ml,
+           mg, g, Frascos, Ampolletas, Sobres, Parches, Cajas, y
+           "Otra…" (que muestra un input adicional para texto
+           personalizado). En modo edición, si el valor actual no
+           coincide con ninguna opción predefinida, se añade como
+           opción seleccionada para preservar el dato. Validación
+           de "Otra…" requiere texto no vacío. Lang keys nuevas:
+           unit_units, unit_pieces, unit_tablets, unit_capsules,
+           unit_bottles, unit_ampoules, unit_sachets, unit_patches,
+           unit_boxes, unit_other, unit_other_placeholder,
+           error_unit_required (es+en).
+
+v1.51.41 — 2026-04-23
+  [i18n]   Inventario: label `inv_unit` cambiado de "Unidad" /
+           "Unit" (ambiguo) a "Unidad de medida" / "Unit of
+           measure" para describir mejor que se refiere a la
+           unidad del artículo (mg, ml, piezas, etc.) y no al
+           area/departamento.
+
+v1.51.40 — 2026-04-23
+  [UI]     Registro de Medicación: .cd-med-notes (notas/indicaciones)
+           ya no son amarillos. Como su contenido es informativo, no
+           una alerta, se cambió a azul discreto: bg color-mix
+           (--cd-info 8%), borde izquierdo --cd-info al 70%, icono
+           --cd-info. Así se distingue claramente de los estados
+           overdue/warning sin perder la jerarquía visual.
+
+v1.51.39 — 2026-04-23
+  [UI]     Registro de Medicación: .cd-med-detail (dosis/via/horarios)
+           usaba colores beige hardcoded #8a7656 (light) y #b89a62
+           (dark) que combinaban con el viejo bg amarillento. Ahora
+           usa var(--cd-text-muted) en ambos temas para integrarse
+           con el resto de texto secundario del sistema.
+
+v1.51.38 — 2026-04-23
+  [UI]     Registro de Medicación: las píldoras de horario
+           (.cd-med-time) tenían colores beige hardcoded por
+           defecto (#f0e6d2 bg, #d4c4a0 borde, #6b5530 texto), lo
+           que las hacía parecer estado warning permanente.
+           UX correcto por estado:
+             • .upcoming (aún no es hora) → NEUTRO
+               (var(--cd-bg) + var(--cd-border) + text-muted).
+             • .overdue (pasó la hora, no administrado) → ÁMBAR
+               con bg color-mix(--cd-warning 14%) + borde sólido
+               + color #92400e / #fbbf24 dark.
+             • .administered → VERDE (sin cambios).
+             • .no-administrado → ROJO (sin cambios).
+             • .active (seleccionado) → azul --cd-accent.
+           Base y dark mode normalizados con tokens del tema.
+  [UX]     Registro de Medicación: al actualizar/archivar/eliminar
+           desde el sidebar, la lista de archivados (#cdMedArchivedList)
+           ahora preserva su estado expandido tras renderMedList()
+           para que los cambios sean visibles sin tener que
+           re-expandir la sección. Además, las rutas
+           reactivar/eliminar archivados y openRxDetailSidebar
+           también llaman renderRxTracker() (antes solo
+           renderMedList()) para refrescar también el tracker del
+           dashboard tras cualquier cambio de prescripción.
+
+v1.51.37 — 2026-04-23
+  [UI]     Registro de Medicación: los .cd-med-item se veían
+           amarillentos por defecto (bg #faf4ea, borde #e0d1b8,
+           hover #c4a97a; en dark #2c2317/#5c4a28). Esto generaba
+           confusión: el usuario interpretaba el color ámbar como
+           "pendiente/warning" cuando realmente era el estilo base.
+           UX correcto: bg neutro (var(--cd-surface)) + borde
+           neutro (var(--cd-border)), hover usa --cd-text-muted, y
+           el color queda reservado para los estados reales:
+           verde (.checked = administrado), ámbar (.cd-med-time
+           overdue/upcoming) y rojo (.skipped). El check también
+           usa var(--cd-border) en lugar del beige #d4c4a0.
+
+v1.51.36 — 2026-04-23
+  [Fix]    Producción: "Cannot read properties of null (reading
+           toLowerCase)" en renderMedList al hacer click en una
+           píldora del RxTracker cuando _rxPendingSelect.nombre era
+           null. La rama auto-select med+time del callback
+           formMedicacion tenía `sel.nombre.toLowerCase()` sin
+           guardia. Cambiado a `String(sel.nombre || '').toLowerCase()`
+           y se cachea en `selName` para evitar recomputarlo en cada
+           iteración del .find().
+
+v1.51.35 — 2026-04-23
+  [UI]     Sueño: el icono .cd-sleep-hint-icon (luna) era muy
+           pequeño (14px), aumentado a 20px (18px en ≤480px) y
+           gap del row 6→8px. Tema oscuro: contraste mejorado del
+           hint, bg rgba(129,140,248,.22), borde rgba(165,180,252,.55),
+           texto #e0e7ff y <strong> en #fff. Filtro del icono
+           ajustado a invert(1) brightness(2) para que la luna se
+           vea nítida sobre el bg oscuro.
+
+v1.51.34 — 2026-04-23
+  [UI]     Tema oscuro: el botón "Guardar registro" usaba
+           --cd-accent (#60a5fa, azul claro) con texto #fff,
+           contraste ~2.2:1 (falla WCAG AA). Cambiado a #2563eb
+           con texto #fff (~4.7:1, AA OK) y hover #1d4ed8.
+  [UI]     Sueño: el hint de fecha (cdSleepDateHint) en mobile se
+           veía amontonado: los 3 segmentos (cruza medianoche /
+           día anterior / fecha ajustada) iban en una sola línea
+           separados por " · " y se cortaban. Ahora cada segmento
+           es un .cd-sleep-hint-row independiente apilado en
+           columna con padding y line-height aumentados. En dark
+           mode usa rgba(129,140,248,.16) con texto #c7d2fe (alto
+           contraste). Icono de luna invertido en dark.
+
+v1.51.33 — 2026-04-23
+  [Fix]    Sueño: registros que cruzan medianoche (p.ej. inicio 21:20,
+           fin 13:20 = 16h) se guardaban con la fecha del día en que
+           DESPERTÓ y aparecían en la línea de tiempo del día siguiente
+           al inicio del sueño. La regla correcta es: un registro de
+           sueño pertenece al día en que INICIÓ. El formulario ya
+           permitía marcar "Día anterior" manualmente, pero el toggle
+           defaulteaba a "Hoy" y la mayoría de cuidadores no lo
+           cambiaba. Ahora `_updateSleepHint` auto-sincroniza el toggle
+           cuando detecta cruce de medianoche (hora_fin ≤ hora_inicio)
+           → marca "Día anterior" automáticamente y la fecha guardada
+           se ajusta vía `_sleepFecha()`. Si el cuidador toca el toggle
+           manualmente (`_userToggledDayRel`), se respeta su elección
+           y se desactiva el auto-ajuste hasta abrir el form de nuevo.
+           El hint de fecha sigue mostrándose con la fecha efectiva
+           para que el usuario tenga visibilidad.
+
+v1.51.32 — 2026-04-23
+  [Fix]    Roles y Permisos: en mobile los headers rotados aparecían
+           desfasados y cortados (la rotación con `transform` no
+           reservaba altura, los títulos se sobrescribían entre sí).
+           Cambiado a `writing-mode: vertical-rl; transform: rotate(180deg)`
+           sobre el <span> interno; el <th> reserva 96px de altura, ancho
+           fijo 38px y alineación vertical bottom. Los textos ADMIN /
+           CUIDADOR / MÉDICO / FAMILIAR se ven ahora completos y
+           alineados a su columna.
+
+v1.51.31 — 2026-04-23
+  [UI]     Lista de medicamentos: el botón .cd-med-info-btn (editar) y
+           .cd-med-img-btn (foto de receta) son más grandes y fáciles
+           de tocar. SVG 16→22px, padding 4→8px, radius 4→6px.
+
+v1.51.30 — 2026-04-23
+  [Fix]    renderMedList y renderRxTracker (pillHtml) crasheaban con
+           "Cannot read properties of null (reading 'toLowerCase')"
+           cuando alguna prescripción tenía `nombre` null (puede
+           ocurrir con filas huérfanas o creadas con datos parciales).
+           Todas las llamadas a `rx.nombre.toLowerCase()` /
+           `it.nombre.toLowerCase()` en cd-forms.js.php (líneas 697,
+           707, 1358, 1500, 1671, 1725) se envuelven ahora en
+           `String(...||'').toLowerCase()` para tolerar null.
+
+v1.51.29 — 2026-04-23
+  [UX]     Inicio · Notificaciones: el botón de "Notificaciones" del Inicio
+           ahora abre la Ficha directamente en la pestaña de Notificaciones
+           (antes activaba la pestaña de Familia por error).
+  [UI]     Ficha · Notificaciones: el dropdown de "Seleccionar familiar"
+           se reemplazó por una lista de cards. Cada miembro tiene su
+           renglón propio (avatar + nombre + parentesco + canales
+           activos) que se expande/colapsa al hacer clic para mostrar la
+           configuración granular de notificaciones de ese contacto. Un
+           card "+ Agregar" al final lleva directo al alta en la
+           pestaña Familia.
+  [UI]     Configuración · Roles y Permisos: en mobile (<768px) los
+           headers de columna (Admin, Enfermero, Médico, Familiar) se
+           rotan -90° para ahorrar espacio horizontal y permitir mostrar
+           la matriz completa sin scroll lateral excesivo.
+
+v1.51.28 — 2026-04-23
+  [Fix]    Guardar medicamento con foto de receta mostraba "Error al
+           guardar" genérico aunque la prescripción ya hubiera sido
+           creada (la foto fallaba en silencio y enmascaraba el éxito).
+           Tres correcciones:
+           1. cdSbMedSave: el catch genérico ya no sobrescribe el toast
+              con el mensaje real del servidor que api() muestra (p.ej.
+              "La imagen supera 5 MB", "Tipo no permitido", "No se
+              recibió archivo").
+           2. La subida de imagen es no-fatal: si la prescripción se
+              guardó pero la imagen falla, se muestra solo el error de
+              imagen (de api()) y el flujo continúa (refresh + cierre).
+           3. compressImage(): ahora siempre genera un nombre con
+              extensión .jpg, incluso si el archivo original venía sin
+              extensión (cámara iOS/Android), evitando rechazo del
+              servidor por "Solo se permiten imágenes JPG/PNG/WebP".
+
+v1.51.27 — 2026-04-23
+  [UI]     Registros: la línea de tiempo (header, filtros, tabs y
+           timeline) se envuelve ahora en un card .cd-records-card con
+           fondo, borde y sombra suave para diferenciarla del fondo
+           general y unificar el look con el resto de la app.
+
+v1.51.26 — 2026-04-23
+  [Fix]    Card de "Incidente" en Inicio no mostraba su .cd-cat-badge
+           con el conteo del día. renderCategoryBadges() iteraba sobre
+           CAT_LABELS, que solo incluye las 10 categorías clásicas y
+           omite incidente / notas / notas_medico. Ahora itera sobre
+           todos los `[data-cat-count]` presentes en el DOM, así cualquier
+           categoría con badge se actualiza automáticamente.
+
+v1.51.25 — 2026-04-23
+  [Fix]    Sesión se cerraba antes del timeout configurado en
+           cfgSegTimeout. Tres causas combinadas:
+           1. session.gc_maxlifetime se fijaba a SESSION_TIMEOUT (30min)
+              global, antes de conocer el timeout por institución. El GC
+              de PHP borraba el archivo de sesión a los 30min aunque la
+              cfg dijera 60+. Ahora se fija a 24h y la expiración real
+              se aplica en código (`_last_activity` vs
+              `_cfg_session_timeout`).
+           2. Columna `configuracion.seg_timeout_sesion` era TINYINT(1)
+              (boolean), valores >127 se truncaban silenciosamente.
+              Migrado a SMALLINT UNSIGNED (db/migrate_seg_timeout_
+              smallint.php) y normalizados valores <5 → 60.
+           3. Default de fallback en login era 30min, inconsistente con
+              institucion_defaults.php (60min). Unificado a 60.
+           Además: input cfgSegTimeout ahora con max=1440 (24h).
+
+v1.51.24 — 2026-04-23
+  [Fix]    Login tras expiración de sesión: ya no se pierde el email y
+           no se requiere un primer intento "fallido". Cuando la sesión
+           caducaba por inactividad, el POST de login llegaba con un
+           CSRF viejo, el servidor redireccionaba a ?csrf_expired=1 y
+           limpiaba el formulario silenciosamente. Ahora:
+           - config.php marca $_SESSION['_just_expired']=1 al destruir la
+             sesión por timeout.
+           - middleware añade ?expired=1 al redirigir al login para
+             mostrar un aviso amable ("Tu sesión expiró por inactividad").
+           - index.php ante CSRF inválido ya NO redirecciona: re-renderiza
+             el formulario en sitio con el email preservado, token CSRF
+             fresco y mensaje claro. El usuario solo reteclea la
+             contraseña y entra al primer intento.
+
+v1.51.23 — 2026-04-23
+  [Migration] Backfill de expediente_docs.descripcion ← notas_medico.contenido
+           (JSON SOAP v:2) para notas antiguas. Nuevo script:
+           db/migrate_backfill_expdoc_soap.php. Multi-tenant,
+           descifra con EncryptionMap, matchea por (inst, residente,
+           usuario, tipo IN ('nota_medico','receta'), created_at ±10 min)
+           y escoge el candidato más cercano. Idempotente: omite filas
+           cuya descripción ya sea JSON v:2. Soporta --dry / env DRY=1.
+
+v1.51.22 — 2026-04-23
+  [UI]     Configuración: cada pestaña de #cdCfgTabs lleva ahora un
+           icono SVG a la izquierda (engrane, usuarios, campana, hoja,
+           enchufe y base de datos para superadmin).
+
+v1.51.21 — 2026-04-23
+  [UI]     Configuración: la pestaña "Equipo" se renombra a "Usuarios"
+           (es/en) para alinearse con el título del panel "Personal /
+           Usuarios".
+
+v1.51.20 — 2026-04-23
+  [UI]     Línea de tiempo: el icono de "Incidente" ahora se muestra en
+           rojo (var(--cd-danger)) con fondo tenue, igual que el card de
+           Inicio y la pestaña Familia. Antes caía al estilo gris por
+           defecto al no existir la regla `.cd-tl-icon--incidente`.
+
+v1.51.19 — 2026-04-23
+  [Config] Matriz de Roles: nuevo permiso "Editar familiares/contactos"
+           (clave `editar_familia`) en la sección Ficha del residente.
+           Controla los botones Editar / Agregar / Guardar / Cancelar de
+           la pestaña Familiares. Defaults: admin✓, enfermero✗, médico✗,
+           familiar✗. Compat hacia atrás: si el permiso no está definido
+           en una institución existente, se usa el valor de
+           `editar_residentes`.
+
+v1.51.18 — 2026-04-23
+  [UI]     Expediente — sidebar de Nota médica: ahora renderiza las
+           secciones SOAP (Signos vitales, Subjetivo, Objetivo, Análisis,
+           Plan, Diagnósticos CIE-10) con el mismo layout visual del
+           módulo de cuidados, en lugar del resumen truncado "S: … | P:
+           …". La línea de tiempo sigue mostrando un resumen corto
+           (nmExpDescSummary) para mantener la densidad de lectura.
+  [Backend]api/cuidados.php: _nmCrearExpedienteDoc ahora guarda el JSON
+           SOAP completo (v:2) en expediente_docs.descripcion. Las
+           vistas (sidebar + timeline) detectan el formato v:2 y caen a
+           texto plano para notas antiguas sin cambio destructivo.
+
+v1.51.17 — 2026-04-23
+  [UX]     Formularios de registro (alimentación, higiene, signos vitales,
+           sueño, terapia, comportamiento, eliminación, movilidad, medicación,
+           incidente): el botón "Guardar registro" ahora permanece visible
+           (sticky al fondo) mientras el usuario hace scroll, evitando que
+           tenga que llegar al final del formulario para guardar.
+  [Fix]    Se cambió `overflow-x: hidden` por `overflow-x: clip` en
+           .cd-form-view y en `form` para que el sticky del botón funcione
+           correctamente sin afectar el ancho del formulario.
+
+v1.51.16 — 2026-04-23
+  [Security] Configuración: el panel "Base de Datos" (conexión + respaldos)
+           ahora es visible y accesible solo para superadmin. La pestaña
+           y el panel completo se ocultan vía PHP para los demás roles
+           (defensa en profundidad sobre el API que ya restringía con
+           api_auth_roles(['superadmin'])).
+  [UI]     Configuración: tab bar reordenado a General → Equipo →
+           Notificaciones → Logs → Integraciones (→ Base de Datos para
+           superadmin), agrupando primero las opciones de uso diario.
+
+v1.51.15 — 2026-04-23
+  [Feature] Notas médicas: el superadmin puede eliminar permanentemente una
+           nota médica (vigente o archivada). La eliminación cascada borra
+           también los documentos del expediente generados por esa nota
+           (heurística: mismo residente + mismo autor + tipo
+           nota_medico/receta + fecha_documento = DATE(creado_at)). Nuevo
+           endpoint POST eliminar_nota_medico (api/cuidados.php) restringido
+           a rol superadmin. Botón rojo "Eliminar" visible solo para
+           superadmin en la nota vigente y en cada tarjeta del archivo.
+  [UI]     Inicio: la sección "Accesos rápidos" se reubicó debajo del grid
+           de categorías de cuidados para dar prioridad visual a las
+           acciones diarias del personal.
+
+v1.51.14 — 2026-04-23
+  [Feature] Nota médica: el médico ahora puede establecer y editar la fecha
+           y hora de la nota directamente desde el formulario (input
+           datetime-local prellenado con la hora actual al crear, o con la
+           hora existente al editar). Backend (api/cuidados.php +
+           Cuidado::createNotaMedico/updateNotaMedico) acepta el campo
+           opcional creado_at; si no se envía, se usa CURRENT_TIMESTAMP
+           como antes (no rompe llamadas existentes).
+
+v1.51.13 — 2026-04-23
+  [UI]     Línea de tiempo: los registros de incidente ahora usan el mismo
+           icono (triángulo de alerta con signo de exclamación) que el
+           card de "Incidentes" en la pantalla de Inicio. Antes caían al
+           fallback genérico (círculo) porque tlIcon() no tenía entrada
+           para 'incidente'.
+
+v1.51.12 — 2026-04-23
+  [UI]     Form Incidente: bloque de adjuntar foto reordenado para quedar
+           inmediatamente después del selector de Severidad (antes estaba
+           al final). Título del formulario renombrado de "Registrar
+           incidente / caída" a "Registrar incidente" en es/en.
+
+v1.51.11 — 2026-04-23
+  [Fix]    Matriz de permisos: el thead sticky agregado en v1.51.8 no
+           funcionaba. Causa: .cd-cfg-perms-wrap tenía overflow-x:auto, lo
+           cual según spec promueve overflow-y a auto automáticamente,
+           creando un contenedor de scroll vertical de altura igual al
+           contenido (sin barra) que atrapaba el sticky pero nunca
+           scrolleaba. Ahora el wrap usa overflow:auto + max-height:65vh,
+           así el contenedor sí scrollea verticalmente y el thead se
+           queda fijo arriba.
+
+v1.51.10 — 2026-04-23
+  [Fix]    Registrar incidente / caída devolvía 422 "Categoría inválida". El
+           formulario manda categoria='incidente' pero Cuidado::CATEGORIAS
+           sólo aceptaba sueno, alimentacion, medicacion, higiene, terapia,
+           movilidad, eliminacion, comportamiento, signos_vitales. Se agregó
+           'incidente' a la lista. La columna categoria es VARCHAR(30), no
+           ENUM, así que no hay migración de DB.
+  [UI]     Formulario de incidente: agregado bloque para adjuntar una foto
+           (mismo estilo cd-photo-upload del registro de alimentación).
+           Reusa el slot _photoAntes ya existente y la foto se envía en
+           datos.foto del registro.
+
+v1.51.9 — 2026-04-23
+  [Fix]    Registro de Medicación: el badge de stock (cd-med-stock-badge)
+           mostraba "Sin inventario" cuando el item correspondiente en
+           inventario era de tipo "suplemento". La caché _invCache (en
+           cd-forms.js.php y cd-dashboard.js) filtraba estrictamente por
+           tipo === 'medicamento', dejando fuera los suplementos. Ahora
+           incluye ambos tipos para que las prescripciones de suplementos
+           muestren stock real.
+
+v1.51.8 — 2026-04-23
+  [UI]     Configuración · Matriz de permisos: la cabecera (thead) ahora es
+           sticky y permanece visible mientras se hace scroll vertical en la
+           tabla, facilitando saber a qué columna corresponde cada celda.
+  [Refactor] Permisos completamente reorganizados. Eliminados ~25 permisos
+           obsoletos que no estaban siendo consultados en el código (todos los
+           nav_*, gestionar_*, ver/editar_historial, ver/escribir_bitacora,
+           ver_residentes, editar_familiares, eliminar_registros, etc.).
+           Renombrados/agrupados para referirse al elemento real de la UI
+           (no más "historial clínico" ni "bitácora").
+  [Feature] Nueva sección "Visibilidad de secciones" con 7 permisos
+           (ver_seccion_inicio, ver_seccion_registros, ver_seccion_medicacion,
+           ver_seccion_ficha, ver_seccion_expediente, ver_seccion_residentes,
+           ver_seccion_configuracion) que SÍ se aplican: la barra lateral y la
+           bottom-nav de cuidados.php sólo muestran los botones cuya sección
+           esté permitida para el rol del usuario.
+  [UX]     Familiar: por defecto ahora ve los cards de cuidados en la pestaña
+           Inicio (ver_cuidados_grid=true) pero en modo solo lectura — sin
+           poder hacer clic ni registrar (hacer_registros=false). El estilo
+           cd-categories--readonly ya estaba en CSS, ahora se activa por
+           defecto para el rol familiar.
+  [i18n]   Agregadas etiquetas y descripciones en es/en para los 7 nuevos
+           perms de sección y para los grupos visualizados en la matriz.
+
+v1.51.7 — 2026-04-23
+  [Fix]    Familia · Notificaciones: corrección de duplicación de familiares al
+           guardar preferencias. La fusión de usuarios vinculados (familiares_usuarios)
+           con contactos guardados (contactos_json) sólo deduplicaba por email,
+           lo cual fallaba cuando: el contacto guardado no tenía email, el
+           usuario se vinculaba con email distinto, o existían colisiones.
+           Ahora dedupe en cascada: 1) por _usuario_id, 2) por email, 3) por
+           nombre. Además se deduplica defensivamente el contactos_json al
+           cargarse (por si tiene duplicados antiguos).
+  [Fix]    Botón "Guardar preferencias" de notificaciones ahora aplica
+           btnLoading (anti-bouncing): evita doble clic durante el PUT.
+           Lo mismo en el auto-save al marcar contacto principal (estrella).
+  [Fix]    Star toggle "Marcar como principal" ya no fusionaba notif_prefs por
+           ÍNDICE (lo cual mezclaba preferencias entre contactos al reordenar);
+           ahora usa la misma identidad (_usuario_id || email || nombre+telefono).
+  [Migration] db/migrate_dedupe_contactos_json.php: limpia duplicados existentes
+           en contactos_json para todas las residencias.
+
+v1.51.6 — 2026-04-22
+  [Fix]    Configuración · Matriz de permisos: corrección de overflow horizontal
+           en mobile. Ahora la tabla se envuelve en un contenedor con scroll y la
+           primera columna queda fija (sticky) para mantener visible el nombre
+           del permiso al desplazarse.
+  [Feature] Configuración · Matriz de permisos: nuevo renglón
+           "Ver medicación del día (solo lectura)" (clave ver_rx_tracker_readonly).
+           Por defecto activo para todos los roles. Para familiar permite ver el
+           tracker de medicación del día en modo lectura, sin poder hacer clic
+           en cada medicamento (las píldoras se renderizan con pointer-events:none).
+  [Backend] cuidados.php: nueva variable PHP $rxTrackerReadonly + flag JS
+           window.__cdRxReadonly. cd-forms.js.php aplica la clase .readonly al
+           contenedor .cd-rx-tracker y omite el bind de click en .cd-rx-pill.
+
+v1.51.5 — 2026-04-21
+  [Feature] Inicio · Accesos rápidos: nuevo botón "Invitar personal"
+            (admin/superadmin) que dispara el flujo existente de cfgInviteBtn.
+  [Feature] Inicio · Accesos rápidos: nuevo botón "Nuevo residente"
+            (admin/superadmin) que abre vista completa tipo Ficha
+            (viewNuevoResidente) con secciones: Datos personales, Información
+            médica, Contacto familiar, Notas y Acceso de cuidadores.
+  [Feature] Nuevo residente: campos obligatorios marcados con * rojo
+            (Nombre, Apellidos, F. Nacimiento, Sexo, F. Ingreso, Habitación)
+            con validación previa al guardado y resaltado visual de errores.
+  [Feature] Nuevo residente: configuración granular de cuidadores con búsqueda
+            y botón "Seleccionar todos / Quitar todos" (toggle dinámico).
+  [API] residentes.php POST acepta cuidador_ids[] y persiste vía
+        UsuarioResidente::add() validando rol y pertenencia institucional.
+  [i18n] 14 claves nuevas (es + en) para accesos rápidos y formulario.
+
+v1.51.3 — 2026-04-20
+  [Legal] T&C: placeholders rellenados (desarrollador, dirección, jurisdicción CDMX)
+  [Legal] T&C: secciones nuevas — Eliminación de Cuenta (§15) y Contacto (§16)
+  [Legal] Aviso de Privacidad: placeholders rellenados + typo corregido ("ponerse" → "oponerse")
+  [Legal] Aviso de Privacidad: secciones nuevas — Conservación de datos (§8), Eliminación de cuenta (§9)
+  [Legal] Aviso de Privacidad: plazo ARCO 20 días hábiles + referencia INAI (§5)
+  [Legal] Limpieza de atributos data-path-to-node en HTML de documentos legales
+  [Feature] Perfil: sección "Mis Datos y Derechos ARCO" con 4 acciones (Acceso, Rectificación, Cancelación, Oposición)
+  [Feature] Perfil: descarga de datos personales (ARCO Acceso) en formato JSON
+  [Feature] Perfil: historial de solicitudes ARCO con estados
+  [API] personal.php: endpoints arco_acceso, arco_solicitud, arco_historial
+  [DB] Nueva tabla arco_solicitudes (tipo, estado, descripción, respuesta)
+  [UI] Login: oculto enlace "Regístrate aquí"
+  [i18n] 20 claves ARCO añadidas (es + en)
+
+v1.51.4 — 2026-04-20
+  [UI] Inventario evoluciona a "Gestión de Medicación" con subtabs:
+       - "Medicación del día" (default) con tracker de prescripciones
+       - "Inventario" para gestión de stock y movimientos
+  [UI] Inicio: se retira el bloque de tracker de medicación (ahora vive en Gestión de Medicación)
+  [UI] Inicio: botón Medicación muestra badge warning (⚠) cuando hay tomas pendientes vencidas
+  [Fix] Al eliminar un cuidado se borran también alertas_medico asociadas (evita alertas huérfanas)
+  [Fix] Consulta de alertas médicas limpia huérfanas y excluye registros inexistentes
+
+v1.51.2 — 2026-04-20
+  [UI] Detección offline: banner sticky + toast al perder/recuperar conexión (app.js + SPA cuidados)
+  [Config] APP_ADDRESS actualizado con domicilio fiscal real
+  [Seguridad] sync_profiles.json movido de conf/ a secretos/ (excluido de git)
+  [Seguridad] .htaccess: bloqueo preventivo de archivos _diag_*, _test_*, *.bak
+
+v1.51.1 — 2026-04-20
+  [Seguridad] Eliminados 15 archivos debug/test/backup del servidor (_diag_*, _test_*, *.bak)
+  [Seguridad] .htaccess: reglas para bloquear archivos _diag_*, _test_*, *.bak por HTTP
+  [iOS] Info.plist: agregado ITSAppUsesNonExemptEncryption = false (export compliance)
+  [Config] package.json: agregada dependencia @capgo/capacitor-native-biometric
+
+v1.51.0 — 2026-04-19
+  [UI] Alertas médico: detalles del registro visibles a simple vista en la tarjeta
+  [UI] Alertas médico: eliminado nombre del autor de la tarjeta compacta
+  [API] alertas_medico: incluye datos, hora y observaciones del registro asociado
+
+v1.50.9 — 2026-04-19
+  [Fix] Dark mode: botón submit (.cd-btn-submit) ahora usa accent azul en vez de blanco
+  [Fix] Dark mode: botón "< Volver" (.cd-form-back) con borde y texto accent
+
+v1.50.8 — 2026-04-19
+  [UI] Timeline signos vitales: celdas fuera de rango con borde coloreado, fondo tintado y efecto breathing
+  [UI] Warn: borde ámbar + fondo sutil; Danger: borde rojo + breathing animado en toda la celda
+  [UI] Labels de signos vitales fuera de rango heredan el color de alerta
+
+v1.50.7 — 2026-04-19
+  [UI] Timeline: iconos PNG teñidos con el color del borde de su categoría (filter CSS)
+  [UI] Timeline: iconos PNG reducidos a 14px (75%) para igualar tamaño visual con SVGs
+  [UI] Eliminados estilos inline de los iconos PNG en tlIcon()
+
+v1.50.6 — 2026-04-19
+  [UI] Timeline encerrado en contenedor con borde y esquinas redondeadas
+
+v1.50.5 — 2026-04-19
+  [UI] Timeline: signos vitales en grid de 3 columnas con etiqueta + valor + unidad
+  [UI] Cada celda vital con fondo sutil, badge de rango (warn/danger), y soporte de foto inline
+  [UI] Dark mode: celdas vitales con fondo ajustado para contraste
+
+v1.50.4 — 2026-04-19
+  [UI] Sidebar (bottom sheet): max-height respeta safe-area-inset-top — no se encima con barra de estado iOS/Android
+  [UI] Panel de notificaciones: padding-top con safe-area-inset-top para Capacitor
+  [UI] Sidebar actions: padding-bottom con safe-area-inset-bottom para dispositivos con gestos
+
+v1.50.3 — 2026-04-19
+  [Fix] Corregido error 500 al crear registros de cuidados — CONSTRAINT json_valid(datos) impedía insertar datos cifrados
+  [Superadmin] Migración: paso automático JSON→TEXT para columnas cifradas (drop CHECK constraints + MODIFY column)
+  [Superadmin] Auditoría BD: detecta columnas LONGTEXT con CHECK constraint JSON en campos cifrados
+  [Superadmin] fix_db: nueva acción fix_json_check para corregir CHECK constraints desde el panel
+
+v1.50.2 — 2026-04-19
+  [UI] Medicamentos: paleta cálida ámbar/crema — fondo #faf4ea y bordes #e0d1b8 en light, #2c2317/#5c4a28 en dark
+  [UI] Time badges: tonos dorados (#d4a84c texto dark, #6b5530 light) en vez de grises neutros
+  [UI] Detail/dosis con color cálido (#8a7656 light, #b89a62 dark) para armonizar con la palette ámbar
+
+v1.50.1 — 2026-04-19
+  [Superadmin] Migración completa reescrita: ahora usa expected_schema.php como fuente de verdad (schema-driven)
+  [Superadmin] Se elimina gap entre auditoría BD y "Migrar todo" — ambos usan el mismo esquema esperado
+  [Superadmin] expected_schema.php: cada tabla tiene 'scope' (master/tenant/both) para clasificar dónde se crea
+  [Superadmin] La migración ahora crea TODAS las tablas/columnas/índices faltantes, no solo un subconjunto hardcodeado
+  [Fix] Tablas documentos_legales, firmas_documentos, push_tokens ahora se crean automáticamente si faltan
+  [Fix] ~30 columnas de configuracion que la migración anterior omitía (seg_*, notif_*, turno_*, backup_*, etc.)
+
+v1.50.0 — 2026-04-19
+  [UI] Contraste mejorado en ambos temas (claro y oscuro) para cumplir WCAG AA en todo el sitio
+  [UI] Medicamentos del día: eliminada opacidad que reducía contraste; fondos y textos con ratio ≥4.5:1 en dark mode
+  [UI] Dark mode: variables semánticas revisadas (accent #60a5fa, danger #f87171, success #4ade80, warning #fbbf24, muted #a1a1a6)
+  [UI] Overrides dark para fondos sólidos semánticos (badges, botones selected, toasts) usan tonos oscuros con texto claro
+  [UI] Limpieza de colores hardcodeados en dark mode: #333→#3a3a3c, #444/#555→var(--cd-border)
+  [UI] Botones imprimir/refrescar y switches vitales usan variables CSS en vez de colores fijos
+
+v1.49.9 — 2026-04-19
+  [UI] Tema claro: todos los colores semánticos cumplen WCAG AA (4.5:1 mínimo vs blanco)
+  [UI] accent #3b82f6→#2563eb, success #22c55e→#15803d, warning #f59e0b→#b45309, danger #ef4444→#dc2626, muted #6b7280→#636366
+  [UI] Nuevo --cd-info (#0284c7) para elementos informativos (notas médico, expediente) — reemplaza #0ea5e9 sin contraste
+  [UI] Badges de warning ahora usan texto blanco sobre fondo oscuro (antes negro sobre ámbar claro sin contraste)
+  [UI] Botón WhatsApp: #25d366→#15803d; bordes: #e6e6e6→#d1d5db; fondo: #fafafa→#f5f5f7
+  [UI] style.css (legacy): mismas correcciones de palette aplicadas
+
+v1.49.8 — 2026-04-19
+  [Seguridad] Se elimina encriptación de la tabla configuracion: los 6 campos sensibles (smtp_password, smtp_usuario, smtp_from_email, wa_api_key, wa_instance_id, ia_api_key) ya no se cifran
+  [Migration] Paso [5b] en run_full_migration descifra valores existentes en BD a texto plano
+  [Fix] Limpieza de encryption_state.json: se eliminan las entradas configuracion.*
+
+v1.49.7 — 2026-04-19
+  [Fix] Cipher::decrypt() ya no lanza excepción fatal si un campo no se puede descifrar — loguea y devuelve el valor original
+  [Fix] EncryptionMap::decryptRow() envuelve cada campo en try/catch: un campo corrupto no tumba toda la fila ni la página
+  [Fix] Resuelve crash de cuidados.php en producción causado por smtp_password corrupto que impedía cargar toda la configuración
+
+v1.49.6 — 2026-04-19
+  [Fix] API GET configuracion: detecta campos sensibles corruptos (valor enmascarado guardado en BD) y los devuelve vacíos con flag _corrupted_fields
+  [UX] Alerta toast + borde naranja en inputs de campos corruptos para forzar re-ingreso del valor real
+  [Fix] La corrupción de smtp_password en producción se origina en v <1.49.4 donde str_contains('••••') fallaba con contraseñas cortas
+
+v1.49.5 — 2026-04-18
+  [Fix] $instId indefinido en acciones crear_alerta_medico y enterado_alerta de api/cuidados.php — reemplazado por api_inst_id()
+
+v1.49.4 — 2026-04-18
+  [Fix] Contraseñas cortas se guardaban enmascaradas: el check str_contains('••••') fallaba con <4 bullets; ahora detecta cualquier • (U+2022)
+  [Fix] Afectaba a SMTP password, WA key corta, e IA key corta — el valor enmascarado sobreescribía el real en la BD
+  [Fix] Misma corrección aplicada en test_smtp, test_wa y test_ia (3 handlers)
+  [Fix] Cache busting ETag ahora incluye mtime de TODOS los JS/CSS/views, no solo cuidados.php
+
+v1.49.3 — 2026-04-18
+  [Fix] Capacitor iOS login: detección nativa via header X-Native-App en vez de Origin: capacitor:// (que no se envía con server.url remota)
+  [Fix] WKWebView iOS no sincroniza cookies del primer page load con fetch() — la exención CSRF por X-Native-App lo resuelve sin depender de sesión
+  [Fix] CORS: X-Native-App agregado a Access-Control-Allow-Headers en .htaccess
+
+v1.49.2 — 2026-04-18
+  [Fix] Guardar config de una sección (SMTP/WA/IA/Seg/Roles) ya no sobreescribe cambios no guardados de otras secciones
+  [Refactor] populateConfigForms dividido en funciones por sección (_populateSmtp, _populateWa, _populateSeg, _populateIa)
+  [Refactor] _reloadSection(seccion): tras guardar, recarga datos de BD y repopula SOLO la sección guardada
+
+v1.49.1 — 2026-04-18
+  [Fix] Cache busting: headers ETag + no-cache en cuidados.php — fuerza al navegador a descargar la última versión del SPA
+  [Fix] Config autofill: campos sensibles (SMTP pass, WA key, IA key, DB pass) cambiados de type=password a type=text con CSS masking (cd-masked) para eliminar por completo la detección de autofill de Chrome
+  [Fix] Re-populate con setTimeout(350ms) como safety net contra autofill que sobreescribe después de populate
+  [Fix] Capacitor iOS CSRF: login exime de validación CSRF a clientes con Origin: capacitor:// (header infalsificable de WKWebView); resuelve sesiones que no se comparten entre fetch() calls
+  [Fix] Toggle password actualizado para soportar tanto cd-masked (CSS) como type=password (legacy)
+
+v1.49.0 — 2026-04-18
+  [Fix] Login en Capacitor iOS: SameSite=None;Secure para cookies cuando origin es capacitor://
+  [Fix] Auto-retry CSRF en login nativo: si falla por token inválido, refresca y reintenta automáticamente
+  [Fix] Variation selectors mojibake (ï¸) en cd-notif-admin.js (info/alerta badges) y cd-sessions.js (3 msgs)
+  [Audit] Flujo save/load/test de IA config verificado: sin race conditions, API key enmascarada protegida
+
+v1.48.9 — 2026-04-18
+  [Fix] Guardar config de una sección (SMTP/WA/IA/etc.) ya no impacta otras secciones
+  [Fix] Tras guardar cualquier sección se recarga la configuración completa desde BD para reflejar el estado real
+
+v1.48.8 — 2026-04-18
+  [Fix] Prevención de autofill de Chrome en campos SMTP, WhatsApp, IA y BD (autocomplete=off/new-password + data-lpignore)
+
+v1.48.7 — 2026-04-18
+  [Fix] Auditoría de caracteres: corregidos 11 emojis mojibake en cd-ai, cd-init, cd-notes, cd-notif-admin, cd-sessions
+  [Fix] Símbolo ¢ reemplazado por • (bullet) en regex de AI y lista de errores de sesiones
+  [Fix] BOM (Byte Order Mark) eliminado de app.js, cuidados.php, cuidados_new.php
+
+v1.48.6 — 2026-04-18
+  [Fix] ENUM wa_proveedor no incluía 'wasender' — el valor se perdía al guardar (MySQL lo descartaba)
+  [Fix] Mismatch de mayúsculas/minúsculas entre ENUM de BD y valores HTML en smtp_encriptacion y wa_proveedor
+  [Fix] Placeholders (¢¢¢) corregidos a (•••) en campos de contraseña de integraciones
+  [Fix] JS populate normaliza valores ENUM con toLowerCase() para evitar que selects se reseteen
+
+v1.48.5 — 2026-04-18
+  [Fix] Emojis corruptos (mojibake) en panel de sesiones: 💻📱🖥🐧 se mostraban como caracteres ASCII
+  [Fix] Símbolo ¢ incorrecto reemplazado por 💊 en detalle de medicación del sidebar
+  [UI] Historial de notificaciones muestra nombre del contacto junto al teléfono/email
+
+v1.48.4 — 2026-04-18
+  [UI] Fotos Antes/Después en sidebar se muestran lado a lado con etiqueta cuando ambas existen
+  [UI] Botón de rotar imagen (90°) en el visor/lightbox de imágenes
+
+v1.48.3 — 2026-04-18
+  [Fix] Cron de notificaciones: throttle de 7s entre envíos de WhatsApp para evitar errores de rate-limit
+  [Fix] Emojis corruptos (mojibake) en historial de notificaciones y plantillas de mensajes
+
+v1.48.2 — 2026-04-18
+  [Fix] Formulario de sueño: resetCareForm dispara change en pending checkbox para restaurar hora_fin
+  [Fix] Timeline de sueño <1hr muestra minutos en vez de "?" (horas=0 era tratado como null)
+  [Fix] Scroll de rx-pill al medicamento correcto: reset scroll + rAF + delay incrementado
+
+v1.48.1 — 2026-04-18
+  [UI] Botón Agregar Documento con border transparent para igualar altura con Notas del Médico
+
+v1.48.0 — 2026-04-18
+  [UX] Diálogo de cambios sin guardar ahora cubre TODOS los puntos de navegación
+  [UX] Cambio de residente y clic en avatar ahora verifican formularios con cambios pendientes
+  [UX] Formularios se limpian automáticamente al confirmar salida sin guardar
+
+v1.47.9 — 2026-04-18
+  [UI] Click en fotos del sidebar (signos vitales, antes/después) abre visor con zoom
+  [Fix] Doble ícono de foto en timeline de signos vitales con una sola foto
+  [Fix] Formularios de cuidados ahora se limpian al confirmar salida con cambios sin guardar
+
+v1.47.8 — 2026-04-18
+  [Fix] Botón Volver en formularios de cuidados no mostraba diálogo de cambios sin guardar
+
+v1.47.7 — 2026-04-18
+  [Fix] Sidebar de signos vitales mostraba solo texto resumido (sin tabla ni fotos) cuando no había PA registrada
+
+v1.47.6 — 2026-04-18
+  [Fix] Fotos de signos vitales ahora se limpian correctamente al crear un nuevo registro
+  [Fix] La hora de registro ya no se pierde al adjuntar fotos de signos vitales
+
+v1.47.5 — 2026-04-17
+  [Fix] Fotos de signos vitales ya no se pierden al editar un registro (datos preservados en PUT)
+  [Fix] Upload de fotos vitales ahora funciona tanto al crear como al editar registros
+  [Fix] Merge de fotos al subir nuevas — ya no sobrescribe fotos de otros vitales
+  [UI] Thumbnails de fotos existentes ahora se muestran en el formulario al editar signos vitales
+
+v1.47.4 — 2026-04-17
+  [UI] Indicador de cámara inline junto a cada lectura de signos vitales con foto en timeline
+  [UI] Badge de foto en timeline ahora también detecta foto_antes/foto_despues
+
+v1.47.3 — 2026-04-17
+  [UI] Botón Imprimir Reporte con mismo estilo destacado que Actualizar
+
+v1.47.2 — 2026-04-17
+  [Fix] Error 500 al presionar Enterado en alertas médicas ($instId no definido en bloque POST)
+  [Fix] Rol admin ahora puede marcar alertas como vistas (enterado_alerta)
+  [UI] Botón Notas en mobile ya no ocupa ancho completo del grid
+  [UI] Botón Notas del Médico en expediente: altura consistente con Agregar documento
+  [UI] Barra de acciones de notas médicas alineada a la derecha
+
+v1.47.1 — 2026-04-17
+  [UI] Icono walk.png para categoría Movilidad (timeline + grid dashboard)
+  [UI] Icono head-ia.png para categoría Comportamiento (timeline + grid dashboard)
+
+v1.47.0 — 2026-04-17
+  [Superadmin] Sistema de seeding demo con toggle on/off
+  [Superadmin] Crea institución, 4 usuarios, 10 residentes, cuidados, notas médicas y prescripciones demo
+  [Fix] Nota médica no se mostraba en cd-form-view tras guardar/editar
+  [UI] Borde azul (--cd-accent) en tarjeta de nota médica vigente (cdNmCurrent)
+
+v1.46.0 — 2026-04-17
+─────────────────────
+• Notas Médicas: editor de texto enriquecido en el campo Plan/
+  Indicaciones (negrita, cursiva, subrayado, listas numeradas y con
+  viñetas). Por defecto inicia con lista numerada. El contenido se
+  guarda como HTML sanitizado y se muestra formateado en la vista.
+• Fix: Warning "Undefined array key user_rol" en middleware de
+  autenticación cuando la sesión no tenía el campo.
+• Fix: Emoji ⚠️ corrupto (doble-encoding UTF-8) en el panel de
+  configuración de errores PHP. Reemplazado con entidades HTML.
+• UI: Chips CIE-10 (cd-nm-dx-chips) alineados al extremo derecho.
+
+v1.45.5 — 2026-04-17
+─────────────────────
+• UI: Cards del grid de categorías con altura uniforme (min-height)
+  para que todos midan lo mismo independientemente de badges visibles.
+• UI: Rediseño del layout de nota médica vigente (cdNmCurrent):
+  - Secciones SOAP con icono grande a la izquierda + contenido a la derecha
+  - Separadores horizontales entre secciones
+  - Adjuntos a ancho completo con imagen más grande
+  - Chips CIE-10 alineados a la izquierda
+
+v1.45.4 — 2026-04-17
+─────────────────────
+• Seguridad: solo el autor puede editar documentos del expediente
+  médico (admin/superadmin siempre pueden). Nuevo permiso
+  “editar_expediente” en la matriz de roles para permitir que otros
+  roles editen documentos ajenos.
+• API: verificación de autoría en endpoint actualizar del expediente.
+• UI: botón Editar oculto si el usuario no es autor ni admin.
+
+v1.45.3 — 2026-04-17
+─────────────────────
+• Fix: el diálogo “cambios sin guardar” aparecía incorrectamente al
+  abrir cualquier formulario de cuidado — se excluyen el toggle de
+  alerta y el form.reset() del dirty tracking.
+
+v1.45.2 — 2026-04-17
+─────────────────────
+• UI: badge de Notas del Médico ahora usa el mismo tamaño, posición y
+  estilo que los badges de las demás categorías.
+
+v1.45.1 — 2026-04-17
+─────────────────────
+• Fix: signos vitales sin PA no se mostraban en timeline (ahora detecta
+  cualquier signo vital registrado, no solo presión arterial).
+• UX: al activar "Notificar al médico" el scroll ahora muestra el campo
+  de mensaje completo sin que el botón Guardar lo oculte.
+• Feature: indicador de borrador (punto ámbar pulsante) en botón de
+  categoría cuando un formulario de cuidado se cierra sin guardar.
+• UX: icono ⓘ de información en toggle "Notificar al médico" explicando
+  el alcance de la notificación.
+• UI: tarjetas de alerta en NM compactas — layout horizontal con
+  botones de "Ver" y "Enterado" en línea, mejor uso del espacio.
+
+v1.45.0 — 2026-04-17
+─────────────────────
+• Feature: "Alertas al Médico" — los cuidadores pueden marcar registros
+  de cuidado para atención del médico con toggle y mensaje opcional.
+• Feature: Los médicos ven alertas pendientes en Notas del Médico con
+  tarjetas ámbar y botón "Enterado" para acusar recibo.
+• Feature: Historial de alertas con registro de qué médico acusó recibo,
+  fecha y hora — visible para todos los médicos.
+• Feature: Badge en botón NM muestra conteo de alertas pendientes.
+• DB: Nueva tabla `alertas_medico` (registro_id, categoria, mensaje,
+  creado_por, visto_por, visto_at).
+
+v1.44.7 — 2026-04-17
+─────────────────────
+• UI: texto de secciones SOAP alineado a la derecha en tarjeta NM.
+• UI: sidebar de reporte en NM ahora tiene su propio toggle de
+  previsualización (siempre visible, activado por defecto).
+• UI: botón “Notas del Médico” en Expediente — icono en línea con texto.
+• UX: displays de signos vitales (cd-vital-value) pre-llenados con
+  valores normales (120/80, 72, 18, 36.5, 95, 68, 110).
+• UI: sliders de TA sistólica/diastólica más separados en formulario NM.
+
+v1.44.6 — 2026-04-17
+─────────────────────
+• UX: signos vitales en formulario NM pre-llenados con valores normales
+  (TA 120/80, FC 72, FR 18, Temp 36.5, SpO₂ 95%, Peso 68, Glucosa 110).
+• UI: botón “Imprimir Reporte” en header de Notas del Médico — abre el
+  mismo flujo de selección de período que el dashboard.
+
+v1.44.5 — 2026-04-17
+─────────────────────
+• UI: chips de diagnóstico CIE-10 alineados a la derecha en tarjeta NM.
+• UI: adjuntos NM con vista miniatura (thumbnail para imágenes, icono para PDFs).
+• UI: botón de acceso directo “Notas del Médico” en header del Expediente.
+• UX: al editar nota médica se ocultan notas existentes; link “Ver historial”
+  disponible para revisarlas sin confundir la navegación.
+• Fix: text-align:right erróneo en dark mode para secciones SOAP.
+
+v1.44.4 — 2026-04-17
+─────────────────────
+• UI: rediseño cdNmCurrent — formato tabla sencillo para signos vitales,
+  iconos por vital, colores solo para valores fuera de rango (rojo/azul).
+• UI: header simplificado — sin avatar, sin gradiente, sin badge.
+• UI: secciones SOAP sin color-coding — etiqueta muted uniforme.
+• UI: dark theme actualizado para nuevo diseño.
+
+v1.44.3 — 2026-04-17
+─────────────────────
+• UI: rediseño completo de tarjeta de nota médica vigente (cdNmCurrent)
+  — header con gradiente, avatar mejorado, nombre/rol separados,
+  fecha formateada, badge de edición y adjuntos.
+• UI: signos vitales como mini-cards en grid con valor prominente.
+• UI: secciones SOAP con borde izquierdo color-coded:
+  S=verde, O=azul, A=naranja, P=púrpura + iconos por sección.
+• UI: sección de signos vitales con borde rojo, dx con borde cyan.
+• UI: contraste dark theme completo para todos los componentes.
+
+v1.44.2 — 2026-04-17
+─────────────────────
+• UI: botón "Archivar nota" — texto corregido en nota médica vigente.
+• UI: cdNmSaveBtn texto negro en tema oscuro para mejor contraste.
+• UI: área de recetas (cdNmRxArea) rediseñada — borde azul, gradiente,
+  símbolo ℞, y botón diferenciado para evitar confusión con adjuntos.
+
+v1.44.1 — 2026-04-17
+─────────────────────
+• Fix: adjuntos de notas médicas en Expediente — links rotos por
+  campo 'url' vs 'path' en archivos_json (api/expediente.php).
+• Fix: adjuntos NM ahora abren en visor inline (lightbox/PDF)
+  en vez de abrir en pestaña externa.
+• Fix: login con token CSRF expirado ahora auto-recarga la página
+  silenciosamente en vez de mostrar mensaje de error.
+• Fix: contraste dark theme en botones del formulario NM —
+  reemplazados colores hardcoded (#fff/#000/#f0f0f0) por CSS vars.
+
+v1.44.0 — 2026-04-17
+─────────────────────
+• Arquitectura: cuidados.php (16,958 líneas) refactorizado en
+  estructura modular — 20 vistas HTML extraídas a includes/views/
+  y 35 módulos JS extraídos a assets/js/cd-*.js(.php).
+• Shell: cuidados.php reducido a ~430 líneas (solo PHP preamble,
+  includes de vistas, e includes de módulos JS).
+• Módulos JS: archivos con PHP inline usan extensión .js.php
+  (include), archivos JS puros usan .js (readfile).
+• Scope: todas las variables globales JS y funciones mantienen el
+  mismo scope — se cargan secuencialmente dentro de un solo <script>.
+• Migraciones: política actualizada — ya no se crean archivos
+  migrate_*.php individuales. Cambios de schema van a
+  db/expected_schema.php y se detectan/corrigen desde Superadmin →
+  Auditoría BD.
+• Backup: monolito original preservado como cuidados_monolith.php.bak.
+
+v1.43.3 — 2026-04-17
+─────────────────────
+• Recetas: Área de adjuntos separada para recetas médicas en el
+  formulario NM, con layout de dos columnas (recetas | adjuntos
+  generales). Los archivos de receta se almacenan aparte y crean
+  expediente tipo 'receta' en la línea de tiempo del paciente.
+• Migración: Nueva columna `recetas` (JSON) en tabla notas_medico.
+• Vitales: Badge de TA ahora evalúa tanto sistólica como diastólica
+  y muestra el peor estado entre ambos valores.
+• Vitales: Slider deshabilitado (pointer-events:none, opacity:.5)
+  cuando el toggle de la tarjeta está apagado.
+• Vitales: Valor numérico (cd-vital-value) reposicionado a grid-row:2
+  para evitar obstrucción con el toggle switch.
+• Vitales: Botón de foto (cd-vital-photo-btn) alineado a la derecha.
+• UX: Barra de acciones NM (Cancelar/Borrador/Guardar) ahora es
+  sticky — siempre visible al fondo del formulario.
+• UX: Botón de guardar en formularios de cuidado (form[data-cat])
+  ahora es sticky al fondo del formulario.
+• UX: Dirty tracking en formularios de cuidado — alerta al intentar
+  navegar con cambios sin guardar (beforeunload + diálogos de
+  confirmación en navegación interna).
+• UX: Diálogo de cambios sin guardar en NM ahora tiene 3 opciones:
+  "Salir", "Guardar borrador" y "Seguir editando".
+• Draft: Guardado/restauración de borrador NM ahora incluye adjuntos
+  y recetas pendientes.
+
+v1.43.2 — 2026-04-17
+─────────────────────
+• UX: Cards de signos vitales NM solo se activan al hacer clic en el
+  toggle switch — los sliders ya no auto-activan la tarjeta.
+• UX: Se eliminó sangría derecha (margin-right) del grid de vitales
+  móvil, ya innecesaria con la nueva lógica de activación explícita.
+• UI: Inputs numéricos ocultos en cards NM; solo se muestran sliders
+  para una interfaz más limpia. TA muestra dos sliders (sys/dia).
+• UI: Botones de acciones NM (Cancelar, Guardar borrador, Guardar)
+  rediseñados con estilo similar al botón "Volver".
+• UX: Alerta al médico al intentar navegar fuera del formulario NM
+  con cambios sin guardar (popstate, nav, back, categorías).
+• UX: Aviso de beforeunload al cerrar/recargar con cambios pendientes
+  en medicación o nota médica.
+• UX: Guardado provisional (borrador) en sessionStorage — el médico
+  puede navegar a otras secciones y al regresar se restaura el borrador
+  automáticamente con notificación toast.
+• i18n: Nuevas claves confirm_unsaved_nm, nm_draft, nm_draft_saved,
+  nm_draft_restored en es.php y en.php.
+
+v1.43.1 — 2026-04-17
+─────────────────────
+• UI: Cards de signos vitales NM ahora incluyen sliders (range bars)
+  idénticos a los del grid principal con sincronización bidireccional
+  slider↔number. Tamaño mínimo homogéneo (min-height: 110px).
+• UX: Scroll guard móvil mejorado — detecta desplazamiento horizontal
+  y vertical (>6px) para cancelar toggles accidentales. Aplica también
+  a cards NM de la nota médica.
+• UX: Sangría derecha (18px) en grids de signos vitales en móvil
+  táctil para crear zona de scroll sin activación accidental.
+
+v1.43.0 — 2026-04-16
+─────────────────────
+• UX: Auto-refresh en formularios (login, registro, forgot/reset-password)
+  cuando el token CSRF expira — ya no muestra error, recarga automáticamente
+  y muestra mensaje informativo "Tu sesión expiró".
+• UX: Guard anti-scroll en tarjetas de signos vitales móvil — al hacer scroll
+  vertical (>8px) el toggle del card se revierte automáticamente, evitando
+  activaciones accidentales durante el desplazamiento.
+• UI: Cards de signos vitales NM (nota médica) rediseñadas al estilo de las
+  cards principales: layout 2-columnas (título izquierda, valor grande derecha),
+  badge de estado (Normal/Precaución/Anormal) con evaluación de rangos,
+  distribuidas homogéneamente en grid 4-col desktop / 2-col móvil.
+
+v1.42.1 — 2026-04-16
+─────────────────────
+• Fix: Corrección masiva de mojibake (5,500+ caracteres) causada por
+  doble-codificación UTF-8 vía Windows-1252. Incluye:
+  — 199 em-dashes (—) en cards de signos vitales NM y textos varios
+  — 29 bullets (•), 15 elipsis (…), 47 flechas (→), emojis (✅❌⚠)
+  — 5,316 líneas decorativas de comentarios (═ ─)
+  — 26 caracteres acentuados (Á É Í Ó Ú Ñ) en datos CIE-10 y regex
+• Fix: Renombrada variable JS `const pañales` → `const panales`
+  (4 instancias) para eliminar riesgo de error de sintaxis por
+  identificador no-ASCII si el servidor no sirve charset UTF-8.
+• Fix: Regex cleanFileName ahora usa [Áá], [Éé], [Íí], [Óó],
+  [Úú], [Ññ] correctamente (antes contenía bytes corruptos).
+
+v1.42.0 — 2026-04-16
+─────────────────────
+• Feature: Card de Peso añadido al grid principal de signos vitales
+  (viewFormSignosVitales) con slider 25-200 kg y evaluación de rango.
+• Feature: Botón de foto-evidencia en cada cd-vital-card — permite
+  tomar foto con cámara del teléfono o subir archivo como evidencia
+  de la lectura del signo vital. Preview con thumbnail y opción de
+  eliminar. Las fotos se envían al API al guardar el registro.
+• UX: Tarjetas de signos vitales ahora son full-width (1 columna)
+  con layout horizontal — título a la izquierda, valor grande a la
+  derecha, slider y foto debajo.
+• UX: Textareas SOAP en Notas del Médico se auto-ajustan al alto
+  del texto contenido (auto-grow), eliminando scroll interno.
+• UX: Grid de signos vitales en Notas del Médico distribuido
+  uniformemente en 4+3 (4 cards primera fila, 3 segunda). Inputs
+  numéricos muestran flechas spin nativas para scroll más práctico.
+• i18n: Nuevas claves vital_weight, vital_photo, vital_photo_hint.
+
+v1.41.0 — 2026-04-17
+─────────────────────
+• UX: Panel de notificaciones rediseñado — sidebar más ancho (440px),
+  pestañas por canal (Todas/Push/Email/WhatsApp), tarjetas expandibles
+  con detalle de destinatario, tipo y fecha, badges de estado
+  (enviado/error/pendiente), iconos por canal, formato tiempo relativo.
+• UX: Botones de acciones en tarjeta de nota médica rediseñados —
+  nuevo estilo con icono + texto, botón editar (tinte primario) y
+  archivar (muted con hover warning), consistente con el resto del sitio.
+• UX: Formulario de nota médica (cdNmFormWrap) reubicado sobre la
+  nota vigente para flujo más intuitivo.
+• UX: Signos vitales en Notas del Médico estandarizados con patrón
+  cd-vitals-grid — tarjetas con toggle switch, valor grande, auto-enable
+  al escribir, nuevo card de Peso añadido.
+• i18n: Nuevas claves de traducción para panel de notificaciones
+  (notif_subtitle, notif_tab_all, notif_empty_desc, notif_sent,
+  notif_error, notif_pending, notif_dest, notif_date).
+
+v1.40.0 — 2026-04-17
+─────────────────────
+• Feature: Catálogo CIE-10 integrado en Notas del Médico — búsqueda
+  autocomplete de diagnósticos (ICD-10) en el campo Análisis/Diagnóstico.
+  ~170 códigos geriátricos embebidos. Tags removibles con código y
+  descripción.
+• Feature: Integración Expediente — al guardar/actualizar una nota médica
+  se crea automáticamente un registro en expediente_docs (tipo nota_medico)
+  con resumen SOAP, códigos diagnósticos y referencia a adjuntos.
+• UX: Área de adjuntos rediseñada con drag & drop — zona punteada con
+  icono de carga, arrastra archivos o selecciona con botón. Reemplaza
+  el botón simple anterior.
+• Config: Nuevo valor 'nota_medico' en ENUM expediente_docs.tipo.
+
+v1.39.0 — 2026-04-16
+─────────────────────
+• Feature: Notas del Médico — formato SOAP (NOM-004-SSA3-2012): campos
+  Signos Vitales (TA, FC, FR, Temp, SpO₂, Peso, Glucosa), Subjetivo,
+  Objetivo, Análisis/Diagnóstico y Plan/Indicaciones. Retrocompatible
+  con notas de texto plano existentes.
+• Feature: Adjuntos múltiples en Notas del Médico — imágenes y PDF
+  (máx. 10 MB c/u, hasta 10 archivos). Compresión server-side para
+  imágenes, chips con previsualización y eliminación en el formulario.
+• UX: Vista lectura por defecto en Notas del Médico — formulario oculto,
+  se abre con botón “Nueva valoración” o “Editar” bajo demanda.
+  Botón Guardar usa diseño cd-btn-primary acorde al sitio.
+• DB: Columna `adjuntos` (TEXT) agregada a tabla notas_medico.
+
+v1.38.1 — 2026-04-16
+─────────────────────
+• Fix: Icono shelf (bottom bar) — contraste mejorado en tema claro (.65)
+  y corrección de filtro en tema oscuro (invert + opacity).
+• Fix: Login nativo (Capacitor) — refresco de token CSRF antes del POST
+  para evitar error "Token de seguridad inválido" por sesión expirada.
+• Fix: Dashboard API 500 — try/catch en consulta notas_medico para
+  servidores donde la migración aún no se ejecutó.
+
+v1.38.0 — 2026-04-16
+─────────────────────
+• Feature: Notas de Médico — nueva categoría para valoraciones e indicaciones
+  médicas persistentes. Solo médicos crean/editan; todos los roles ven.
+  Incluye historial archivado, cifrado AES-256-GCM (campo contenido),
+  tabla notas_medico con auditoría BD integrada, y migración automática.
+• UI: Contraste mejorado de cd-sig-card (tarjetas de firmas legales)
+  para tema oscuro — background, bordes y colores de texto ajustados.
+
+v1.37.2 — 2026-04-16
+─────────────────────
+• Seguridad: Registro — checkbox de consentimiento requiere firmar T&C y AdP
+  antes de activarse; ya no se puede marcar directamente.
+• UI: Sidebar de cuidados — títulos de sección en color cd-accent (azul) para
+  mayor separación visual.
+
+v1.37.1 — 2026-04-16
+─────────────────────
+[Seguridad] Registro: los 3 checkboxes (T&C, AdP, facultad legal) se
+            consolidan en un único consentimiento legal unificado (Opción 1
+            LFPDPPP). Incluye declaración bajo protesta, nota de no-urgencias,
+            tooltip explicativo para familiares, y botón deshabilitado hasta
+            marcar. Se registra terms_accepted_at y privacy_version en BD.
+
+v1.37.0 — 2026-04-16
+─────────────────────
+[Seguridad] Registro: nuevo checkbox obligatorio “Declaro que tengo la
+            facultad legal o familiar para gestionar los datos de salud
+            de la persona a mi cargo”. Validación client-side y server-side.
+
+v1.36.9 — 2026-04-16
+─────────────────────
+[Fix] Sueño: calidad preseleccionada en “Normal” ya no requiere
+      interacción del usuario para ser aceptada como válida.
+
+v1.36.8 — 2026-04-16
+─────────────────────
+[Cuidados] Auditoría BD ahora detecta columnas desnormalizadas sin poblar
+           (subtipo en eliminación) en cuidados_registros y ofrece botón
+           “Corregir” que ejecuta backfill PHP con descifrado.
+           Corregida detección falsa positiva en registros de sueño.
+           Frontend extendido para soportar fix_action además de fix_sql.
+
+v1.36.7 — 2026-04-16
+─────────────────────
+[Fix] Badge heces mostraba “?” post-cifrado: columna desnormalizada
+      `subtipo` no se llenó porque el backfill usaba JSON_EXTRACT en SQL
+      sobre datos cifrados. migrate_cuidados_denorm.php y run_full_migration
+      ahora usan descifrado PHP para rellenar subtipo, pendiente
+      y duracion_min correctamente.
+
+v1.36.6 — 2026-04-16
+─────────────────────
+[Fix] Auditoría BD: columnas cifradas (horarios, datos) ya no proponen
+      ALTER TABLE a JSON — post-consolidación contienen ciphertext base64
+      que no pasa JSON_VALID(). expected_schema.php actualizado a text.
+      check_db ahora acepta text como tipo válido para columnas con
+      cifrado activo/consolidado.
+
+v1.36.5 — 2026-04-15
+─────────────────────
+[Fix] Cifrado: EncryptionMap::saveState() ahora lanza excepción si no logra
+      escribir encryption_state.json (antes fallaba silenciosamente, dejando
+      la app sin poder descifrar datos post-consolidación).
+[Fix] Generado encryption_state.json con 30 campos ‘consolidated’ +
+      logs_sistema.ip como ‘active’ (pendiente 3 filas).
+
+v1.36.4 — 2026-04-15
+─────────────────────
+[Fix] Cifrado Fase 4 — Consolidar: error “There is no active transaction”
+      corregido. ALTER TABLE (DDL) causa commit implícito en MySQL/MariaDB;
+      ahora ambas operaciones (DROP + RENAME) se ejecutan en un solo ALTER
+      atómico sin wrapper de transacción.
+
+v1.36.3 — 2026-04-15
+─────────────────────
+[UX]  reset-password.php: checklist animado de requisitos de contraseña
+      en tiempo real (5 reglas + coincidencia) con animaciones pop/shake,
+      barra de fuerza de 5 niveles. Consistente con register.php.
+
+v1.36.2 — 2026-04-15
+─────────────────────
+[UX]  Modal cambio forzoso de contraseña: backdrop-filter blur(6px) para
+      enfocar la atención del usuario en el modal.
+[Feat] Registro: al hacer clic en "Términos y Condiciones" o "Aviso de
+       Privacidad" se abre el documento legal vigente de la institución
+       con renderizado HTML completo, firma manuscrita en canvas, y
+       envío de copia por correo tras registrarse.
+[Feat] Registro: nuevo checkbox de aceptación de Aviso de Privacidad
+       (separado del de T&C). Ambos son obligatorios.
+[API]  Nuevo endpoint público GET ?action=public_vigente&tipo=X&inst=Y
+       en documentos_legales.php para obtener docs sin sesión activa.
+
+v1.36.1 — 2026-04-15
+─────────────────────
+[UX]  Registro: checklist animado de requisitos de contraseña en tiempo real
+      (8 chars, mayúscula, minúscula, número, especial, coincidencia).
+      Barra de fuerza ahora mide 5 niveles incluyendo minúscula.
+[UX]  Modal cambio forzoso de contraseña (pw-force-modal): link
+      "¿No recuerdas tu contraseña actual?" que cierra sesión y
+      redirige a forgot-password.php.
+
+v1.36.0 — 2026-04-15
+─────────────────────
+[UX]  Botones de acciones en documentos legales (cfgPrivList, cfgTcList)
+      ahora tienen tamaño adecuado para touch en móvil (min-height 36px,
+      padding ampliado). En pantallas <520px las filas se reorganizan.
+[Feat] Expediente Médico: nuevo campo "Especialidad médica" con dropdown
+       buscable (57 especialidades). Se almacena en BD, se muestra en
+       timeline y detalle del documento.
+[Fix] Tarjetas de firma (cd-sig-card): corregidas variables CSS faltantes
+      del prefijo --cd-* para dark mode. Ahora usan --cd-border, --cd-bg-card,
+      --cd-primary-light, --cd-text-muted, --cd-text-secondary correctamente.
+[UX]  Expediente Médico: filtro por rango de fecha (desde/hasta) y botón
+      para alternar orden ascendente/descendente.
+[UX]  Expediente Médico: nombre del doctor reubicado a la izquierda del
+      badge de tipo en la card del timeline; especialidad visible en meta.
+[UX]  Documentos legales: estilos rich text completos (headings h1–h6,
+      párrafos, blockquote, pre/code, hr, links) ahora se renderizan
+      correctamente en modal de firma y vista previa.
+[Feat] Superadmin Auditoría BD: selector de perfil de conexión para ejecutar
+       auditoría y correcciones en bases de datos remotas (producción, etc.).
+[DB]  Nueva columna `especialidad` VARCHAR(100) en tabla `expediente_docs`.
+      Migración: db/migrate_expediente_especialidad.php
+
+v1.35.2 — 2026-04-15
+─────────────────────
+[Fix] Documentos legales: contenido HTML ahora se envía en base64
+      (contenido_b64) para evitar que WAF/ModSecurity elimine tags
+      al interceptar el POST. Server decodifica y sanitiza.
+[Add] _diag_legal.php: script de diagnóstico temporal para verificar
+      qué formato tiene el contenido almacenado en la BD.
+
+v1.35.1 — 2026-04-15
+─────────────────────
+[UX]  Visor PDF Canvas (Capacitor): reescritura completa del zoom.
+      Eliminado CSS transform; ahora redimensiona físicamente el wrapper
+      y usa scroll nativo del browser para pan/arrastre. Pinch-to-zoom
+      anclado al punto medio entre los dedos. Doble tap para alternar
+      entre 1x y 2x. Scroll vertical y horizontal naturales.
+
+v1.35.0 — 2026-04-15
+─────────────────────
+[Fix] Documentos legales: contenido guardado antes del editor enriquecido
+      (texto plano) ahora se renderiza correctamente con saltos de línea.
+[Sec] Documentos legales: sanitización HTML (allowlist de tags y atributos)
+      tanto client-side como server-side para prevenir XSS.
+[Fix] Aviso de Privacidad (adp.php): contenido sanitizado server-side,
+      texto plano viejo se auto-convierte a HTML con nl2br.
+
+v1.34.9 — 2026-04-15
+─────────────────────
+[UX]  Aviso de Privacidad (adp.php): página pública rediseñada,
+      ahora scrolleable y con renderizado de texto enriquecido.
+[Feat] Configuración Legal: link “Ver página pública” en la
+      versión vigente de Política de Privacidad para abrir adp.php.
+[Fix] Visor PDF Canvas (Capacitor): corregido pinch-to-zoom que
+      movía la referencia al hacer gesto — ahora usa zoom relativo
+      al inicio del gesto sin drift multiplicativo.
+
+v1.34.8 — 2026-04-15
+─────────────────────
+[UX]  Login: spinner y botón deshabilitado al enviar credenciales,
+      previene doble click y muestra que se está verificando.
+[Feat] Configuración Legal: editor de texto enriquecido (negrita,
+      cursiva, subrayado, listas) para Términos y Condiciones y
+      Política de Privacidad. El contenido se renderiza con formato
+      al momento de visualizar y firmar.
+[UX]  Configuración Legal: botón de vista previa en el editor.
+[Fix] Sidebar: el parámetro 'wide' pasado como actionsHTML ahora
+      se maneja correctamente como flag (ya no muestra texto 'wide').
+[Refactor] openSidebar acepta 4to parámetro opts ({wide:true}).
+
+v1.34.7 — 2026-04-15
+─────────────────────
+[UX]  Expediente Médico: zoom y drag en lightbox de imágenes — rueda,
+      pinch-to-zoom, doble click, botones +/−/reset, arrastre con mouse.
+[UX]  Expediente Médico: zoom en visor PDF canvas (Capacitor) — botones
+      +/−/reset, pinch-to-zoom táctil.
+[Feat] Superadmin: botón "Corregir todo" en Auditoría BD — ejecuta todas
+      las correcciones de todas las tablas en una sola acción.
+
+v1.34.6 — 2026-04-15
+─────────────────────
+[UI]  Expediente Médico: sangria izquierda en cards de la linea de tiempo
+      para que las fechas sean facilmente identificables; separadores de
+      fecha con linea horizontal completa.
+[UX]  Expediente Médico: ghost/skeleton elements estilo timeline mientras
+      se cargan los registros de la linea de tiempo.
+[UX]  Expediente Médico: indicador de carga (spinner overlay) al hacer
+      click en un archivo/foto en el sidebar, previene doble click.
+
+v1.34.5 — 2026-04-15
+─────────────────────
+[UX]  Al cambiar de residente, la pagina permanece en la seccion actual
+      y recarga la informacion del nuevo residente con ghost/skeleton
+      elements mientras se obtiene la data.
+
+v1.34.4 — 2026-04-15
+─────────────────────
+[UI]  Expediente Médico: vista timeline en lugar de grid de tarjetas.
+      Los documentos se muestran en linea de tiempo vertical, agrupados
+      por fecha, con icono de tipo coloreado y separadores de fecha.
+[UI]  Expediente Médico: sidebar mas ancho en desktop (560px) para
+      apreciar mejor los documentos y datos.
+[Feat] Expediente Médico: soporte multi-archivo por documento.
+      Al crear un documento se pueden adjuntar multiples fotos y/o PDFs.
+      Se almacenan en archivos_json (JSON array). Compatible con legacy.
+[UI]  Expediente Médico: el creador del documento ahora se muestra
+      en la lista de la linea de tiempo (campo autor).
+[UI]  Expediente Médico: galeria de archivos en detalle sidebar —
+      thumbnails clickeables para imagenes y PDFs.
+[DB]  Nueva columna archivos_json (TEXT) en expediente_docs.
+
+v1.34.3 — 2026-04-15
+─────────────────────
+[Fix] Expediente Médico: layout corregido — ahora respeta max-width,
+      centrado y padding igual que el resto de secciones (Inventario, etc.).
+[Fix] Expediente Médico: error SQL “Column not found: u.apellidos”.
+      La tabla usuarios tiene un solo campo ‘nombre’ (no nombre+apellidos).
+
+v1.34.2 — 2026-04-15
+─────────────────────
+[UI]  Superadmin: favicon dinámico amarillo (#f59e0b) para distinguirlo
+      de la app principal (blanco).
+[UI]  testgeriapp: punto rojo en esquina superior derecha del favicon
+      para diferenciar entorno de pruebas de producción.
+[UI]  Lógica en head.php: tint via canvas + detección automática de
+      hostname "test" para el indicador rojo.
+
+v1.34.1 — 2026-04-15
+─────────────────────
+[DB]    expected_schema.php: tabla expediente_docs y columna
+        prescripciones.expediente_id registrados en el esquema esperado.
+[SA]    Superadmin → Auditoría BD: la validación automática ahora detecta
+        y repara la tabla expediente_docs y la columna expediente_id.
+[SA]    run_full_migration: crea expediente_docs y añade expediente_id
+        en prescripciones para todas las instituciones/tenants.
+
+v1.34.0 — 2026-04-16
+─────────────────────
+[Nuevo] Módulo Expediente Médico: CRUD completo de documentos clínicos
+        (recetas, laboratorios, imágenes/estudios, interpretaciones,
+        hospitalizaciones, doc. legales, notas de enfermería).
+[Nuevo] Subida de archivos (JPG, PNG, WebP, PDF, máx 10 MB) con compresión
+        server-side vía GD (max 2048px, JPEG 82%).
+[Nuevo] Visor inline: lightbox para imágenes, pdf.js canvas para PDFs
+        en Capacitor, iframe para web.
+[Nuevo] Integración con cámara nativa (Capacitor Camera) para capturar
+        fotos directamente desde el formulario.
+[Nuevo] Vinculación de documentos del expediente a prescripciones médicas
+        (Phase 2). Selector en el sidebar de medicación.
+[Nuevo] Filtros: búsqueda por texto, tipo de documento y fuente.
+        Paginación con "Cargar más".
+[UI]    Tarjetas con icono por tipo de documento (7 colores distintos),
+        miniaturas para imágenes, badge PDF.
+[UI]    Botón en sidebar desktop y bottom nav mobile.
+[DB]    Tabla expediente_docs + columna expediente_id en prescripciones.
+[i18n]  45+ claves de traducción para el módulo.
+
+v1.33.8 — 2026-04-15
+─────────────────────
+[PDF] Gráficas: cada gráfica ocupa el ancho completo de la columna (1 por fila
+      en vez de 2). Mayor legibilidad de datos y etiquetas.
+[PDF] Gráficas: datos ordenados cronológicamente (fecha+hora ascendente) de
+      izquierda a derecha.
+[Fix] Tabla Insumos: ahora cuenta TODOS los medicamentos administrados,
+      incluso los que no están en inventario. Corregido bug donde registros
+      con inventario_admin excluían medicamentos no cubiertos por él.
+
+v1.33.7 — 2026-04-15
+─────────────────────
+[Fix] Visor PDF en Capacitor: usa pdf.js para renderizar el PDF a <canvas>
+      directamente en el WebView. Ya no descarga ni abre app externa.
+      Carga pdf.js v4.4 via import dinámico (lazy, solo en Capacitor).
+[UI]  Visor nativo: overlay desplazable a pantalla completa, 2x DPR máximo
+      para calidad sin consumir memoria excesiva.
+
+v1.33.6 — 2026-04-15
+─────────────────────
+[Fix] Tabla Insumos: matching fuzzy entre nombres de prescripción e inventario
+      (ej. "Memantina" ↔ "Memantina 10 mg"). Usa inventario_admin del registro
+      cuando existe; fallback con startsWith/includes para registros rápidos.
+[Fix] Visor PDF en Capacitor: usa FileOpener nativo en vez de iframe (Android
+      WebView no tiene renderizador PDF integrado).
+[UI]  Visor PDF web: ancho 100% (máx 900px) para mejor lectura.
+
+v1.33.5 — 2026-04-15
+─────────────────────
+[Fix] Visor PDF en Capacitor: sube blob al servidor via pdf_temp.php y usa
+      la URL HTTP resultante en el iframe embebido (blob URLs no funcionan
+      en WebViews nativos).
+[UI]  Visor PDF: ancho 80vw (máx 800px), centrado, con #zoom=page-width.
+      Safe-area respetada en el overlay y botón Cerrar.
+
+v1.33.4 — 2026-04-15
+─────────────────────
+[Fix] Visor PDF en Capacitor: usa Filesystem + FileOpener nativo en vez de
+      iframe (blob URLs no renderizan en WebViews nativos).
+[UI]  Visor PDF web: ancho proporcional A4 (height/1.414), centrado.
+      Botón Cerrar y overlay respetan safe-area-inset de iOS/Android.
+
+v1.33.3 — 2026-04-15
+─────────────────────
+[PDF] Tabla de Insumos ahora incluye medicamentos administrados por
+      prescripción (rx + SOS) que coinciden con inventario. Stock Remanente
+      se calcula como stock actual − total consumido (puede ser negativo).
+[Reportes] Visor PDF embebido ahora ocupa toda la pantalla (full-width)
+           para lectura rápida sin necesidad de hacer zoom.
+
+v1.33.2 — 2026-04-15
+─────────────────────
+[PDF] Etiquetas eje X vuelven a vertical (-90°) para evitar solapamiento.
+[PDF] Tabla de Insumos se mueve a la columna derecha, debajo de Medicación.
+[PDF] Nombre del cuidador + hora de registro alineados a la derecha.
+[PDF] Margen inferior ampliado (18mm) para evitar solapamiento con footer.
+[Reportes] Previsualización usa visor PDF embebido (iframe modal) en la
+           misma página, sin descargar el archivo.
+
+v1.33.1 — 2026-04-15
+─────────────────────
+[Fix] Toggle "Solo previsualizar" ahora activo por defecto.
+[Fix] Corregida descarga involuntaria: el modo preview ahora abre el PDF
+      en nueva pestaña sin descargar (blob URL en _generateReport).
+
+v1.33.0 — 2026-04-16
+─────────────────────
+[PDF] Autor y hora de registro: cada entrada del timeline muestra el nombre
+      del cuidador y la hora en que se registró el evento.
+[PDF] Tablas separadas: "Medicación Prescrita" (solo rx + SOS) y "Insumos"
+      (administrado + stock remanente). Reemplaza "Insumos Consumidos".
+[PDF] Gráficas mejoradas: formato dd-Mmm-yy HH:MM en eje X, rotación −45°,
+      salto inteligente de etiquetas (máx 6 por gráfica), más altura de chart.
+[Reportes] Semana lunes–domingo, mes 1°–último día (sin cambio).
+[Reportes] Nuevo periodo "Últimos 30 Días" y "Fechas Personalizadas" con
+           selector de rango desde/hasta en el sidebar.
+[i18n] Nuevas claves: report_last_30, report_custom, report_custom_from,
+       report_custom_to, report_custom_generate, report_custom_invalid_range.
+
+v1.32.0 — 2026-04-15
+─────────────────────
+[Legal] Ver firma autógrafa: botón "Volver al listado" + contenedor con
+        contraste corregido para tema oscuro (fondo blanco para la imagen).
+[Signos Vitales] Timeline ahora muestra SpO₂ en formato nuevo y SpO₂ + FR
+                 en formato legado. Todos los signos con lectura se muestran.
+[PDF] Medicamentos ocasionales/SOS/no prescritos: se integran al reporte PDF
+      con color naranja y etiqueta itálica para diferenciarlos de prescritos.
+[Reportes] Paso intermedio en sidebar: toggle "Solo previsualizar" abre el
+           PDF en nueva pestaña sin descargar. Controlado por permiso
+           preview_reportes en la matriz de roles.
+[Timeline] Filtro de categorías muestra todas las categorías posibles
+           (incluyendo Bitácora), deshabilitando las que no tienen eventos.
+[Permisos] Nuevo permiso preview_reportes en la matriz de roles
+           (admin/enfermero/médico activo por defecto, familiar inactivo).
+[i18n] Nuevas claves: cat_bitacora, legal_back_to_list, perm_preview_reports,
+       report_preview_mode, report_preview_hint, toast_pdf_preview.
+
+v1.31.0 — 2026-04-14
+─────────────────────
+[Legal] Email al firmar: envío automático de copia del documento firmado al
+        usuario y CC al correo configurado por el administrador.
+[Config] Campo "Correo CC para documentos legales" en Configuración → General.
+         Se guarda en configuración y se usa para copias de T&C y Privacidad.
+[Privacidad] Rediseño de adp.php: hero con gradiente, pills de estado/versión,
+             info box, estados vacíos mejorados, dark mode, impresión.
+[Legal] Vista de firmas rediseñada: tarjetas con avatar, sin texto wrapeado,
+        barra de búsqueda por nombre/correo, botón "Ver firma" autógrafa.
+[API] GET action=get_firma&id=X: obtener imagen de firma autógrafa individual.
+[i18n] Nuevas claves: legal_view_signature, legal_no_signature_data,
+       legal_sig_search_placeholder, config_legal_cc_email*.
+
+v1.30.1 — 2026-04-14
+─────────────────────
+[Privacidad] Nueva página pública /adp.php: muestra el Aviso de Privacidad
+             vigente sin requerir sesión. Acepta ?inst=ID para filtrar por
+             institución. Diseño consistente con la app, soporte dark mode.
+[Registro] Enlace al Aviso de Privacidad en footer del formulario de registro
+           (visible cuando hay invitación con institución asignada).
+
+v1.30.0 — 2026-04-14
+─────────────────────
+[Términos y Condiciones] Ver documento vigente: botón para visualizar T&C o
+             Aviso de Privacidad desde panel Configuración. Muestra título,
+             versión, estado, contenido con espacios/saltos preservados.
+[Términos y Condiciones] Editar documento: acceso directo a editor desde
+             lista de documentos (botón lápiz). Carga contenido completo
+             en sidebar, respeta formato original.
+[Términos y Condiciones] Formato pre-wrap: contenido en modal de firma y
+             vista previa mantiene saltos de línea, espacios, indentación.
+[Términos y Condiciones] Checkbox obligatorio en registro: "Acepto los
+             Términos y Condiciones y declaro que cuento con facultades
+             legales para gestionar la información del Sujeto del Cuidado".
+             Validación client-side y server-side. Con modal de vista previa.
+[Términos y Condiciones] API GET ?action=get&id=X: nuevo endpoint para
+             obtener documento completo con contenido. Uso: admin panel.
+[Términos y Condiciones] Global scope: funciones viewLegalDoc, editLegalDoc,
+             viewLegalSignatures expuestas a window.* para inline onclick.
+             Resuelve ReferenceError: viewLegalSignatures not defined.
+[i18n] Nuevas claves: config_legal_view_doc, config_legal_inactive.
+[CSS] .cd-legal-preview-content: estilos para vista previa scrollable.
+
+v1.29.9 — 2026-04-14
+─────────────────────
+[Superadmin] fix_db: SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION' antes
+             de ejecutar DDL. Resuelve error 1067 (Invalid default value
+             for 'updated_at') en servidores con sql_mode estricto.
+[Superadmin] Toast notifications: estilos inline forzados (position:fixed,
+             z-index:99999) para garantizar visibilidad independiente del
+             scroll, caché CSS o CDN.
+
+v1.29.8 — 2026-04-14
+─────────────────────
+[Auditoría]  Sidebar de log enriquecido: detalle ahora almacenado como
+             JSON estructurado con categoría, residente, fecha, hora,
+             observaciones y datos completos del cuidado.
+[Auditoría]  Sidebar muestra 3 secciones: Detalle del registro, Detalle
+             del cuidado (con todos los campos registrados), y Detalles
+             técnicos. Badge de color por tipo de acción (crear/editar/eliminar).
+[Auditoría]  Compatible con formato legacy (pipe-delimited) para logs antiguos.
+
+v1.29.7 — 2026-04-14
+─────────────────────
+[DB]         Fix: DEFAULT CURRENT_TIMESTAMP añadido a TODAS las columnas
+             TIMESTAMP NOT NULL en expected_schema.php (26 columnas:
+             creado_at, firmado_at, expires_at, visto_at, ultimo_acceso).
+             Elimina error 1067 al crear/corregir cualquier tabla.
+
+v1.29.6 — 2026-04-14
+─────────────────────
+[Seguridad]  Parámetros de seguridad funcionales: longitud mínima de
+             contraseña, timeout de sesión, max intentos login, minutos
+             de bloqueo configurados desde General→Seguridad.
+[Superadmin] checkdbSummary no cuenta issues tipo 'info' como problemas.
+[Superadmin] Botón hamburger flotante (FAB) en esquina inferior derecha
+             en móvil.
+[Superadmin] Toast notifications rediseñados: posición top-right,
+             barra de progreso, mayor duración en errores (10s),
+             colores de fondo por tipo.
+[Auditoría]  Detalle enriquecido en logs: nombre completo del residente,
+             resumen de datos, ID de registro.
+[DB]         Fix: updated_at con DEFAULT CURRENT_TIMESTAMP en
+             expected_schema.php (12 tablas). SQL fix_sql ya no
+             envuelve CURRENT_TIMESTAMP entre comillas.
+
+v1.29.5 — 2026-04-14
+─────────────────────
+[DB]         Archivo de migración: db/migrate_documentos_legales.php.
+[UI]         cdSuenoBadge: icono con mejor contraste (filter:brightness(0)).
+[UI]         cd-date-nav ahora arriba del toolbar, sticky al scroll.
+[UI]         cdInstSelect: flecha SVG visible en tema oscuro.
+[UI]         cdAvatarOverlay: badge de cámara permanente en esquina
+             inferior derecha del avatar.
+[Fix]        Bug sueño 23h+: cálculo de tiempo usa fecha+hora completa.
+[UI]         Iconos mañana/tarde en RxTracker: SVG inline en lugar de PNG.
+
+v1.29.4 — 2026-04-14
+─────────────────────
+[Config]     Botón AI rewrite integrado en cfgNotifTitulo (título de
+             notificación del sistema).
+[Config]     Tab «General» reestructurado con sub-tabs: Generales,
+             Seguridad, Términos y Condiciones, Aviso de Privacidad.
+             Tab Seguridad independiente eliminado (ahora sub-tab de General).
+[Config]     Gestor de documentos legales (T&C / Privacidad) con
+             versionado, flag vigente, requiere firma, lista de firmas.
+[Legal]      Modal de firma gráfica obligatoria al iniciar sesión
+             cuando hay T&C o Aviso de Privacidad pendiente de firma.
+[DB]         Nuevas tablas: documentos_legales, firmas_documentos.
+[API]        Nuevo endpoint: api/documentos_legales.php (CRUD + firmas).
+[i18n]       ~40 nuevas claves de traducción (es/en) para legal docs.
+
+v1.29.3 — 2026-04-14
+─────────────────────
+[UI]         Sidebar derecho solo se cierra con click completo
+             (mousedown+mouseup) fuera del panel, no al arrastar.
+[UI]         Confirm dialog de sueño pendiente: click en overlay
+             cierra el dialog y permanece en inicio.
+[UI]         Icono moon-zzz.png en cdSuenoBadge en lugar de emoji.
+[Config]     Tabs consolidados: SMTP + WhatsApp + IA → «Integraciones»;
+             Personal + Roles + Sesiones → «Equipo» (con sub-tabs).
+[i18n]       Nuevas claves: config_integrations, config_team (es/en).
+
+v1.29.2 — 2026-04-14
+─────────────────────
+[UI]         Checkbox «No conozco la hora de despertar» reubicado dentro
+             de la columna «Hora de despertar», debajo del icono+input.
+[UI]         Texto «Aún desconocida» en hora de despertar cuando pendiente
+             está activo (ya no muestra una hora confusa).
+[UI]         Hint «El sueño cruza la medianoche» oculto cuando hora_fin
+             no se conoce.
+[UI]         Texto de cdSleepDateHint centrado.
+[i18n]       Nueva clave: sleep_wake_unknown (es/en).
+
+v1.29.1 — 2026-04-14
+─────────────────────
+[Limpieza]   app.js: eliminadas ~650 líneas de código muerto (sidebar, tabs,
+             medicación, scroll-to-top, sortable, descargarReporteNativo).
+             Conservado solo theme init + push notifications.
+[Limpieza]   cuidados.php: eliminado bloque PDF legend comentado (18 líneas).
+[CSS]        Corregidas 6 variables CSS indefinidas (--cd-error → --cd-danger,
+             --cd-card → --cd-surface, --cd-hover → rgba fallback).
+[CSS]        Renombrada .cd-notif-empty duplicada a .cd-notif-push-empty
+             en panel push para evitar colisión con panel admin.
+
+v1.29.0 — 2026-04-14
+─────────────────────
+[UI]         Botón Actualizar (cdDashRefreshBtn) con texto visible,
+             fondo blanco y letras negras para mayor visibilidad.
+[UI]         Ghost/skeleton animado en cdRxTracker durante la carga
+             del dashboard.
+[UI]         Botón Notas (cd-cat-btn--notas) con icono y texto más
+             grande, al nivel del resto de categorías; full-width en móvil.
+[UI]         Icono de notificaciones (campana) entre avatar y tema.
+             Abre panel lateral con historial de notificaciones push
+             (WhatsApp/email) de notificaciones_log.
+[Nav]        Sección Reportes oculta temporalmente en sidebar y bottombar.
+[i18n]       Nuevas claves: header_notifications, notif_title, notif_empty.
+
+v1.28.2 — 2026-04-14
+─────────────────────
+[Superadmin] expected_schema.php: ~30 keys/indexes añadidos en 12 tablas,
+             columnas faltantes (subtipo, pendiente, duracion_min,
+             roles_destino) y push_tokens/sesiones_activas.
+[DB]         schema.sql y schema_tenant.sql: eliminadas 6 tablas
+             obsoletas (bitacora_turnos, bitacora_entradas,
+             bitacora_rx_administraciones, historial_expedientes,
+             historial_evoluciones, historial_documentos) — dropped v1.26.0.
+[DB]         schema_tenant.sql: añadidas verificacion_biometrica y
+             timestamp_firma a cuidados_registros.
+
+v1.28.1 — 2026-04-14
+─────────────────────
+[Fix]        Botón CdConfirmNo mostraba "btn_new" — corregido a clave
+             i18n sleep_pending_new ("Nuevo registro" / "New record").
+[UI]         cd-confirm-dialog con opción required: true bloquea click
+             en overlay y Escape para forzar respuesta explícita.
+[Superadmin] Auditoría BD detecta tablas y columnas residuales (no en
+             esquema esperado) con botón "Corregir" (DROP TABLE/COLUMN).
+             Botón "Corregir todos" para aplicar múltiples fixes a la vez.
+             Columnas _enc de cifrado dual se marcan como info, no warn.
+[Cuidados]   Badge de sueño pendiente (cdSuenoBadge) muestra horas
+             transcurridas (ej. "3h 20m") en lugar de la hora de inicio.
+[i18n]       Nuevas claves: sleep_pending_new, sleep_pending_hours (es/en).
+
+v1.28.0 — 2026-04-14
+─────────────────────
+[Seguridad]  Cifrado AES-256-GCM fase 2: 5 nuevas columnas PHI cifradas
+             (prescripciones.nombre, inventario_items.nombre,
+             cuidados_registros.datos, cuidados_registros.observaciones,
+             notificaciones_log.mensaje). Total: 31 campos en 8 tablas.
+[Seguridad]  Columnas desnormalizadas (subtipo, pendiente, duracion_min)
+             en cuidados_registros para consultas SQL sin JSON_EXTRACT
+             sobre datos cifrados.
+[Seguridad]  Refactorización de ORDER BY en PHP (usort) para columnas
+             cifradas: prescripciones.nombre, inventario_items.nombre.
+[Seguridad]  LIKE CONCAT → stripos() en PHP para búsqueda de
+             medicamentos en reportes (Reporte::getMedicamentos).
+[Seguridad]  EncryptionMap::dualWriteEnc() método público genérico
+             para dual-write fuera de modelos.
+[DB]         Migración migrate_cuidados_denorm.php + schema_tenant.sql
+             actualizado con columnas desnormalizadas.
+[DB]         migrate_sync_schema.php actualizado para propagar
+             columnas desnormalizadas a todos los tenants.
+[Cron]       notificaciones.php: cifrado de mensaje en INSERT,
+             descifrado de inventario_items.nombre y cuidados_registros.
+
+v1.27.1 — 2026-04-14
+─────────────────────
+[Cuidados]   Sueño pendiente: registro parcial cuando no se conoce la
+             hora de despertar. Badge ⏳ en botón de categoría, checkbox
+             "No conozco la hora de despertar", flujo de completar
+             registro con pre-llenado automático.
+[Cuidados]   Timeline muestra tag visual ⏳ Pendiente en registros
+             de sueño incompletos.
+[UI]         Botón AI Rewrite en textarea de mensaje de notificación
+             (cfgNotifMensaje) en configuración.
+[i18n]       8 nuevas claves de traducción para sueño pendiente (es/en).
+[API]        Dashboard devuelve sueno_pendiente para el residente activo.
+[Backend]    Cuidado::getSuenoPendiente() consulta JSON pendiente=true.
+
+v1.27.0 — 2026-04-14
+─────────────────────
+[Seguridad]  Cifrado AES-256-GCM ampliado: 12 columnas nuevas en 4 tablas.
+             prescripciones: dosis, vía, frecuencia, horarios.
+             cuidados_notas: nota.
+             logs_sistema: ip, user_agent.
+             configuracion: smtp_usuario, smtp_from_email, wa_api_key,
+             wa_instance_id, ia_api_key.
+[Seguridad]  Configuracion: dual-write generalizado a todos los campos
+             cifrados (antes solo smtp_password).
+[Fix]        Prescripcion::getHistorialForResidente() ahora descifra datos
+             (bug: devolvía texto cifrado sin decryptRow).
+[Fix]        Reporte::getMedicamentos() ahora descifra dosis/frecuencia
+             de prescripciones antes del cálculo de adherencia.
+[Fix]        Superadmin: endpoints de cifrado ya no fallan en BDs donde
+             la tabla no existe (tablas master-only como logs_sistema).
+
+v1.26.0 — 2026-04-14
+─────────────────────
+[Limpieza]   Eliminadas tablas legacy bitacora_turnos, bitacora_entradas,
+             bitacora_rx_administraciones, bitacora_firmas — reemplazadas
+             por cuidados_registros desde v6.
+[Limpieza]   Eliminadas tablas legacy historial_expedientes,
+             historial_evoluciones, historial_documentos — sin UI desde v6.
+[Limpieza]   Eliminados modelos Bitacora.php y Historial.php (código muerto).
+[Refactor]   Reporte.php migrado de bitacora_entradas a cuidados_registros
+             (Database::getTenant). Reportes ahora usan datos actuales.
+[Limpieza]   Removidos writes huérfanos de Historial:: en prescripciones y
+             upload (datos se escribían pero nunca se mostraban).
+[Limpieza]   EncryptionMap: removidas entradas de historial_expedientes y
+             historial_evoluciones (9 campos PHI ya no necesitan cifrado).
+[DB]         Nuevo script migrate_drop_bitacora_historial.php — elimina 7
+             tablas de BD master + tenants separadas.
+
+v1.25.0 — 2026-04-14
+─────────────────────
+[Cifrado]    Fase 4 — Consolidar: elimina columnas originales (texto plano) y
+             renombra _enc → original. Limpia la BD tras verificar cifrado.
+             Operación irreversible con confirmación explícita.
+[Cifrado]    Switch global de modo lectura: toggle para elegir entre leer de
+             columnas cifradas o texto plano. Útil para verificación y emergencias.
+[Cifrado]    Nueva fase 'consolidated' en EncryptionMap: la app lee/escribe
+             cifrado directo en la columna original (sin columnas _enc duplicadas).
+
+v1.24.7 — 2026-04-14
+─────────────────────
+[Fix]        Push cuidados.php: flush del token no incluía header X-CSRF-Token
+             (copia independiente de app.js, faltaba CSRF desde v1.24.4)
+[Fix]        Diagnóstico push: flush_error residual no se limpiaba tras éxito
+             — el panel mostraba "Failed to fetch" aunque el último flush fue OK
+
+v1.24.6 — 2026-04-14
+─────────────────────
+[Fix]        Fotos alimentación en Capacitor: si el plugin Camera falla o no
+             está disponible, ahora se usa el file input nativo del WebView
+             como fallback automático (antes no pasaba nada al tocar la caja)
+[Fix]        _capacitorPickPhoto: distingue cancelación del usuario vs error
+             del plugin para decidir si hacer fallback
+
+v1.24.5 — 2026-04-14
+─────────────────────
+[Fix]        Auditoría BD: warnings falsos de tipo JSON vs LONGTEXT — MariaDB
+             almacena JSON como LONGTEXT internamente, ahora se tratan como
+             equivalentes funcionales (afecta 9 columnas en 8 tablas)
+
+v1.24.4 — 2026-04-14
+─────────────────────
+[Fix]        Push notifications en Capacitor: flush del token FCM fallaba con
+             403 porque el fetch en app.js no incluía header X-CSRF-Token
+[Fix]        cuidados.php: faltaba meta tag csrf-token en <head> — el
+             interceptor global de fetch enviaba CSRF vacío en todas las
+             peticiones POST/PUT/DELETE
+
+v1.24.3 — 2026-04-14
+─────────────────────
+[Fix]        PDF en Capacitor: Filesystem.downloadFile() hacía petición nativa
+             sin cookies de sesión → api_auth() rechazaba con 401. Se reemplazó
+             por autenticación vía token hex efímero (capability URL, 128 bits,
+             auto-expira en 10 min)
+
+v1.24.2 — 2026-04-13
+─────────────────────
+[Fix]        migrate_drop_expediente: ahora elimina tablas de la BD master
+             (antes solo buscaba en BD tenant separadas, que no existían)
+[Fix]        migrate_drop_expediente: usa db_name real de instituciones en vez
+             de asumir DB_TENANT_PREFIX + id
+
+v1.24.1 — 2026-04-13
+─────────────────────
+[Fix]        Login en Android Capacitor: el fetch() nativo no incluía el campo
+             _csrf en el body → validación CSRF siempre fallaba
+[Config]     CORS: añadido header X-CSRF-Token en Allow-Headers
+
+v1.24.0 — 2026-04-13
+─────────────────────
+[Feature]    Tab Cifrado §5 en superadmin: gestión visual del cifrado de campos
+             PHI/PII con selección por campo, 4 fases (preparar, migrar, activar,
+             rollback), verificación previa y progreso en tiempo real
+[Seguridad]  §5.1 Cipher.php: cifrado AES-256-GCM (Galois/Counter Mode) con
+             DATA_ENCRYPTION_KEY de conf/.env (64 hex = 256 bits)
+[Seguridad]  §5.2 EncryptionMap: mapa de campos encriptables (20 campos en 5
+             tablas), estado por campo (JSON), helpers encryptRow/decryptRow.
+             Excluidos: nombre/apellidos/notas (WHERE LIKE/ORDER BY),
+             bitacora_entradas.contenido (LIKE en reportes),
+             signos_vitales (JSON_EXTRACT en reportes)
+[Seguridad]  §5.3 Dual-write en modelos: Residente, Prescripcion, Historial,
+             Configuracion — escritura simultánea a columnas _enc
+[Seguridad]  §5.4 API encryption_status/prepare/migrate/activate/rollback en
+             superadmin/api.php para migraciones multi-tenant
+[Seguridad]  §5.5 migrate_encryption.php: migración idempotente de columnas _enc
+             (master + todos los tenants)
+[UI]         Diálogo de confirmación con resumen de parámetros antes de cada fase
+[UI]         Barra de progreso + log en tiempo real durante migración por lotes
+
+v1.23.0 — 2026-04-12
+─────────────────────
+[Feature]    Tab Logs: sub-tab Auditoría con exportación CSV PHIPA/NOM y
+             filtro por estado (ok/warn/error/info)
+[Feature]    Tab Logs: sub-tab Errores PHP (admin) — visor en tiempo real del
+             log de errores, toggle display_errors, limpieza de log
+[Seguridad]  §7.1 Custom error/exception handler: mensajes genéricos al
+             usuario, detalle completo al log interno
+[Seguridad]  §7.2 display_errors = Off por defecto (controlable desde UI)
+[Seguridad]  §7.3 Logging centralizado de errores PHP en logs/php_errors.log
+[Feature]    Tab Base de Datos: sub-tab Respaldos con historial, descarga,
+             eliminación y generación manual de backups
+[Seguridad]  §8.1 Backup automatizado via cron (cron/backup.php) con retención
+             de 30 días y purga automática
+[Seguridad]  §8.2 Backup cifrado AES-256-CBC con clave de .env
+[Seguridad]  §8.3 Plan de recuperación documentado en UI (collapsible)
+[Seguridad]  Protección .htaccess para directorios logs/ y backups/
+[UX]         Sub-tabs CSS reutilizables (.cd-cfg-subtab / .cd-cfg-subpanel)
+
+v1.22.0 — 2026-04-12
+─────────────────────
+[Seguridad]  §1.4 session.use_strict_mode activado (rechaza session IDs ajenos)
+[Seguridad]  §1.5 session.use_only_cookies activado (sin SID por URL)
+[Seguridad]  §1.6 Entropía de session_id incrementada a 96 chars / 5 bits
+[Seguridad]  §1.7 Cron de limpieza de sesiones inactivas (cron/limpieza.php)
+[Seguridad]  §4.4 Audit logging en prueba de conexión BD (db_config test)
+[Seguridad]  §4.5 Retención y purga programada de logs (180d sistema, 90d
+             login_attempts y notificaciones). Ejecuta en master + tenants.
+[Seguridad]  §4.6 Alertas de seguridad automáticas: login fallido, CSRF
+             inválido y detección de fuerza bruta (≥10 intentos/15min)
+             registrados en logs_sistema con estado warn/error
+[Seguridad]  §6.5 Validación MIME reforzada con finfo (libmagic) en 5
+             endpoints de upload (upload, residentes, cuidados,
+             prescripciones, notificaciones). Doble check finfo + fallback.
+[Seguridad]  §9.4 API keys y passwords enmascarados en respuesta GET de
+             configuración. Los tests de SMTP/WA/IA usan valor almacenado
+             cuando llega enmascarado.
+
+v1.21.3 — 2026-04-12
+─────────────────────
+[UX]         Post-cambio de contraseña forzado: muestra confirmación visual
+             con checkmark y recarga automática tras 1.8s (flujo orgánico)
+[Fix]        Modal biometría: contraste dark mode corregido (--cd-surface
+             en vez de --cd-bg-card inexistente, --cd-bg en input, font-family)
+[UX]         Modal biometría: botón ojo para revelar/ocultar contraseña
+
+v1.21.2 — 2026-04-12
+─────────────────────
+[Fix]        Modal cambio contraseña: contraste de inputs en tema oscuro
+             (usa --cd-bg y --cd-text para fondo/texto, elimina --cd-input-bg
+             que no existía como variable)
+[UX]         Botón ojo en cada campo para revelar/ocultar contraseña
+             (toggle password/text con iconos eye/eye-off)
+[Fix]        Color de error en modal adaptado para dark mode (rgba + #f87171)
+
+v1.21.1 — 2026-04-12
+─────────────────────
+[UI]         Modal de cambio de contraseña: fuentes consistentes con el sitio
+             (DM Sans/Inter via --cd-font), inputs con colores del tema
+[UX]         Requisitos de contraseña se colorean en verde en tiempo real
+             conforme se cumplen (grid 2 columnas, indicadores ○/●)
+[UX]         Botón "Actualizar contraseña" deshabilitado hasta cumplir todos
+             los requisitos (incluye validación de coincidencia)
+
+v1.21.0 — 2026-04-13
+─────────────────────
+[Seguridad]  §1.8 Cookies de sesión con flags httponly, secure (HTTPS), samesite=Lax
+[Seguridad]  §1.9 Protección CSRF en todos los formularios (login, registro,
+             recuperación/reset de contraseña) y API (header X-CSRF-Token,
+             campo _csrf en POST/JSON vía interceptor global fetch)
+[Seguridad]  §1.10 Timeout de sesión por inactividad (30 min) con destrucción
+             automática y gc_maxlifetime alineado
+[Seguridad]  §1.11 Política de complejidad de contraseñas (8+ chars, mayúscula,
+             minúscula, dígito, carácter especial). Usuarios existentes con
+             contraseña débil son forzados a cambiarla en su próximo login
+             (modal obligatorio + API change_password.php)
+[Seguridad]  §2.3 Credenciales movidas a conf/.env (fuera de VCS). config.db.php
+             reescrito para leer variables de entorno. Incluye .env.example
+[Seguridad]  §2.4 Soporte SSL/TLS para conexión MySQL en producción
+             (activado vía DB_SSL_CA en .env, ignorado en localhost)
+[Seguridad]  §2.5 Header HSTS (Strict-Transport-Security) condicional para
+             dominios de producción (via .htaccess)
+[Seguridad]  §3.6 Registro cerrado: se requiere enlace de invitación obligatorio
+[Seguridad]  §3.7 Filtrado de datos para rol familiar: solo ve residentes
+             vinculados, sin bitácora/inventario/notas ni datos sensibles
+             (CURP, NSS, contacto emergencia)
+[Seguridad]  §3.8 Endpoint db_config restringido exclusivamente a superadmin
+[Seguridad]  §6.6 Validación de nombre de BD en createTenantDB() contra
+             inyección SQL (regex alfanumérico)
+[Seguridad]  §10.5 Acceso a directorio conf/ bloqueado via .htaccess
+[Seguridad]  §10.6 Archivos en uploads/ servidos via api/serve_file.php con
+             autenticación obligatoria y validación de institución
+[Config]     .gitignore creado para producción (bloquea .env, secretos/,
+             uploads/, archivos IDE)
+[DB]         migrate_phipa_security.php: añade columna password_change_required
+             a usuarios, índices para rate limiting y sesiones
+
+v1.20.0 — 2026-04-12
+─────────────────────
+[General]    Expediente Médico independizado como MediApp (app standalone)
+[Limpieza]   cuidados.php: removidas 7 integraciones del módulo médico (CSS,
+             sidebar, nav, include, callbacks, JS)
+[Limpieza]   models.php: removido require de ExpedienteMedico.php
+[Limpieza]   Superadmin: removido panel CIE-10 y endpoints cie10_stats/cie10_import
+[DB]         migrate_drop_expediente.php: elimina 7 tablas de expediente de
+             todas las BD tenant (expediente_hc, expediente_notas,
+             expediente_enfermeria, expediente_estudios,
+             expediente_consentimientos, expediente_auditoria, cie10_catalogo)
+[DB]         migrate_expediente_medico.php desactivado (return temprano)
+[DB]         cie10_import.php desactivado (return temprano)
+[Nota]       El directorio v7/medico/ se conserva como referencia histórica
+             (ya no es referenciado por ningún archivo activo)
+
+v1.19.2 — 2026-04-12
+─────────────────────
+[Limpieza]   Eliminados 12 archivos/dirs obsoletos: debug scripts (_check_db,
+             _debug_syntax, _deploy_check, test_push), run_migrations.php,
+             APIs huérfanas (historial, bitacora), DB utilities (fix_instituciones,
+             install.php, _debug_inst, config.db.local.example), db/bkp/ (dump
+             sensible), cron_test.php
+[Seguridad]  Removidos archivos con credenciales en texto plano (install.php,
+             config.db.local.example.php, db/bkp/)
+
+v1.19.1 — 2026-04-12
+─────────────────────
+[Fix]        Push: token no se enviaba al servidor porque cuidados.php (SPA)
+             no cargaba app.js donde se definía geriappFlushPushToken()
+[Push]       cuidados.php: setup completo de push inline (flush + init Capacitor)
+             — el token se envía al backend al entrar a la app autenticada
+
+v1.19.0 — 2026-04-12
+─────────────────────
+[Push]       iOS: conversión APNs→FCM server-side vía Firebase batchImport
+             (sin Firebase SDK nativo — elimina crash al inicio)
+[Push]       push_token.php: detecta tokens iOS y los convierte a FCM
+[Fix]        iOS: removido @capacitor-community/fcm (causaba crash al inicio)
+[Fix]        iOS: AppDelegate restaurado, eliminado GoogleService-Info.plist
+[UI]         Header: rediseño a 2 filas — fila 1: institución + avatar + acciones;
+             fila 2: selector de residente a ancho completo
+[Fix]        Push: limpieza automática de tokens FCM inválidos más robusta
+             (cubre errorCode + status + NOT_FOUND, HTTP 400+)
+[Push]       Test push ahora indica cuántos tokens inválidos se eliminaron
+
+v1.18.1 — 2026-04-11
+─────────────────────
+[Push]       Config: botón "Enviar push de prueba" con feedback detallado paso a paso
+[Push]       Config: botón "Limpiar caché" para resetear diagnóstico push
+[Push]       Superadmin: feedback detallado al enviar push (progreso, errores por token)
+[Push]       Superadmin: drawer de token muestra resultado inline al enviar prueba
+[Push]       Nuevo endpoint api/push_test.php para prueba desde la app
+[Fix]        Android: icono de notificación era círculo blanco — meta-data estaba
+             dentro de <provider> en vez de <application> en AndroidManifest.xml
+[Fix]        Android: regenerados ic_notification_logo.png en todas las densidades
+[Fix]        Android: añadido colors.xml con colorPrimary para tinte de notificación
+
+v1.18.0 — 2026-04-10
+─────────────────────
+[UI]         Sesiones: rediseño completo de tarjetas — más compactas y legibles
+[UI]         Sesiones: contador regresivo de expiración con colores (verde/amarillo/rojo)
+[UI]         Sesiones: filtros por chips (Todas / Mi sesión / Otras)
+[UI]         Sesiones: resumen de sesiones activas con botón de actualizar inline
+[UI]         Sesiones: botones de acción (Cerrar) en cada tarjeta
+[UI]         Sesiones: iconos de dispositivo (💻/📱) y badge de navegador/OS
+
+v1.17.2 — 2026-04-08
+─────────────────────
+[Fix]        Expediente Médico: addendum form mistakenly sent 'update_nota' instead
+             of 'create_nota', causing "id requerido" error; also pass es_addendum
+             and nota_padre_id to API
+
+v1.17.1 — 2026-04-08
+─────────────────────
+[Fix]        Login: photo lightbox modal (gPhotoModal) leaked raw HTML onto login page;
+             foot.php now skips the modal when bodyClass is 'login-page'
+
+v1.17.0 — 2026-04-08
+─────────────────────
+[Módulo]     Expediente Médico: nuevo módulo NOM-004-SSA3-2012 / NOM-024-SSA3-2012
+[DB]         7 tablas nuevas: cie10_catalogo, expediente_hc, expediente_notas,
+             expediente_enfermeria, expediente_estudios, expediente_consentimientos,
+             expediente_auditoria
+[DB]         Catálogo CIE-10 con ~170 códigos geriátricos y búsqueda FULLTEXT
+[Model]      ExpedienteMedico.php: CRUD completo, firma digital, auditoría, CIE-10
+[API]        medico/api.php: endpoints REST para todo el módulo (GET/POST/DELETE)
+[UI]         6 pestañas: Historia Clínica, Notas (SOAP), Enfermería, Estudios,
+             Consentimientos, Auditoría
+[UI]         Firma digital con canvas táctil (pointer events)
+[NOM]        Inmutabilidad de notas firmadas (NOM-024 §6.6.2), solo addendums
+[NOM]        Consentimiento informado con firmas (NOM-004 §4.2)
+[NOM]        Valoración geriátrica integral (Barthel, Lawton, MMSE, GDS, MNA, Tinetti)
+[i18n]       ~150 claves de traducción en es.php y en.php
+[Roles]      Familiar solo lectura, enfermero pestaña enfermería, médico/admin completo
+
+v1.15.4 — 2026-04-07
+─────────────────────
+[Permiso]    Nuevo permiso ver_cuidados_grid: permite ver la cuadrícula de categorías en modo solo lectura (read-only)
+[Fix]        Capacitor Camera: se verifica/solicita permiso de cámara antes de capturar; resultType cambiado a uri (menos memoria)
+[Fix]        Navegador móvil: se restauró capture="environment" en inputs de foto para que el browser ofrezca cámara
+
+v1.15.2 — 2026-04-07
+─────────────────────
+[Config]     Sesiones: fechas ahora usan fmtDateTime (respeta cfgTimezone y cfgFechaFormato)
+[UI]         Botón "Finalizar" en tarjeta de sesión movido al extremo derecho (inline, sin wrapper extra)
+[Fix]        Fotos alimentación: todas las instancias de reset usan bindPhotoBox para que el click + Capacitor Camera funcione en móvil
+
+v1.15.1 — 2026-04-07
+─────────────────────
+[Fix]        Foto en móvil/Capacitor: click programático + Capacitor Camera plugin para captura nativa confiable
+[Fix]        CSS input[file] con z-index y dimensiones explícitas para touch en webview
+[Dep]        @capacitor/camera añadido como dependencia para captura nativa
+
+v1.15.0 — 2026-04-07
+─────────────────────
+[Fix]        Captura de fotos en móvil: se removió capture="environment" para mostrar opción cámara + galería en iOS/Android
+[UI]         Fotos antes/después de alimentación se apilan verticalmente en pantallas <480px
+[Admin]      Botón "Ejecutar Todo" en panelMigraciones ejecuta migración completa (master + tenant) desde el portal
+[API]        Nuevo endpoint run_full_migration en superadmin API
+
+v1.14.0 — 2026-04-07
+─────────────────────
+[Seguridad]  Rol familiar ya no puede acceder a los botones de categoría (cd-cat-btn) por defecto
+[Config]     Nuevo tab "Sesiones" en configuración para ver y gestionar sesiones activas de la institución
+[Config]     Forzar cierre de sesión de cualquier usuario conectado desde el panel de sesiones
+[Fix]        Sidebar "Editar residente" ahora refleja los cambios guardados al reabrir (await loadResidentes + Cache-Control: no-store en API)
+[API]        Nuevo endpoint /api/sesiones.php (GET listar, DELETE finalizar sesión)
+[DB]         Nueva tabla sesiones_activas para tracking de sesiones por usuario/institución
+
+v1.13.0 — 2026-04-06
+─────────────────────
+[Seguridad]  Permiso editar_residentes de la matriz de roles ahora se aplica al botón de edición y acciones de la Ficha (cdResGrid / cdResExtraGrid)
+[API]        PUT /api/residentes.php ahora permite rol enfermero (controlado por permiso editar_residentes)
+[UI]         Captura de fotos desde cámara disponible en formulario de Alimentación (atributo capture="environment")
+
+v1.12.6 — 2026-04-06
+─────────────────────
+[Fix]        Badge de signos vitales fuera de rango y alerta amarilla en formulario ahora soportan formato legacy (rows)
+
+v1.12.5 — 2026-04-06
+─────────────────────
+[Fix]        Usuarios con rol familiar ahora aparecen correctamente en la pestaña Familia de la Ficha del residente
+[API]        Endpoint dashboard incluye familiares_usuarios vinculados al residente
+
+v1.12.4 — 2026-04-06
+─────────────────────
+[Cuidados]   Timestamps completos (fecha evento + fecha registro) en tabla de signos vitales del sidebar
+[Cuidados]   Valores fuera de rango resaltados con color y efecto breathing en tabla de detalle
+[UI]         Signos vitales fuera de rango resaltados con breathing en la línea de tiempo
+
+v1.12.3 — 2026-04-06
+─────────────────────
+[UI]         Skeleton/ghost loading en listas de usuarios, invitaciones y logs de configuración
+[UI]         Animación de giro en botones de refrescar mientras se cargan datos
+
+v1.12.2 — 2026-04-06
+─────────────────────
+[UI]         Iconos PNG (handwash, sponge, toothbrush) en botones de tipo de higiene
+
+v1.12.1 — 2026-04-06
+─────────────────────
+[UI]         Iconos sleep/awake reubicados junto a los inputs de hora (tamaño igualado al campo)
+
+v1.12.0 — 2026-04-06
+─────────────────────
+[UI]         Icono Gemini reemplaza estrella en botones de reescritura IA
+[Cuidados]   Calidad de sueño obligatoria con indicador rojo (*)
+[Cuidados]   Botones de opción rápida con iconos en formulario de higiene (reemplaza select)
+[UI]         Icono shower.png en botón categoría Higiene y formulario
+[Seguridad]  Redirección automática a login al recibir error 401 (No Autenticado)
+
+v1.11.0 — 2026-04-06
+─────────────────────
+[Cuidados]   Familiares registrados se integran automáticamente en Ficha > Familia con badge "Usuario"
+[Cuidados]   Edición de contactos familiares sincroniza cambios de vuelta al registro del usuario
+[UI]         Iconos sleep.png y awake.png junto a hora de dormir/despertar en formulario de sueño
+
+v1.10.3 — 2026-04-06
+─────────────────────
+[Fix]        Icono toilet.png visible en tema claro (filtro CSS por tema)
+
+v1.10.2 — 2026-04-06
+─────────────────────
+[UI]         Icono toilet.png en botón Eliminación (reemplaza SVG)
+
+v1.10.1 — 2026-04-06
+─────────────────────
+[Cuidados]   Alerta de signos vitales muestra fecha y hora de la última lectura
+[Fix]        Corrección de acentos en alerta de signos vitales
+[UI]         Header de formularios sticky (visible al hacer scroll)
+[Notificaciones] Botón Vista Previa en sidebar de notificaciones admin
+[Notificaciones] Control deslizante para ajustar tamaño de imagen/GIF/video
+
+v1.10.0 — 2026-04-06
+─────────────────────
+[UI]         Transición lateral (slide) al abrir/cerrar formularios de categoría
+[UI]         RxTracker en móvil: Mañana/Tarde/Noche apilados verticalmente
+[Cuidados]   Badge de alerta en Signos Vitales cuando la última lectura está fuera de rango
+[Cuidados]   Banner de alerta dentro del formulario de Signos Vitales con detalle de signos anormales
+[Cuidados]   Iconos vomit.png y blood.png en botones de Eliminación
+[Cuidados]   Icono poop 50% más grande en badge de heces
+[Inventario]  Botón Editar en tarjetas de inventario + campo Notas
+[API]        Dashboard retorna ultimos_signos para evaluación de rango
+
+v1.9.7 — 2026-04-04
+─────────────────────
+[Medicación]  Se eliminan registros vacíos al revertir todos los medicamentos
+[Notificaciones] Soporte para GIF/imagen ilustrativa en notificaciones
+
+v1.9.6 — 2026-04-02
+─────────────────────
+[Config]     Archivos de configuración movidos a /conf
+[Cuidados]   Badge de horas desde última evacuación en botón Eliminación
+[Fix]        Efecto breathing de notas importantes visible al abrir cuidados
+[i18n]       Claves heces_sin_registro y heces_horas en es/en

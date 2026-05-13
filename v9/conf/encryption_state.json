@@ -1,0 +1,90 @@
+{
+    "fields": {
+        "residentes.curp": {
+            "phase": "consolidated"
+        },
+        "residentes.nss": {
+            "phase": "consolidated"
+        },
+        "residentes.diagnostico": {
+            "phase": "consolidated"
+        },
+        "residentes.alergias": {
+            "phase": "consolidated"
+        },
+        "residentes.cuidados_especiales": {
+            "phase": "consolidated"
+        },
+        "residentes.contacto_nombre": {
+            "phase": "consolidated"
+        },
+        "residentes.contacto_telefono": {
+            "phase": "consolidated"
+        },
+        "residentes.contacto_telefono2": {
+            "phase": "consolidated"
+        },
+        "residentes.contacto_email": {
+            "phase": "consolidated"
+        },
+        "residentes.contacto_direccion": {
+            "phase": "consolidated"
+        },
+        "residentes.contactos_json": {
+            "phase": "consolidated"
+        },
+        "prescripciones.nombre": {
+            "phase": "consolidated"
+        },
+        "prescripciones.indicacion": {
+            "phase": "consolidated"
+        },
+        "prescripciones.medico_nombre": {
+            "phase": "consolidated"
+        },
+        "prescripciones.dosis": {
+            "phase": "consolidated"
+        },
+        "prescripciones.via": {
+            "phase": "consolidated"
+        },
+        "prescripciones.frecuencia": {
+            "phase": "consolidated"
+        },
+        "prescripciones.horarios": {
+            "phase": "consolidated"
+        },
+        "cuidados_registros.datos": {
+            "phase": "consolidated"
+        },
+        "cuidados_registros.observaciones": {
+            "phase": "consolidated"
+        },
+        "notificaciones_log.mensaje": {
+            "phase": "consolidated"
+        },
+        "inventario_items.nombre": {
+            "phase": "consolidated"
+        },
+        "cuidados_notas.nota": {
+            "phase": "consolidated"
+        },
+        "logs_sistema.ip": {
+            "phase": "active"
+        },
+        "logs_sistema.user_agent": {
+            "phase": "consolidated"
+        },
+        "notas_medico.contenido": {
+            "phase": "consolidated"
+        },
+        "chat_asistente_mensajes.contenido": {
+            "phase": "consolidated"
+        },
+        "chat_asistente_memoria.contenido": {
+            "phase": "consolidated"
+        }
+    },
+    "read_encrypted": true,
+    "updated": "2026-05-11T12:00:00+02:00"
+}

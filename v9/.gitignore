@@ -1,0 +1,29 @@
+# GeriApp — .gitignore
+# Archivos que NUNCA deben subirse al repositorio
+
+# Credenciales y secretos
+conf/.env
+secretos/
+*.pem
+*.key
+
+# Uploads (datos de usuario)
+uploads/
+
+# Archivos de IDE/OS
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Dependencias
+node_modules/
+vendor/
+
+# Temporales
+*.log
+*.tmp
